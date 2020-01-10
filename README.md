@@ -17,7 +17,14 @@ original Z80 Cpu. For example the Sega Master System
 mkdir build
 cd ./build
 cmake  ..
-make 
+make all
 ```
 
 
+### Testing
+```
+mkdir build
+cd ./build
+cmake  ..
+make test
+```
