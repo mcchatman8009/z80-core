@@ -42,6 +42,8 @@ namespace Z80Core {
             void executeUntilNumberOfCycles(int cycles);
 
             int getNumberOfCyclesPassed() const;//NOLINT
+
+            void enableDebuggingLogging(bool enable);
         protected:
             class Z80CpuImplementation;
 

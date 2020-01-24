@@ -72,6 +72,11 @@ namespace Z80Core {
                 cpu->executeUntilNumberOfCycles(cycles);
             }
 
+            void enableDebugLogging(bool enable) {
+                cpu->enableDebugLogging(enable);
+
+            }
+
             int getNumberOfCyclesPassed() const { // NOLINT
                 return cpu->getNumberOfCyclesPassed();
             }
@@ -111,6 +116,10 @@ namespace Z80Core {
 
     int Z80CpuChip::getNumberOfCyclesPassed() const {
         return cpu->getNumberOfCyclesPassed();
+    }
+
+    void Z80CpuChip::enableDebuggingLogging(bool enable) {
+        cpu->enableDebugLogging(enable);
     }
 
     Z80CpuChip* createZ80Cpu(Memory& memory, IOMemory& ioMemory) {
