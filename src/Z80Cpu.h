@@ -10,8 +10,6 @@
 #include "MemoryCommandHandler.h"
 #include "ByteCpuRegisterSymbol.h"
 #include "WordCpuRegisterSymbol.h"
-//#include <functional>
-
 
 class Z80Cpu {
     public:
@@ -38,6 +36,8 @@ class Z80Cpu {
         void executeUntilNumberOfCycles(int cycles);
 
         int getNumberOfCyclesPassed() const; // NOLINT
+
+        void enableDebugLogging(bool enable);
 
 
     private:

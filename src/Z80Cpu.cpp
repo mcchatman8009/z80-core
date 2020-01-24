@@ -705,3 +705,7 @@ void Z80Cpu::RLD() {
     f.setHalfCarryBit(false);
     f.setNegativeBit(false);
 }
+
+void Z80Cpu::enableDebugLogging(bool enable) {
+    debug = enable;
+}

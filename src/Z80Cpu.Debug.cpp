@@ -4,8 +4,6 @@
 
 using namespace std;
 
-#define Z80_DEBUG 0
-
 using w=Z80Word;
 using b=Z80Byte;
 
