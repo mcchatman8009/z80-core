@@ -89,8 +89,13 @@ target_link_libraries(Z80Test z80encoder z80parser gtest gmock gtest_main)
 add_dependencies(Z80Test z80encoder z80parser gtest gmock gtest_main)
 add_test(Z80Test Z80Test)
 
+set(Library_Type SHARED)
+IF (CMAKE_COMPILER_IS_GNUCC)
+    set(Library_Type STATIC)
+endif ()
+
 add_library(z80core
-    SHARED
+    ${Library_Type}
     src/IOMemoryHandler.h
     src/Z80Byte.cpp
     src/Z80Byte.h

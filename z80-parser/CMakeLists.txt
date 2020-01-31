@@ -29,7 +29,7 @@ add_executable(Z80ParserTest
 target_link_libraries(Z80ParserTest antlr4_static gtest gmock gtest_main)
 add_dependencies(Z80ParserTest antlr4_static)
 
-add_library(z80parser
+add_library(z80parser STATIC
     generated/Z80BaseListener.cpp
     generated/Z80BaseListener.h
     generated/Z80Lexer.cpp
