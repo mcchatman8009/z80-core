@@ -12,7 +12,6 @@ include_directories(generated)
 include_directories(${antlr4_SOURCE_DIR}/runtime/Cpp/runtime/src)
 
 link_directories(${CMAKE_SOURCE_DIR}/dist)
-#link_libraries(antlr4-runtime)
 
 add_executable(Z80ParserTest
     generated/Z80BaseListener.cpp
@@ -43,6 +42,5 @@ add_library(z80parser
     generated/Z80Parser.h
     )
 
-target_link_libraries(z80parser antlr4_static gtest gmock gtest_main)
+target_link_libraries(z80parser antlr4_static)
 add_dependencies(z80parser antlr4_static)
-#target_link_libraries(z80_parser antlr4-runtime)
