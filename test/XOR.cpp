@@ -1,137 +1,175 @@
-#include "Z80CpuTest.h"
+#include "Z80CpuTestFixture.h"
 
 //@formatter:off
 
 //
-// 8-Bit OR
+// 8-Bit XOR
 //
-#define CPU_XOR_A 0xAF
-#define CPU_XOR_B 0xA8
-#define CPU_XOR_C 0xA9
-#define CPU_XOR_D 0xAA
-#define CPU_XOR_E 0xAB
-#define CPU_XOR_H 0xAC
-#define CPU_XOR_L 0xAD
-#define CPU_XOR_HL_PTR 0xAE
-#define CPU_XOR_N 0xEE
+TEST_F(Z80CpuTestFixture, XOR_IX_OFFSET) { // NOLINT
 
-TEST_F(Z80CpuTest, XOR_A) { // NOLINT
-    auto pc = START_PC;
-
-    cpuSet(PC, pc);
-    cpuSet(A, 0xFF);
-    memSet(pc, CPU_XOR_A);
-    cpu.executeNextCommand();
+    validateSingleInstruction("LD A, 0xFF");
+    validateSingleInstruction("LD (IX+1), 0xFF");
 
     expectedResults.A(0);
     expectedResults.ZF(true);
-    validateExpectedResults();
+    expectedResults.CF(false);
+    expectedResults.PF(true);
+    expectedResults.SF(false);
+    expectedResults.NF(false);
+    expectedResults.HF(false);
+    validateSingleInstruction("XOR A, (IX+1)");
 }
-TEST_F(Z80CpuTest, XOR_B) { // NOLINT
-    auto pc = START_PC;
+TEST_F(Z80CpuTestFixture, XOR_IY_OFFSET) { // NOLINT
 
-    cpuSet(PC, pc);
-    cpuSet(A, 0xF0);
-    cpuSet(B, 0x80);
-    memSet(pc, CPU_XOR_B);
-    cpu.executeNextCommand();
+    validateSingleInstruction("LD A, 0xFF");
+    validateSingleInstruction("LD (IY+1), 0xFF");
 
-    expectedResults.A(0x70);
-    expectedResults.ZF(false);
-    validateExpectedResults();
-}
-TEST_F(Z80CpuTest, XOR_C) { // NOLINT
-    auto pc = START_PC;
-
-    cpuSet(PC, pc);
-    cpuSet(A, 0x40);
-    cpuSet(C, 0x80);
-    memSet(pc, CPU_XOR_C);
-    cpu.executeNextCommand();
-
-    expectedResults.A(0xC0);
-    expectedResults.ZF(false);
-    validateExpectedResults();
-}
-TEST_F(Z80CpuTest, XOR_D) { // NOLINT
-    auto pc = START_PC;
-
-    cpuSet(PC, pc);
-    cpuSet(A, 0xF0);
-    cpuSet(D, 0x80);
-    memSet(pc, CPU_XOR_D);
-    cpu.executeNextCommand();
-
-    expectedResults.A(0x70);
-    expectedResults.ZF(false);
-    validateExpectedResults();
-}
-TEST_F(Z80CpuTest, XOR_E) { // NOLINT
-    auto pc = START_PC;
-
-    cpuSet(PC, pc);
-    cpuSet(A, 0xF0);
-    cpuSet(E, 0x80);
-    memSet(pc, CPU_XOR_E);
-    cpu.executeNextCommand();
-
-    expectedResults.A(0x70);
-    expectedResults.ZF(false);
-    validateExpectedResults();
-}
-TEST_F(Z80CpuTest, XOR_H) { // NOLINT
-    auto pc = START_PC;
-
-    cpuSet(PC, pc);
-    cpuSet(A, 0xF0);
-    cpuSet(H, 0x80);
-    memSet(pc, CPU_XOR_H);
-    cpu.executeNextCommand();
-
-    expectedResults.A(0x70);
-    expectedResults.ZF(false);
-    validateExpectedResults();
-}
-TEST_F(Z80CpuTest, XOR_L) { // NOLINT
-    auto pc = START_PC;
-
-    cpuSet(PC, pc);
-    cpuSet(A, 0xF0);
-    cpuSet(L, 0x80);
-    memSet(pc, CPU_XOR_L);
-    cpu.executeNextCommand();
-
-    expectedResults.A(0x70);
-    expectedResults.ZF(false);
-    validateExpectedResults();
-}
-TEST_F(Z80CpuTest, XOR_HL_PTR) { // NOLINT
-    auto pc = START_PC;
-
-    cpuSet(PC, pc);
-    cpuSet(A, 0xF0);
-    cpuSet(HL, 0x1000);
-    memSet(0x1000, 0x10);
-    memSet(pc, CPU_XOR_HL_PTR);
-    cpu.executeNextCommand();
-
-    expectedResults.A(0xE0);
-    expectedResults.ZF(false);
-    validateExpectedResults();
-}
-
-TEST_F(Z80CpuTest, XOR_N) { // NOLINT
-    auto pc = START_PC;
-
-    cpuSet(PC, pc);
-    cpuSet(A, 0x00);
-    memSet(pc++, CPU_XOR_N);
-    memSet(pc, 0x0);
-    cpu.executeNextCommand();
-
-    expectedResults.A(0x0);
+    expectedResults.A(0);
     expectedResults.ZF(true);
-    validateExpectedResults();
+    expectedResults.CF(false);
+    expectedResults.PF(true);
+    expectedResults.SF(false);
+    expectedResults.NF(false);
+    expectedResults.HF(false);
+    validateSingleInstruction("XOR A, (IY+1)");
+}
+TEST_F(Z80CpuTestFixture, XOR_IYL) { // NOLINT
+
+    validateSingleInstruction("LD A, 0xFF");
+    validateSingleInstruction("LD IY, 0xFF");
+
+    expectedResults.A(0);
+    expectedResults.ZF(true);
+    expectedResults.CF(false);
+    expectedResults.PF(true);
+    expectedResults.SF(false);
+    expectedResults.NF(false);
+    expectedResults.HF(false);
+    validateSingleInstruction("XOR A, IYL");
+}
+TEST_F(Z80CpuTestFixture, XOR_IYH) { // NOLINT
+
+    validateSingleInstruction("LD A, 0xFF");
+    validateSingleInstruction("LD IY, 0xFF00");
+
+    expectedResults.A(0);
+    expectedResults.ZF(true);
+    expectedResults.CF(false);
+    expectedResults.PF(true);
+    expectedResults.SF(false);
+    expectedResults.NF(false);
+    expectedResults.HF(false);
+    validateSingleInstruction("XOR A, IYH");
+}
+TEST_F(Z80CpuTestFixture, XOR_IXL) { // NOLINT
+
+    validateSingleInstruction("LD A, 0xFF");
+    validateSingleInstruction("LD IX, 0xFF");
+
+    expectedResults.A(0);
+    expectedResults.ZF(true);
+    expectedResults.CF(false);
+    expectedResults.PF(true);
+    expectedResults.SF(false);
+    expectedResults.NF(false);
+    expectedResults.HF(false);
+    validateSingleInstruction("XOR A, IXL");
+}
+TEST_F(Z80CpuTestFixture, XOR_IXH) { // NOLINT
+
+    validateSingleInstruction("LD A, 0xFF");
+    validateSingleInstruction("LD IX, 0xFF00");
+
+    expectedResults.A(0);
+    expectedResults.ZF(true);
+    expectedResults.CF(false);
+    expectedResults.PF(true);
+    expectedResults.SF(false);
+    expectedResults.NF(false);
+    expectedResults.HF(false);
+    validateSingleInstruction("XOR A, IXH");
+}
+TEST_F(Z80CpuTestFixture, XOR_A) { // NOLINT
+
+    validateSingleInstruction("LD A, 0xFF");
+
+    expectedResults.A(0);
+    expectedResults.ZF(true);
+    expectedResults.CF(false);
+    expectedResults.PF(true);
+    expectedResults.SF(false);
+    expectedResults.NF(false);
+    expectedResults.HF(false);
+    validateSingleInstruction("XOR A, A");
+}
+TEST_F(Z80CpuTestFixture, XOR_B) { // NOLINT
+    validateSingleInstruction("LD A, 0x70");
+    validateSingleInstruction("LD B, 0xF0");
+
+    expectedResults.A(0x80);
+    expectedResults.ZF(false);
+    expectedResults.SF(true);
+    validateSingleInstruction("XOR A, B");
+}
+TEST_F(Z80CpuTestFixture, XOR_C) { // NOLINT
+    validateSingleInstruction("LD A, 0x80");
+    validateSingleInstruction("LD C, 0xF0");
+
+    expectedResults.A(0x70);
+    expectedResults.ZF(false);
+    validateSingleInstruction("XOR A, C");
+}
+TEST_F(Z80CpuTestFixture, XOR_D) { // NOLINT
+    validateSingleInstruction("LD A, 0x80");
+    validateSingleInstruction("LD d, 0xF0");
+
+    expectedResults.A(0x70);
+    expectedResults.ZF(false);
+    validateSingleInstruction("XOR A, D");
+}
+TEST_F(Z80CpuTestFixture, XOR_E) { // NOLINT
+
+    validateSingleInstruction("LD A, 0x80");
+    validateSingleInstruction("LD e, 0xF0");
+
+    expectedResults.A(0x70);
+    expectedResults.ZF(false);
+    validateSingleInstruction("XOR A, e");
+}
+TEST_F(Z80CpuTestFixture, XOR_H) { // NOLINT
+
+    validateSingleInstruction("LD A, 0x80");
+    validateSingleInstruction("LD h, 0xF0");
+
+    expectedResults.A(0x70);
+    expectedResults.ZF(false);
+    validateSingleInstruction("XOR A, h");
+}
+TEST_F(Z80CpuTestFixture, XOR_L) { // NOLINT
+
+    validateSingleInstruction("LD A, 0x80");
+    validateSingleInstruction("LD l, 0xF0");
+
+    expectedResults.A(0x70);
+    expectedResults.ZF(false);
+    validateSingleInstruction("XOR A, l");
+}
+TEST_F(Z80CpuTestFixture, XOR_HL_PTR) { // NOLINT
+
+    validateSingleInstruction("LD A, 0x80");
+    validateSingleInstruction("LD (hl), 0xF0");
+
+    expectedResults.A(0x70);
+    expectedResults.ZF(false);
+    validateSingleInstruction("XOR A, (hl)");
+}
+TEST_F(Z80CpuTestFixture, XOR_N) { // NOLINT
+
+    validateSingleInstruction("LD A, 0x80");
+
+    expectedResults.A(0x70);
+    expectedResults.ZF(false);
+    validateSingleInstruction("XOR A, 0xF0");
 }
 
 

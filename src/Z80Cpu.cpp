@@ -110,6 +110,19 @@ void Z80Cpu::set(WordCpuRegisterSymbol wordCpuRegisterSymbol, Z80Word data) {
         case WordCpuRegisterSymbol::IY:
             iy.setWordValue(data);
             return;
+        case WordCpuRegisterSymbol::SHADOW_AF:
+            a.setShadowByteValue(data.getHighByte());
+            f.setShadowByteValue(data.getLowByte());
+            break;
+        case WordCpuRegisterSymbol::SHADOW_BC:
+            bc.setShadowWordValue(data);
+            break;
+        case WordCpuRegisterSymbol::SHADOW_DE:
+            de.setShadowWordValue(data);
+            break;
+        case WordCpuRegisterSymbol::SHADOW_HL:
+            hl.setShadowWordValue(data);
+            break;
     }
 }
 

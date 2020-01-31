@@ -1,135 +1,151 @@
-#include "Z80CpuTest.h"
+#include "Z80CpuTestFixture.h"
 
 //@formatter:off
 
 //
 // 8-Bit AND
 //
+TEST_F(Z80CpuTestFixture, AND_IXH) { // NOLINT
 
-#define CPU_AND_A 0xA7
-#define CPU_AND_B 0xA0
-#define CPU_AND_C 0xA1
-#define CPU_AND_D 0xA2
-#define CPU_AND_E 0xA3
-#define CPU_AND_H 0xA4
-#define CPU_AND_L 0xA5
-#define CPU_AND_HL_PTR 0xA6
-#define CPU_AND_N 0xA6
+    cpuSet(ByteCpuRegisterSymbol::A, 0xF0);
+    cpuSet(WordCpuRegisterSymbol::IX, 0xFF00);
 
-TEST_F(Z80CpuTest, AND_A) { // NOLINT
-    auto pc = START_PC;
-
-    cpuSet(PC, pc);
-    cpuSet(A, 0xFF);
-    memSet(pc, CPU_AND_A);
-    cpu.executeNextCommand();
-
-    expectedResults.A(0xFF);
+    expectedResults.A(0xF0);
     expectedResults.ZF(false);
-    validateExpectedResults();
+    expectedResults.HF(true);
+    expectedResults.CF(false);
+    expectedResults.SF(true);
+    validateSingleInstructionAndTestPCOffset("AND A, IXH");
 }
-TEST_F(Z80CpuTest, AND_B) { // NOLINT
-    auto pc = START_PC;
+TEST_F(Z80CpuTestFixture, AND_IXL) { // NOLINT
 
-    cpuSet(PC, pc);
-    cpuSet(A, 0xF0);
-    cpuSet(B, 0x80);
-    memSet(pc, CPU_AND_B);
-    cpu.executeNextCommand();
+    cpuSet(ByteCpuRegisterSymbol::A, 0xF0);
+    cpuSet(WordCpuRegisterSymbol::IX, 0x00FF);
 
-    expectedResults.A(0x80);
+    expectedResults.A(0xF0);
     expectedResults.ZF(false);
-    validateExpectedResults();
+    expectedResults.HF(true);
+    expectedResults.CF(false);
+    expectedResults.SF(true);
+    validateSingleInstructionAndTestPCOffset("AND A, IXL");
 }
-TEST_F(Z80CpuTest, AND_C) { // NOLINT
-    auto pc = START_PC;
+TEST_F(Z80CpuTestFixture, AND_IX_OFFSET) { // NOLINT
 
-    cpuSet(PC, pc);
-    cpuSet(A, 0xF0);
-    cpuSet(C, 0x80);
-    memSet(pc, CPU_AND_C);
-    cpu.executeNextCommand();
+    cpuSet(ByteCpuRegisterSymbol::A, 0xF);
+    validateSingleInstructionAndTestPCOffset("LD (ix+2), 0xF");
 
-    expectedResults.A(0x80);
+    expectedResults.A(0xF);
     expectedResults.ZF(false);
-    validateExpectedResults();
+    expectedResults.HF(true);
+    expectedResults.CF(false);
+    expectedResults.SF(false);
+    validateSingleInstructionAndTestPCOffset("AND A, (ix+2)");
 }
-TEST_F(Z80CpuTest, AND_D) { // NOLINT
-    auto pc = START_PC;
+TEST_F(Z80CpuTestFixture, AND_IY_OFFSET) { // NOLINT
 
-    cpuSet(PC, pc);
-    cpuSet(A, 0xF0);
-    cpuSet(D, 0x80);
-    memSet(pc, CPU_AND_D);
-    cpu.executeNextCommand();
+    cpuSet(ByteCpuRegisterSymbol::A, 0xF);
+    validateSingleInstructionAndTestPCOffset("LD (iy+2), 0xF");
 
-    expectedResults.A(0x80);
+    expectedResults.A(0xF);
     expectedResults.ZF(false);
-    validateExpectedResults();
+    expectedResults.HF(true);
+    expectedResults.CF(false);
+    expectedResults.SF(false);
+    validateSingleInstructionAndTestPCOffset("AND A, (iy+2)");
 }
-TEST_F(Z80CpuTest, AND_E) { // NOLINT
-    auto pc = START_PC;
+TEST_F(Z80CpuTestFixture, AND_A) { // NOLINT
+    validateSingleInstructionAndTestPCOffset("LD A, 0x81");
 
-    cpuSet(PC, pc);
-    cpuSet(A, 0xF0);
-    cpuSet(E, 0x80);
-    memSet(pc, CPU_AND_E);
-    cpu.executeNextCommand();
-
-    expectedResults.A(0x80);
+    expectedResults.A(0x81);
     expectedResults.ZF(false);
-    validateExpectedResults();
+    expectedResults.SF(true);
+    validateSingleInstructionAndTestPCOffset("AND A, A");
 }
-TEST_F(Z80CpuTest, AND_H) { // NOLINT
-    auto pc = START_PC;
+TEST_F(Z80CpuTestFixture, AND_B) { // NOLINT
+    validateSingleInstructionAndTestPCOffset("LD A, 0x81");
+    validateSingleInstructionAndTestPCOffset("LD B, 0x00");
 
-    cpuSet(PC, pc);
-    cpuSet(A, 0xF0);
-    cpuSet(H, 0x80);
-    memSet(pc, CPU_AND_H);
-    cpu.executeNextCommand();
-
-    expectedResults.A(0x80);
-    expectedResults.ZF(false);
-    validateExpectedResults();
-}
-TEST_F(Z80CpuTest, AND_L) { // NOLINT
-    auto pc = START_PC;
-
-    cpuSet(PC, pc);
-    cpuSet(A, 0xF0);
-    cpuSet(L, 0x80);
-    memSet(pc, CPU_AND_L);
-    cpu.executeNextCommand();
-
-    expectedResults.A(0x80);
-    expectedResults.ZF(false);
-    validateExpectedResults();
-}
-TEST_F(Z80CpuTest, AND_HL_PTR) { // NOLINT
-    auto pc = START_PC;
-
-    cpuSet(PC, pc);
-    cpuSet(A, 0xF0);
-    cpuSet(HL, 0x1000);
-    memSet(0x1000, 0x10);
-    memSet(pc, CPU_AND_HL_PTR);
-    cpu.executeNextCommand();
-
-    expectedResults.A(0x10);
-    expectedResults.ZF(false);
-    validateExpectedResults();
-}
-TEST_F(Z80CpuTest, AND_N) { // NOLINT
-    auto pc = START_PC;
-
-    cpuSet(PC, pc);
-    cpuSet(A, 0x0F);
-    memSet(pc++, CPU_AND_N);
-    memSet(pc, 0x0);
-    cpu.executeNextCommand();
-
-    expectedResults.A(0x0);
+    expectedResults.A(0x00);
     expectedResults.ZF(true);
-    validateExpectedResults();
+    expectedResults.HF(true);
+    expectedResults.CF(false);
+    expectedResults.SF(false);
+    validateSingleInstructionAndTestPCOffset("AND A, B");
+}
+TEST_F(Z80CpuTestFixture, AND_C) { // NOLINT
+    validateSingleInstructionAndTestPCOffset("LD A, 0x81");
+    validateSingleInstructionAndTestPCOffset("LD C, 0x00");
+
+    expectedResults.A(0x00);
+    expectedResults.ZF(true);
+    expectedResults.HF(true);
+    expectedResults.CF(false);
+    expectedResults.SF(false);
+    validateSingleInstructionAndTestPCOffset("AND A, C");
+}
+TEST_F(Z80CpuTestFixture, AND_D) { // NOLINT
+    validateSingleInstructionAndTestPCOffset("LD A, 0x81");
+    validateSingleInstructionAndTestPCOffset("LD D, 0x01");
+
+    expectedResults.A(0x01);
+    expectedResults.ZF(false);
+    expectedResults.HF(true);
+    expectedResults.CF(false);
+    expectedResults.SF(false);
+    validateSingleInstructionAndTestPCOffset("AND A, d");
+
+}
+TEST_F(Z80CpuTestFixture, AND_E) { // NOLINT
+    validateSingleInstructionAndTestPCOffset("LD A, 0x81");
+    validateSingleInstructionAndTestPCOffset("LD e, 0x01");
+
+    expectedResults.A(0x01);
+    expectedResults.ZF(false);
+    expectedResults.HF(true);
+    expectedResults.CF(false);
+    expectedResults.SF(false);
+    validateSingleInstructionAndTestPCOffset("AND A, e");
+}
+TEST_F(Z80CpuTestFixture, AND_H) { // NOLINT
+    validateSingleInstructionAndTestPCOffset("LD A, 0x81");
+    validateSingleInstructionAndTestPCOffset("LD h, 0x01");
+
+    expectedResults.A(0x01);
+    expectedResults.ZF(false);
+    expectedResults.HF(true);
+    expectedResults.CF(false);
+    expectedResults.SF(false);
+    validateSingleInstructionAndTestPCOffset("AND A, h");
+}
+TEST_F(Z80CpuTestFixture, AND_L) { // NOLINT
+    validateSingleInstructionAndTestPCOffset("LD A, 0x81");
+    validateSingleInstructionAndTestPCOffset("LD l, 0x01");
+
+    expectedResults.A(0x01);
+    expectedResults.ZF(false);
+    expectedResults.HF(true);
+    expectedResults.CF(false);
+    expectedResults.SF(false);
+    validateSingleInstructionAndTestPCOffset("AND A, l");
+}
+TEST_F(Z80CpuTestFixture, AND_HL_PTR) { // NOLINT
+    validateSingleInstructionAndTestPCOffset("LD A, 0x81");
+    validateSingleInstructionAndTestPCOffset("LD (hl), 0x01");
+
+    expectedResults.A(0x01);
+    expectedResults.ZF(false);
+    expectedResults.HF(true);
+    expectedResults.CF(false);
+    expectedResults.SF(false);
+    validateSingleInstructionAndTestPCOffset("AND A, (hl)");
+}
+TEST_F(Z80CpuTestFixture, AND_N) { // NOLINT
+    validateSingleInstructionAndTestPCOffset("LD A, 0x81");
+
+    expectedResults.A(0x01);
+    expectedResults.ZF(false);
+    expectedResults.HF(true);
+    expectedResults.CF(false);
+    expectedResults.SF(false);
+    validateSingleInstructionAndTestPCOffset("AND A, 0x1");
 }

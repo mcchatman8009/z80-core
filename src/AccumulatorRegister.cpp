@@ -1,5 +1,4 @@
 #include "AccumulatorRegister.h"
-#include "DAA.h"
 #include <EVEN_PARITY.h>
 
 AccumulatorRegister::AccumulatorRegister(FlagRegister& flagRegister) : flagRegister{flagRegister},
@@ -72,29 +71,38 @@ void AccumulatorRegister::rotateRightCircular() {
 }
 
 void AccumulatorRegister::decimalAdjust() {
-    auto accumulatorValue = value.getValue();
+    //
+    // Based on the following information:
+    // http://www.worldofspectrum.org/faq/reference/z80reference.htm#DAA
+    //
+    bool carry = false;
+    int correctionFactor = 0;
+    int aValue = value.getValue();
+
+    int lsbNibble = value.getValue() & 0x0F; // NOLINT
+
+    if (value.getValue() > 0x99 || flagRegister.getCarryBit()) {
+        correctionFactor |= 0x60; // NOLINT
+        carry = true;
+    }
+
+    if (lsbNibble > 9 || flagRegister.getHalfCarryBit()) {
+        correctionFactor |= 0x06; // NOLINT
+    }
 
     if (flagRegister.getNegativeBit()) {
-        accumulatorValue = accumulatorValue | 0x100; // NOLINT
+        value = Z80Byte(value.getValue() - correctionFactor);
+    } else {
+        value = Z80Byte(value.getValue() + correctionFactor);
     }
 
-    if (flagRegister.getCarryBit()) {
-        accumulatorValue = accumulatorValue | 0x200; // NOLINT
-    }
-
-    if (flagRegister.getHalfCarryBit()) {
-        accumulatorValue = accumulatorValue | 0x400; // NOLINT
-    }
-
-    auto tableResult = DAA_TABLE[accumulatorValue];
-
-    flagRegister.setCarryBit(tableResult > 0xFF);
-
-    value = Z80Byte{tableResult};
-    flagRegister.setParityBit(EVEN_PARITY_TABLE[tableResult]);
-
-    flagRegister.setZeroBit(value.getValue() == 0);
+    flagRegister.setHalfCarryBit((aValue ^ value.getValue()) & 0x10); // NOLINT
+    flagRegister.setCarryBit(carry);
     flagRegister.setSignBit(value.isBitEnabled(7));
+    flagRegister.setZeroBit(value.getValue() == 0);
+    flagRegister.setParityBit(EVEN_PARITY_TABLE[value.getValue()]);
+    flagRegister.setBit3FromValue(value);
+    flagRegister.setBit5FromValue(value);
 }
 
 void AccumulatorRegister::shiftLeftArithmetic() {

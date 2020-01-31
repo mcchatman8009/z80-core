@@ -21,6 +21,7 @@ TEST_F(Z80CpuTest, DJNZ) {  // NOLINT
 
     //  B should be 0, so the JR should occur.
     expectedResults.PC(START_PC);
+    expectedResults.B(0x00);
 
     validateExpectedResults();
 }

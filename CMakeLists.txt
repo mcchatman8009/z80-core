@@ -7,11 +7,25 @@ set(CMAKE_CXX_STANDARD 17)
 enable_testing()
 include(${CMAKE_CURRENT_SOURCE_DIR}/google-test.cmake)
 
+add_subdirectory(z80-parser)
+add_subdirectory(z80-byte-encoder)
+
 #
 # Includes...
 #
 include_directories(src)
 include_directories(include)
+include_directories(z80-parser/generated)
+include_directories(z80-byte-encoder/src)
+include_directories(${LIBANTLR4_SOURCE_DIR}/runtime/src)
+#message(${LIBANTLR4_SOURCE_DIR})
+#include_directories(${LIBANTLR4_SOURCE_DIR}/runtime/Cpp/runtime/src)
+
+#get_cmake_property(_variableNames VARIABLES)
+#list (SORT _variableNames)
+#foreach (_variableName ${_variableNames})
+#    message(STATUS "${_variableName}=${${_variableName}}")
+#endforeach()
 
 #
 # Unit Tests
@@ -35,7 +49,6 @@ add_executable(Z80Test
     src/WordRegister.h
     src/ByteOperationHandler.cpp
     src/ByteOperationHandler.h
-    src/DAA.h
     src/OpcodeCycleReader.cpp
     src/OpcodeCycleReader.h
     src/Z80Cpu.cpp
@@ -44,6 +57,8 @@ add_executable(Z80Test
     src/MemoryCommandHandler.h
     src/ByteCpuRegisterSymbol.h
     src/WordCpuRegisterSymbol.h
+    src/Z80Compiler.cpp
+    src/Z80Compiler.h
     test/Z80WordTest.cpp
     test/Z80ByteTest.cpp
     test/WordRegisterTest.cpp
@@ -68,9 +83,9 @@ add_executable(Z80Test
     src/Z80Cpu.Debug.cpp
     src/Z80CpuMnemonicMapper.cpp
     src/Z80CpuMnemonicMapper.h
-    src/OpcodeType.h test/JP.cpp test/JR.cpp test/CALL.cpp test/RET.cpp)
+    src/OpcodeType.h test/JP.cpp test/JR.cpp test/CALL.cpp test/RET.cpp src/ImmediateValueReader.h test/CompilerTest.cpp test/Z80CpuTestFixture.cpp test/Z80CpuTestFixture.h test/TestMemoryHandler.cpp test/TestMemoryHandler.h test/TestIOMemoryHandler.cpp test/TestIOMemoryHandler.h test/ExchagneAndBlockTransfrerCommandTest.cpp test/ArithemeticControlCommandsTest.cpp)
 
-target_link_libraries(Z80Test gtest gmock gtest_main)
+target_link_libraries(Z80Test z80encoder z80parser gtest gmock gtest_main)
 add_test(Z80Test Z80Test)
 
 add_library(z80core
@@ -91,7 +106,6 @@ add_library(z80core
     src/WordRegister.h
     src/ByteOperationHandler.cpp
     src/ByteOperationHandler.h
-    src/DAA.h
     src/OpcodeCycleReader.cpp
     src/OpcodeCycleReader.h
     src/Z80Cpu.cpp
@@ -112,7 +126,8 @@ add_library(z80core
     src/Z80CpuMnemonicMapper.cpp
     src/Z80CpuMnemonicMapper.h
     src/OpcodeType.h
-    )
+    src/Z80Compiler.cpp src/Z80Compiler.h src/ImmediateValueReader.h src/interpolate.h)
+target_link_libraries(z80core z80encoder z80parser)
 
 set_target_properties(z80core PROPERTIES PUBLIC_HEADER "include/Z80Core.h")
 

@@ -1,3 +1,4 @@
+#include "Z80CpuTestFixture.h"
 #include "Z80CpuTest.h"
 
 using namespace std;
@@ -6,72 +7,78 @@ using namespace std;
 //
 // 8-Bit increment
 //
-#define CPU_INC_A 0x3C
-#define CPU_INC_B 0x04
-#define CPU_INC_C 0x0C
-#define CPU_INC_D 0x14
-#define CPU_INC_E 0x1C
-#define CPU_INC_H 0x24
-#define CPU_INC_L 0x2C
-#define CPU_INC_HL_PTR 0x34
-
-template<ByteCpuRegisterSymbol registerSymbol, int command>
-static void perform8BitIncrement(int pc, Z80CpuTest& cpuTest) {
-    cpuTest.cpuSet(registerSymbol, 0xFF);
-
-    cpuTest.memSet(pc, command);
-    cpuTest.cpu.executeNextCommand();
-
-    cpuTest.isEqual(registerSymbol, 0x0);
+TEST_F(Z80CpuTestFixture, INC_A) { // NOLINT
+    validateSingleInstructionAndTestPCOffset("ld a, 0xff");
+    expectedResults.A(0x00);
+    expectedResults.NF(false);
+    expectedResults.HF(true);
+    expectedResults.CF(false);
+    expectedResults.SF(false);
+    validateSingleInstructionAndTestPCOffset("inc a");
 }
-
-TEST_F(Z80CpuTest, INC_A) { // NOLINT
-    auto pc = START_PC;
-    cpuSet(PC, pc);
-
-    perform8BitIncrement<A, CPU_INC_A>(pc, *this);
+TEST_F(Z80CpuTestFixture, INC_B) { // NOLINT
+    validateSingleInstructionAndTestPCOffset("ld b, 0xfe");
+    expectedResults.B(0xFF);
+    expectedResults.NF(false);
+    expectedResults.HF(true);
+    expectedResults.CF(false);
+    expectedResults.SF(false);
+    validateSingleInstructionAndTestPCOffset("inc b");
 }
-TEST_F(Z80CpuTest, INC_B) { // NOLINT
-    auto pc = START_PC;
-    cpuSet(PC, pc);
-
-    perform8BitIncrement<B, CPU_INC_B>(pc, *this);
+TEST_F(Z80CpuTestFixture, INC_C) { // NOLINT
+    validateSingleInstructionAndTestPCOffset("ld c, 0xfe");
+    expectedResults.B(0xFF);
+    expectedResults.NF(false);
+    expectedResults.HF(true);
+    expectedResults.CF(false);
+    expectedResults.SF(false);
+    validateSingleInstructionAndTestPCOffset("inc c");
 }
-TEST_F(Z80CpuTest, INC_C) { // NOLINT
-    auto pc = START_PC;
-    cpuSet(PC, pc);
-
-    perform8BitIncrement<C, CPU_INC_C>(pc, *this);
+TEST_F(Z80CpuTestFixture, INC_D) { // NOLINT
+    validateSingleInstructionAndTestPCOffset("ld d, 0xfe");
+    expectedResults.D(0xFF);
+    expectedResults.NF(false);
+    expectedResults.HF(true);
+    expectedResults.CF(false);
+    expectedResults.SF(false);
+    validateSingleInstructionAndTestPCOffset("inc d");
 }
-TEST_F(Z80CpuTest, INC_D) { // NOLINT
-    auto pc = START_PC;
-    cpuSet(PC, pc);
-
-    perform8BitIncrement<D, CPU_INC_D>(pc, *this);
+TEST_F(Z80CpuTestFixture, INC_E) { // NOLINT
+    validateSingleInstructionAndTestPCOffset("ld e, 0xfe");
+    expectedResults.E(0xFF);
+    expectedResults.NF(false);
+    expectedResults.HF(true);
+    expectedResults.CF(false);
+    expectedResults.SF(false);
+    validateSingleInstructionAndTestPCOffset("inc e");
 }
-TEST_F(Z80CpuTest, INC_E) { // NOLINT
-    auto pc = START_PC;
-    cpuSet(PC, pc);
-
-    perform8BitIncrement<E, CPU_INC_E>(pc, *this);
+TEST_F(Z80CpuTestFixture, INC_H) { // NOLINT
+    validateSingleInstructionAndTestPCOffset("ld h, 0xfe");
+    expectedResults.H(0xFF);
+    expectedResults.NF(false);
+    expectedResults.HF(true);
+    expectedResults.CF(false);
+    expectedResults.SF(false);
+    validateSingleInstructionAndTestPCOffset("inc h");
 }
-TEST_F(Z80CpuTest, INC_H) { // NOLINT
-    auto pc = START_PC;
-    cpuSet(PC, pc);
-
-    perform8BitIncrement<H, CPU_INC_H>(pc, *this);
+TEST_F(Z80CpuTestFixture, INC_L) { // NOLINT
+    validateSingleInstructionAndTestPCOffset("ld l, 0xfe");
+    expectedResults.H(0xFF);
+    expectedResults.NF(false);
+    expectedResults.HF(true);
+    expectedResults.CF(false);
+    expectedResults.SF(false);
+    validateSingleInstructionAndTestPCOffset("inc l");
 }
-TEST_F(Z80CpuTest, INC_L) { // NOLINT
-    auto pc = START_PC;
-    cpuSet(PC, pc);
-
-    perform8BitIncrement<L, CPU_INC_L>(pc, *this);
-}
-TEST_F(Z80CpuTest, INC_HL_PTR) { // NOLINT
-    auto pc = START_PC;
-    cpuSet(PC, pc);
-
-    perform8BitIncrement<HL_PTR, CPU_INC_HL_PTR>(pc, *this);
+TEST_F(Z80CpuTestFixture, INC_HL_PTR) { // NOLINT
+    validateSingleInstructionAndTestPCOffset("ld hl, 0xFF00");
+    validateSingleInstructionAndTestPCOffset("ld (hl), 0xfe");
+    expectedResults.MEM(0xFF00, 0xFF);
+    expectedResults.NF(false);
+    expectedResults.HF(true);
+    expectedResults.CF(false);
+    expectedResults.SF(false);
+    validateSingleInstructionAndTestPCOffset("inc (hl)");
 }
 
 //

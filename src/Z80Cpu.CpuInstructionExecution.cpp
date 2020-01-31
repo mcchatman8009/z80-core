@@ -1227,8 +1227,8 @@ void Z80Cpu::executeNextEDCommand(Z80Byte opCode) {
         CPU_COMMAND(0x5F, 1, {
             a.setByteValue(refreshRegister);
             f.setParityBit(iff2);
-            f.setZeroBit(byteOperationHandler.zeroFromValue(refreshRegister));
-            f.setSignBit(byteOperationHandler.signFromValue(refreshRegister));
+            f.setZeroBit(byteOperationHandler.zeroFromValue(interruptVectorRegister));
+            f.setSignBit(byteOperationHandler.signFromValue(interruptVectorRegister));
             f.setHalfCarryBit(false);
             f.setNegativeBit(false);
         })

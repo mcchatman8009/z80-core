@@ -244,3 +244,7 @@ void WordRegister::clearBit(int bit, RegisterWordPart lowOrHigh) {
     auto result = registerHandler.clearBit(bit, getByteValue(lowOrHigh));
     setByteValue(lowOrHigh, result);
 }
+
+void WordRegister::setShadowWordValue(Z80Word data) {
+    shadowValue = data;
+}

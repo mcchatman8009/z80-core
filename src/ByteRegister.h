@@ -8,6 +8,9 @@ class ByteRegister {
         void initialize();
 
         void setByteValue(Z80Byte byteValue); // NOLINT
+
+        void setShadowByteValue(Z80Byte byteValue); // NOLINT
+
         Z80Byte getByteValue() const; // NOLINT
 
         void swapCurrentValueWithShadowValue();

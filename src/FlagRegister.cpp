@@ -5,13 +5,13 @@
 // Flag:  S | Z | X | H | X | P/V | N | C
 //
 constexpr auto CARRY_BIT = 0;
-const auto NEGATIVE_BIT = 1;
-const auto PARITY_BIT = 2;
-const auto UNKNOWN_BIT3 = 3;
-const auto HALF_CARRY_BIT = 4;
-const auto UNKNOWN_BIT5 = 5;
-const auto ZERO_BIT = 6;
-const auto SIGN_BIT = 7;
+constexpr auto NEGATIVE_BIT = 1;
+constexpr auto PARITY_BIT = 2;
+constexpr auto UNKNOWN_BIT3 = 3;
+constexpr auto HALF_CARRY_BIT = 4;
+constexpr auto UNKNOWN_BIT5 = 5;
+constexpr auto ZERO_BIT = 6;
+constexpr auto SIGN_BIT = 7;
 
 void FlagRegister::setCarryBit(bool flag) {
     value = value.setBit(CARRY_BIT, flag);

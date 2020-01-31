@@ -2,11 +2,14 @@
 #define SMS_Z80CPUTEST_H
 
 #include "Z80Cpu.h"
+#include "Z80Compiler.h"
 #include <gtest/gtest.h>
 #include <array>
 #include <vector>
 #include <string>
 #include "Z80CpuCommandExpectedTestResults.h"
+#include "TestIOMemoryHandler.h"
+#include "TestMemoryHandler.h"
 
 using w=Z80Word;
 using b=Z80Byte;
@@ -35,53 +38,31 @@ using b=Z80Byte;
 
 using namespace std;
 
-class TestMemoryHandler : public MemoryHandler {
-    public:
-        void writeByte(Z80Word address, Z80Byte data) override {
-            memory[address.getValue()] = data.getValue();
-        }
-
-        Z80Byte readByte(Z80Word address) override {
-            return Z80Byte(memory[address.getValue()]);
-        }
-
-        char readSignedByte(Z80Word address) override {
-            return Z80Byte(memory[address.getValue()]).getValue();
-        }
-
-        Z80Word readWord(Z80Word address) override {
-            // Read as Little Endian...
-            auto lowByte = readByte(address);
-            auto highByte = readByte(w{address.getValue() + 1});
-            return Z80Word(highByte, lowByte);
-        }
-
-    private:
-        array<unsigned char, 0x10000> memory{0};
-};
-
-class TestIOMemoryHandler : public IOMemoryHandler {
-    public :
-        void writeByte(Z80Byte port, Z80Byte data) override {
-            memory[port.getValue()] = data.getValue();
-        }
-
-        Z80Byte readByte(Z80Byte port) override {
-            return Z80Byte(memory[port.getValue()]);
-        }
-
-    private:
-        array<unsigned char, 0x100> memory{0};
-
-};
 
 class Z80CpuTest : public ::testing::Test {
-
     public:
         int START_PC{0x100};
 
         void SetUp() override {
             cpu.initialize();
+        }
+
+        void validateSingleInstruction(std::string instruction) {
+            executeSingleInstruction(instruction);
+            validateExpectedResults();
+        }
+
+        void executeSingleInstruction(std::string instruction) {
+            auto pc = START_PC;
+
+            cpuSet(PC, pc);
+            auto bytes = compiler.compile(instruction);
+
+            for (int i = 0; i < bytes.size(); ++i) {
+                memSet(pc +i, bytes[i]);
+            }
+
+            cpu.executeNextCommand();
         }
 
         void validateExpectedResults() {
@@ -207,6 +188,8 @@ class Z80CpuTest : public ::testing::Test {
         Z80Cpu cpu{memory, ioMemory};
 
         Z80CpuCommandExpectedTestResults expectedResults{cpu, memory, ioMemory};
+
+        Z80Compiler compiler;
 };
 
 #endif //SMS_Z80CPUTEST_H

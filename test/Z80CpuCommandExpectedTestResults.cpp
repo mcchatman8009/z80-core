@@ -26,8 +26,14 @@ static const string HF_KEY = "HF";
 static const string A_REG = "A";
 static const string F_REG = "F";
 static const string DE_REG = "DE";
+static const string D_REG = "D";
+static const string E_REG = "E";
+static const string B_REG = "B";
+static const string C_REG = "C";
 static const string BC_REG = "BC";
 static const string HL_REG = "HL";
+static const string H_REG = "H";
+static const string L_REG = "L";
 static const string HL_REG_POINTER = "(HL)";
 static const string IX_REG = "IX";
 static const string IY_REG = "IY";
@@ -409,4 +415,111 @@ bool Z80CpuCommandExpectedTestResults::isEqual(ByteCpuRegisterSymbol byteCpuRegi
 
 bool Z80CpuCommandExpectedTestResults::isEqual(WordCpuRegisterSymbol wordCpuRegisterSymbol, int value) {
     return cpu.get(wordCpuRegisterSymbol).getValue() == value;
+}
+
+Z80CpuCommandExpectedTestResults& Z80CpuCommandExpectedTestResults::B(int value) {
+    expectedCpuParameters[B_REG] = value;
+    return *this;
+}
+
+Z80CpuCommandExpectedTestResults& Z80CpuCommandExpectedTestResults::C(int value) {
+    expectedCpuParameters[C_REG] = value;
+    return *this;
+}
+
+Z80CpuCommandExpectedTestResults& Z80CpuCommandExpectedTestResults::D(int value) {
+    expectedCpuParameters[D_REG] = value;
+    return *this;
+}
+
+Z80CpuCommandExpectedTestResults& Z80CpuCommandExpectedTestResults::E(int value) {
+    expectedCpuParameters[E_REG] = value;
+    return *this;
+}
+
+Z80CpuCommandExpectedTestResults& Z80CpuCommandExpectedTestResults::H(int value) {
+    expectedCpuParameters[H_REG] = value;
+    return *this;
+}
+
+Z80CpuCommandExpectedTestResults& Z80CpuCommandExpectedTestResults::L(int value) {
+    expectedCpuParameters[L_REG] = value;
+    return *this;
+}
+
+std::optional<bool> Z80CpuCommandExpectedTestResults::isBEqual() {
+    auto key = B_REG;
+    auto symbol = ByteCpuRegisterSymbol::B;
+
+    if (expectedCpuParameters.count(key) > 0) {
+        auto expectedResults = std::any_cast<int>(expectedCpuParameters[key]);
+        return static_cast<int>(cpu.get(symbol).getValue()) == expectedResults;
+    }
+
+    return nullopt;
+}
+
+std::optional<bool> Z80CpuCommandExpectedTestResults::isCEqual() {
+    auto key = C_REG;
+    auto symbol = ByteCpuRegisterSymbol::C;
+
+    if (expectedCpuParameters.count(key) > 0) {
+        auto expectedResults = std::any_cast<int>(expectedCpuParameters[key]);
+        return static_cast<int>(cpu.get(symbol).getValue()) == expectedResults;
+    }
+
+    return nullopt;
+}
+
+std::optional<bool> Z80CpuCommandExpectedTestResults::isDEqual() {
+    auto key = D_REG;
+    auto symbol = ByteCpuRegisterSymbol::D;
+
+    if (expectedCpuParameters.count(key) > 0) {
+        auto expectedResults = std::any_cast<int>(expectedCpuParameters[key]);
+        return static_cast<int>(cpu.get(symbol).getValue()) == expectedResults;
+    }
+
+    return nullopt;
+}
+
+std::optional<bool> Z80CpuCommandExpectedTestResults::isEEqual() {
+    auto key = E_REG;
+    auto symbol = ByteCpuRegisterSymbol::E;
+
+    if (expectedCpuParameters.count(key) > 0) {
+        auto expectedResults = std::any_cast<int>(expectedCpuParameters[key]);
+        return static_cast<int>(cpu.get(symbol).getValue()) == expectedResults;
+    }
+
+    return nullopt;
+}
+
+std::optional<bool> Z80CpuCommandExpectedTestResults::isHEqual() {
+    auto key = H_REG;
+    auto symbol = ByteCpuRegisterSymbol::H;
+
+    if (expectedCpuParameters.count(key) > 0) {
+        auto expectedResults = std::any_cast<int>(expectedCpuParameters[key]);
+        return static_cast<int>(cpu.get(symbol).getValue()) == expectedResults;
+    }
+
+    return nullopt;
+}
+
+std::optional<bool> Z80CpuCommandExpectedTestResults::isLEqual() {
+    auto key = L_REG;
+    auto symbol = ByteCpuRegisterSymbol::L;
+
+    if (expectedCpuParameters.count(key) > 0) {
+        auto expectedResults = std::any_cast<int>(expectedCpuParameters[key]);
+        return static_cast<int>(cpu.get(symbol).getValue()) == expectedResults;
+    }
+
+    return nullopt;
+}
+
+Z80CpuCommandExpectedTestResults& Z80CpuCommandExpectedTestResults::Set(std::string name, int value) {
+    expectedCpuParameters[name] = value;
+    return *this;
 }

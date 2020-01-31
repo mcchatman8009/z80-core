@@ -68,6 +68,8 @@ class WordRegister {
 
         Z80Byte getHighByte();
 
+        void setShadowWordValue(Z80Word data);
+
         void setLowByte(Z80Byte lowByte);
 
         void setHighByte(Z80Byte highByte);

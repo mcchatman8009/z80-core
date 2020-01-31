@@ -12,6 +12,7 @@ class Z80CpuCommandExpectedTestResults {
         explicit Z80CpuCommandExpectedTestResults(Z80Cpu& cpu, MemoryHandler& memoryHandler,
                                                   IOMemoryHandler& ioMemoryHandler);
 
+        Z80CpuCommandExpectedTestResults& Set(std::string, int value);
 
         Z80CpuCommandExpectedTestResults& CF(bool flag);
 
@@ -32,6 +33,18 @@ class Z80CpuCommandExpectedTestResults {
         Z80CpuCommandExpectedTestResults& A(int value);
 
         Z80CpuCommandExpectedTestResults& F(int value);
+
+        Z80CpuCommandExpectedTestResults& B(int value);
+
+        Z80CpuCommandExpectedTestResults& C(int value);
+
+        Z80CpuCommandExpectedTestResults& D(int value);
+
+        Z80CpuCommandExpectedTestResults& E(int value);
+
+        Z80CpuCommandExpectedTestResults& H(int value);
+
+        Z80CpuCommandExpectedTestResults& L(int value);
 
         Z80CpuCommandExpectedTestResults& BC(int value);
 
@@ -70,6 +83,18 @@ class Z80CpuCommandExpectedTestResults {
         std::optional<bool> isFlagsEqual();
 
         std::optional<bool> isBCEqual();
+
+        std::optional<bool> isBEqual();
+
+        std::optional<bool> isCEqual();
+
+        std::optional<bool> isDEqual();
+
+        std::optional<bool> isEEqual();
+
+        std::optional<bool> isHEqual();
+
+        std::optional<bool> isLEqual();
 
         std::optional<bool> isDEEqual();
 

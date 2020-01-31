@@ -18,3 +18,7 @@ void ByteRegister::setByteValue(Z80Byte byteValue) {
 Z80Byte ByteRegister::getByteValue() const {
     return value;
 }
+
+void ByteRegister::setShadowByteValue(Z80Byte byteValue) {
+    shadowValue = byteValue;
+}

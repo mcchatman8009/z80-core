@@ -8,7 +8,11 @@ enum class WordCpuRegisterSymbol {
     PC,
     IX,
     IY,
-    SP
+    SP,
+    SHADOW_AF,
+    SHADOW_BC,
+    SHADOW_DE,
+    SHADOW_HL,
 // @formatter:on
 };
 
