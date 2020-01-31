@@ -3,6 +3,10 @@ project(z80-core)
 
 set(CMAKE_CXX_STANDARD 17)
 
+IF (CMAKE_COMPILER_IS_GNUCC)
+    MESSAGE(STATUS "=== GCC C COMPILER DETECTED")
+    set(CMAKE_EXE_LINKER_FLAGS -fPIC)
+endif ()
 
 enable_testing()
 include(${CMAKE_CURRENT_SOURCE_DIR}/google-test.cmake)
