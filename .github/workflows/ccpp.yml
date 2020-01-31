@@ -9,9 +9,15 @@ jobs:
 
     steps:
       - uses: actions/checkout@v1
+
+      - name: install uuid
+        run: sudo apt-get install -y uuid-runtime
+
       - name: configure
         run: mkdir build && cd build && cmake ..
+
       - name: make
         run: cd build && make
+
       - name: test
         run: cd build && make test
