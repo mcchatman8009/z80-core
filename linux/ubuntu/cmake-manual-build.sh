@@ -23,7 +23,7 @@ cd cmake-$CMAKE_VERSION.$BUILD_NUMBER/
 echo "Building using $NUMBER_OF_PROCESSORS processors..."
 ./bootstrap
 make -j$NUMBER_OF_PROCESSORS
-sudo make install
+make install
 
 #
 # Cleanup

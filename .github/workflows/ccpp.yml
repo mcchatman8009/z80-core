@@ -9,6 +9,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v1
+      - name: ls
+        run: ls -l && pwd
 
       - name: add repo
         run: sudo add-apt-repository ppa:ubuntu-toolchain-r/test
@@ -19,10 +21,7 @@ jobs:
       - name: install uuid-runtime
         run: sudo apt-get install -y uuid-runtime
 
-      - name: install uuid-runtime
-        run: sudo apt-get install -y uuid-dev
-
-      - name: install uuid-runtime
+      - name: install uuid-dev
         run: sudo apt-get install -y uuid-dev
 
       - name: install gcc/g++ 9

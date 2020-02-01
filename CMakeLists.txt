@@ -61,21 +61,21 @@ add_executable(Z80Test
     test/Z80CpuCommandExpectedTestResults.cpp
     test/Z80CpuCommandExpectedTestResults.h
     test/Z80CpuTest.h
-    test/LD.cpp
-    test/ADD.cpp
-    test/SUB.cpp
-    test/AND.cpp
-    test/OR.cpp
-    test/XOR.cpp
-    test/CP.cpp
-    test/INC.cpp
-    test/INC.cpp
-    test/DEC.cpp
+    test/LD_TEST.cpp
+    test/ADD_TEST.cpp
+    test/SUB_TEST.cpp
+    test/AND_TEST.cpp
+    test/OR_TEST.cpp
+    test/XOR_TEST.cpp
+    test/CP_TEST.cpp
+    test/INC_TEST.cpp
+    test/INC_TEST.cpp
+    test/DEC_TEST.cpp
     src/Z80Cpu.CpuInstructionExecution.cpp
     src/Z80Cpu.Debug.cpp
     src/Z80CpuMnemonicMapper.cpp
     src/Z80CpuMnemonicMapper.h
-    src/OpcodeType.h test/JP.cpp test/JR.cpp test/CALL.cpp test/RET.cpp src/ImmediateValueReader.h test/CompilerTest.cpp test/Z80CpuTestFixture.cpp test/Z80CpuTestFixture.h test/TestMemoryHandler.cpp test/TestMemoryHandler.h test/TestIOMemoryHandler.cpp test/TestIOMemoryHandler.h test/ExchagneAndBlockTransfrerCommandTest.cpp test/ArithemeticControlCommandsTest.cpp)
+    src/OpcodeType.h test/JP_TEST.cpp test/JR_TEST.cpp test/CALL_TEST.cpp test/RET_TEST.cpp src/ImmediateValueReader.h test/CompilerTest.cpp test/Z80CpuTestFixture.cpp test/Z80CpuTestFixture.h test/TestMemoryHandler.cpp test/TestMemoryHandler.h test/TestIOMemoryHandler.cpp test/TestIOMemoryHandler.h test/ExchagneAndBlockTransfrerCommandTest.cpp test/ArithemeticControlCommandsTest.cpp)
 
 target_link_libraries(Z80Test z80encoder z80parser gtest gmock gtest_main)
 add_dependencies(Z80Test z80encoder z80parser gtest gmock gtest_main)
