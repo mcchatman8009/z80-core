@@ -81,13 +81,7 @@ target_link_libraries(Z80Test z80encoder z80parser gtest gmock gtest_main)
 add_dependencies(Z80Test z80encoder z80parser gtest gmock gtest_main)
 add_test(Z80Test Z80Test)
 
-set(Library_Type SHARED)
-IF (CMAKE_COMPILER_IS_GNUCC)
-    set(Library_Type STATIC)
-endif ()
-
 add_library(z80core
-    ${Library_Type}
     src/IOMemoryHandler.h
     src/Z80Byte.cpp
     src/Z80Byte.h
@@ -127,14 +121,7 @@ add_library(z80core
     src/Z80Compiler.cpp src/Z80Compiler.h src/ImmediateValueReader.h src/interpolate.h)
 target_link_libraries(z80core z80encoder z80parser)
 add_dependencies(z80core z80encoder z80parser)
-
-IF (CMAKE_COMPILER_IS_GNUCC)
-    MESSAGE(STATUS "=== GCC C COMPILER DETECTED")
-    set_target_properties(z80core PROPERTIES LINK_FLAGS "-fPIC" PUBLIC_HEADER "include/Z80Core.h")
-else ()
-    set_target_properties(z80core PROPERTIES PUBLIC_HEADER "include/Z80Core.h")
-endif ()
-
+set_target_properties(z80core PROPERTIES PUBLIC_HEADER "include/Z80Core.h")
 
 install(
     TARGETS z80core

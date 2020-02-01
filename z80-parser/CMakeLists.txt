@@ -4,7 +4,10 @@ project(z80-parser)
 
 set(CMAKE_CXX_STANDARD 17)
 
+
 include(antlr4.cmake)
+set_target_properties(antlr4_shared PROPERTIES EXCLUDE_FROM_ALL 1 EXCLUDE_FROM_DEFAULT_BUILD 1)
+
 enable_testing()
 include(${CMAKE_CURRENT_SOURCE_DIR}/google-test.cmake)
 

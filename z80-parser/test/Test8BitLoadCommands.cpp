@@ -49,7 +49,6 @@ TEST_F(Z80ParserTestFixture, loadByteRegisterWithIYOffset) { // NOLINT
     });
 }
 
-
 TEST_F(Z80ParserTestFixture, loadHLPointerWithRegister) { // NOLINT
     performParse("LD (hl), c", [](Z80Parser& parser) {
         parser.loadHLPointerWithRegister();

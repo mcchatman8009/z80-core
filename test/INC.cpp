@@ -27,7 +27,7 @@ TEST_F(Z80CpuTestFixture, INC_B) { // NOLINT
 }
 TEST_F(Z80CpuTestFixture, INC_C) { // NOLINT
     validateSingleInstructionAndTestPCOffset("ld c, 0xfe");
-    expectedResults.B(0xFF);
+    expectedResults.C(0xFF);
     expectedResults.NF(false);
     expectedResults.HF(true);
     expectedResults.CF(false);
@@ -63,7 +63,7 @@ TEST_F(Z80CpuTestFixture, INC_H) { // NOLINT
 }
 TEST_F(Z80CpuTestFixture, INC_L) { // NOLINT
     validateSingleInstructionAndTestPCOffset("ld l, 0xfe");
-    expectedResults.H(0xFF);
+    expectedResults.L(0xFF);
     expectedResults.NF(false);
     expectedResults.HF(true);
     expectedResults.CF(false);

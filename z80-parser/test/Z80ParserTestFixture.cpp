@@ -10,7 +10,7 @@ using namespace antlr4;
 void Z80ParserTestFixture::SetUp() {
 }
 
-void Z80ParserTestFixture::performParse(std::string input, std::function<void(Z80Parser&)> parserHandler) {
+void Z80ParserTestFixture::performParse(std::string_view input, std::function<void(Z80Parser&)> parserHandler) { // NOLINT
     stringstream stringStream;
     stringStream << input;
 
