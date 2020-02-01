@@ -10,11 +10,26 @@ jobs:
     steps:
       - uses: actions/checkout@v1
 
+      - name: add repo
+        run: sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+
+      - name: update repos
+        run: sudo apt-get update
+
       - name: install uuid-runtime
         run: sudo apt-get install -y uuid-runtime
 
       - name: install uuid-runtime
         run: sudo apt-get install -y uuid-dev
+
+      - name: install uuid-runtime
+        run: sudo apt-get install -y uuid-dev
+
+      - name: install gcc/g++ 9
+        run: sudo apt-get install -y gcc-9 g++-9
+
+      - name: update the alternatives for gcc/g++
+        run: sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 60 --slave /usr/bin/g++ g++ /usr/bin/g++-9
 
       - name: configure
         run: mkdir build && cd build && cmake ..

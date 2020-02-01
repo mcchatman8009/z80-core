@@ -8,18 +8,8 @@
 using namespace std;
 using namespace antlr4;
 
-template<class Rule>
-void Z80Compiler::addEncodedInstructionBytesToRom(string name, Rule* context) { // NOLINT
-    string dest = context->dest->getText();
-    string source = context->source->getText();
-    string instruction = name + " " + dest + " , " + source;
-
-    auto results = instructionEncoder.encodeInstructionWithoutImmediateBytes(instruction);
-
-    addBytesToRom(results);
-}
-
-std::vector<unsigned char> Z80Compiler::compile(std::string& assemblyCode) {
+template<class ParserProviderCallbackFunction>
+void Z80Compiler::provideParserFromText(std::string_view assemblyCode, ParserProviderCallbackFunction callbackFunction) {
     stringstream stringStream;
     stringStream << assemblyCode;
     stringStream << '\n';
@@ -34,9 +24,38 @@ std::vector<unsigned char> Z80Compiler::compile(std::string& assemblyCode) {
     Ref<BailErrorStrategy> bailErrorStrategy(new BailErrorStrategy());
     parser.setErrorHandler(bailErrorStrategy);
 
-    auto* tree = parser.program();
+    callbackFunction(parser);
+}
 
-    tree::ParseTreeWalker::DEFAULT.walk(this, tree);
+template<class Rule>
+void Z80Compiler::addEncodedInstructionBytesToRom(string name, Rule* context) { // NOLINT
+    string dest = context->dest->getText();
+    string source = context->source->getText();
+    string instruction = name + " " + dest + " , " + source;
+
+    auto results = instructionEncoder.encodeInstructionWithoutImmediateBytes(instruction);
+
+    addBytesToRom(results);
+}
+
+void Z80Compiler::compileAndPutIntoByteVector(std::string_view assemblyCode, std::vector<unsigned char>& bytes) {
+    provideParserFromText(assemblyCode, [this](Z80Parser& parser) {
+        auto tree = parser.program();
+        tree::ParseTreeWalker::DEFAULT.walk(this, tree);
+    });
+
+    bytes.reserve(romData.size());
+
+    for (auto& data : romData) {
+        bytes.push_back(data);
+    }
+}
+
+std::vector<unsigned char> Z80Compiler::compile(std::string_view assemblyCode) {
+    provideParserFromText(assemblyCode, [this](Z80Parser& parser) {
+        auto tree = parser.program();
+        tree::ParseTreeWalker::DEFAULT.walk(this, tree);
+    });
 
     return romData;
 }
@@ -61,7 +80,7 @@ void Z80Compiler::exitLoadByteRegisterWithImmediateByte(Z80Parser::LoadByteRegis
     unsigned char number = valueReader.readNumber(context->source);
     string instruction =
         context->loadCommandName()->getText() + " " + context->dest->getText() + " , n";
-    auto results = instructionEncoder.encodeInstructionWithImmediateBytes(instruction, {number});
+    auto results = instructionEncoder.encodeInstructionWithImmediateBytes(instruction, 1, number);
 
     addBytesToRom(results);
 
@@ -82,7 +101,7 @@ void Z80Compiler::exitLoadByteRegisterWithIXOffset(Z80Parser::LoadByteRegisterWi
     auto number = readByte(context->source->number());
     string instruction =
         context->loadCommandName()->getText() + " " + context->dest->getText() + " , (ix + n)";
-    auto results = instructionEncoder.encodeInstructionWithImmediateBytes(instruction, {number});
+    auto results = instructionEncoder.encodeInstructionWithImmediateBytes(instruction, 1, number);
     addBytesToRom(results);
 }
 
@@ -94,7 +113,7 @@ void Z80Compiler::exitLoadByteRegisterWithIYOffset(Z80Parser::LoadByteRegisterWi
 
     string instruction =
         context->loadCommandName()->getText() + " " + context->dest->getText() + " , (iy + n)";
-    auto results = instructionEncoder.encodeInstructionWithImmediateBytes(instruction, {number});
+    auto results = instructionEncoder.encodeInstructionWithImmediateBytes(instruction, 1, number);
     addBytesToRom(results);
 }
 
@@ -113,7 +132,7 @@ void Z80Compiler::exitLoadIXOffsetWithRegister(Z80Parser::LoadIXOffsetWithRegist
         context->loadCommandName()->getText() + " (ix+n)" + " , " + context->source->getText();
 
     auto results = instructionEncoder.encodeInstructionWithImmediateBytes(instruction,
-                                                                          {readByte(context->dest->number())});
+                                                                          1, readByte(context->dest->number()));
     addBytesToRom(results);
 }
 
@@ -125,7 +144,7 @@ void Z80Compiler::exitLoadIYOffsetWithRegister(Z80Parser::LoadIYOffsetWithRegist
         context->loadCommandName()->getText() + " (iy+n)" + " , " + context->source->getText();
 
     auto results = instructionEncoder.encodeInstructionWithImmediateBytes(instruction,
-                                                                          {readByte(context->dest->number())});
+                                                                          1, readByte(context->dest->number()));
     addBytesToRom(results);
 }
 
@@ -140,7 +159,7 @@ void Z80Compiler::exitLoadHLPointerWithImmediateByte(Z80Parser::LoadHLPointerWit
     string instruction = name + " " + dest + " , " + source;
     auto data = readByte(context->number());
 
-    auto results = instructionEncoder.encodeInstructionWithImmediateBytes(instruction, {data});
+    auto results = instructionEncoder.encodeInstructionWithImmediateBytes(instruction, 1, data);
 
     addBytesToRom(results);
 }
@@ -657,7 +676,7 @@ void Z80Compiler::exitAddAAndRegister(Z80Parser::AddAAndRegisterContext* context
 
 void Z80Compiler::exitAddAAndImmediateByte(Z80Parser::AddAAndImmediateByteContext* context) {
     auto data = readByte(context->number());
-    auto results = instructionEncoder.encodeInstructionWithImmediateBytes("ADD A, n", {data});
+    auto results = instructionEncoder.encodeInstructionWithImmediateBytes("ADD A, n", 1, data);
     addBytesToRom(results);
 }
 
@@ -688,13 +707,13 @@ void Z80Compiler::exitAddAAndHLPointer(Z80Parser::AddAAndHLPointerContext* conte
 
 void Z80Compiler::exitAddAAndIXOffset(Z80Parser::AddAAndIXOffsetContext* context) {
     auto data = readByte(context->ixPointerWithOffset()->number());
-    auto results = instructionEncoder.encodeInstructionWithImmediateBytes("ADD A, (ix+n)", {data});
+    auto results = instructionEncoder.encodeInstructionWithImmediateBytes("ADD A, (ix+n)", 1, data);
     addBytesToRom(results);
 }
 
 void Z80Compiler::exitAddAAndIYOffset(Z80Parser::AddAAndIYOffsetContext* context) {
     auto data = readByte(context->iyPointerWithOffset()->number());
-    auto results = instructionEncoder.encodeInstructionWithImmediateBytes("ADD A, (iy+n)", {data});
+    auto results = instructionEncoder.encodeInstructionWithImmediateBytes("ADD A, (iy+n)", 1, data);
     addBytesToRom(results);
 }
 
@@ -710,19 +729,19 @@ void Z80Compiler::exitAddWithCarryAAndHLPointer(Z80Parser::AddWithCarryAAndHLPoi
 
 void Z80Compiler::exitAddWithCarryAAndImmediate(Z80Parser::AddWithCarryAAndImmediateContext* context) {
     auto data = readByte(context->number());
-    auto results = instructionEncoder.encodeInstructionWithImmediateBytes("ADC A, n", {data});
+    auto results = instructionEncoder.encodeInstructionWithImmediateBytes("ADC A, n", 1, data);
     addBytesToRom(results);
 }
 
 void Z80Compiler::exitAddWithCarryAAndIXOffset(Z80Parser::AddWithCarryAAndIXOffsetContext* context) {
     auto data = readByte(context->ixPointerWithOffset()->number());
-    auto results = instructionEncoder.encodeInstructionWithImmediateBytes("ADC A, (ix+n)", {data});
+    auto results = instructionEncoder.encodeInstructionWithImmediateBytes("ADC A, (ix+n)", 1, data);
     addBytesToRom(results);
 }
 
 void Z80Compiler::exitAddWithCarryAAndIYOffset(Z80Parser::AddWithCarryAAndIYOffsetContext* context) {
     auto data = readByte(context->iyPointerWithOffset()->number());
-    auto results = instructionEncoder.encodeInstructionWithImmediateBytes("ADC A, (iy+n)", {data});
+    auto results = instructionEncoder.encodeInstructionWithImmediateBytes("ADC A, (iy+n)", 1, data);
     addBytesToRom(results);
 }
 
@@ -775,7 +794,7 @@ void Z80Compiler::exitSubtractImmediateFromA(Z80Parser::SubtractImmediateFromACo
     auto instruction = interpolate(instructionFormat, dest, immediate);
     auto data = readByte(context->number());
 
-    auto results = instructionEncoder.encodeInstructionWithImmediateBytes(instruction, {data});
+    auto results = instructionEncoder.encodeInstructionWithImmediateBytes(instruction, 1, data);
     addBytesToRom(results);
 }
 
@@ -786,7 +805,7 @@ void Z80Compiler::exitSubtractIXOffsetFromA(Z80Parser::SubtractIXOffsetFromACont
     auto instruction = interpolate(instructionFormat, dest, src);
     auto data = readByte(context->ixPointerWithOffset()->number());
 
-    auto results = instructionEncoder.encodeInstructionWithImmediateBytes(instruction, {data});
+    auto results = instructionEncoder.encodeInstructionWithImmediateBytes(instruction, 1, data);
     addBytesToRom(results);
 }
 
@@ -797,7 +816,7 @@ void Z80Compiler::exitSubtractIYOffsetFromA(Z80Parser::SubtractIYOffsetFromACont
     auto instruction = interpolate(instructionFormat, dest, src);
     auto data = readByte(context->iyPointerWithOffset()->number());
 
-    auto results = instructionEncoder.encodeInstructionWithImmediateBytes(instruction, {data});
+    auto results = instructionEncoder.encodeInstructionWithImmediateBytes(instruction, 1, data);
     addBytesToRom(results);
 }
 
@@ -850,7 +869,7 @@ void Z80Compiler::exitSubtractWithBorrowIXOffsetFromA(Z80Parser::SubtractWithBor
 
     auto data = readByte(context->source->number());
 
-    auto results = instructionEncoder.encodeInstructionWithImmediateBytes(instruction, {data});
+    auto results = instructionEncoder.encodeInstructionWithImmediateBytes(instruction, 1, data);
     addBytesToRom(results);
 }
 
@@ -862,7 +881,7 @@ void Z80Compiler::exitSubtractWithBorrowIYOffsetFromA(Z80Parser::SubtractWithBor
 
     auto data = readByte(context->source->number());
 
-    auto results = instructionEncoder.encodeInstructionWithImmediateBytes(instruction, {data});
+    auto results = instructionEncoder.encodeInstructionWithImmediateBytes(instruction, 1, data);
     addBytesToRom(results);
 }
 
@@ -875,7 +894,7 @@ void Z80Compiler::exitSubtractWithBorrowImmediateFromA(Z80Parser::SubtractWithBo
 
     auto data = readByte(context->number());
 
-    auto results = instructionEncoder.encodeInstructionWithImmediateBytes(instruction, {data});
+    auto results = instructionEncoder.encodeInstructionWithImmediateBytes(instruction, 1, data);
     addBytesToRom(results);
 }
 
@@ -937,7 +956,7 @@ void Z80Compiler::exitAndAWithImmediate(Z80Parser::AndAWithImmediateContext* con
     auto instruction = interpolate(instructionFormat, dest, src);
     auto data = readByte(context->number());
 
-    auto results = instructionEncoder.encodeInstructionWithImmediateBytes(instruction, {data});
+    auto results = instructionEncoder.encodeInstructionWithImmediateBytes(instruction, 1, data);
     addBytesToRom(results);
 }
 
@@ -958,7 +977,7 @@ void Z80Compiler::exitAndAWithIXOffset(Z80Parser::AndAWithIXOffsetContext* conte
     auto instruction = interpolate(instructionFormat, dest, src);
     auto data = readByte(context->ixPointerWithOffset()->number());
 
-    auto results = instructionEncoder.encodeInstructionWithImmediateBytes(instruction, {data});
+    auto results = instructionEncoder.encodeInstructionWithImmediateBytes(instruction, 1, data);
     addBytesToRom(results);
 }
 
@@ -969,7 +988,7 @@ void Z80Compiler::exitAndAWithIYOffset(Z80Parser::AndAWithIYOffsetContext* conte
     auto instruction = interpolate(instructionFormat, dest, src);
     auto data = readByte(context->iyPointerWithOffset()->number());
 
-    auto results = instructionEncoder.encodeInstructionWithImmediateBytes(instruction, {data});
+    auto results = instructionEncoder.encodeInstructionWithImmediateBytes(instruction, 1, data);
     addBytesToRom(results);
 }
 
@@ -1031,7 +1050,7 @@ void Z80Compiler::exitOrAWithImmediate(Z80Parser::OrAWithImmediateContext* conte
     auto instruction = interpolate(instructionFormat, dest, src);
     auto data = readByte(context->number());
 
-    auto results = instructionEncoder.encodeInstructionWithImmediateBytes(instruction, {data});
+    auto results = instructionEncoder.encodeInstructionWithImmediateBytes(instruction, 1, data);
     addBytesToRom(results);
 }
 
@@ -1053,7 +1072,7 @@ void Z80Compiler::exitOrAWithIXOffset(Z80Parser::OrAWithIXOffsetContext* context
     auto instruction = interpolate(instructionFormat, dest, src);
     auto data = readByte(context->ixPointerWithOffset()->number());
 
-    auto results = instructionEncoder.encodeInstructionWithImmediateBytes(instruction, {data});
+    auto results = instructionEncoder.encodeInstructionWithImmediateBytes(instruction, 1, data);
     addBytesToRom(results);
 }
 
@@ -1064,7 +1083,7 @@ void Z80Compiler::exitOrAWithIYOffset(Z80Parser::OrAWithIYOffsetContext* context
     auto instruction = interpolate(instructionFormat, dest, src);
     auto data = readByte(context->iyPointerWithOffset()->number());
 
-    auto results = instructionEncoder.encodeInstructionWithImmediateBytes(instruction, {data});
+    auto results = instructionEncoder.encodeInstructionWithImmediateBytes(instruction, 1, data);
     addBytesToRom(results);
 }
 
@@ -1125,7 +1144,7 @@ void Z80Compiler::exitXorAWithImmediate(Z80Parser::XorAWithImmediateContext* con
     auto instruction = interpolate(instructionFormat, dest, src);
     auto data = readByte(context->number());
 
-    auto results = instructionEncoder.encodeInstructionWithImmediateBytes(instruction, {data});
+    auto results = instructionEncoder.encodeInstructionWithImmediateBytes(instruction, 1, data);
     addBytesToRom(results);
 }
 
@@ -1146,7 +1165,7 @@ void Z80Compiler::exitXorAWithIXOffset(Z80Parser::XorAWithIXOffsetContext* conte
     auto instruction = interpolate(instructionFormat, dest, src);
     auto data = readByte(context->ixPointerWithOffset()->number());
 
-    auto results = instructionEncoder.encodeInstructionWithImmediateBytes(instruction, {data});
+    auto results = instructionEncoder.encodeInstructionWithImmediateBytes(instruction, 1, data);
     addBytesToRom(results);
 }
 
@@ -1157,7 +1176,7 @@ void Z80Compiler::exitXorAWithIYOffset(Z80Parser::XorAWithIYOffsetContext* conte
     auto instruction = interpolate(instructionFormat, dest, src);
     auto data = readByte(context->iyPointerWithOffset()->number());
 
-    auto results = instructionEncoder.encodeInstructionWithImmediateBytes(instruction, {data});
+    auto results = instructionEncoder.encodeInstructionWithImmediateBytes(instruction, 1, data);
     addBytesToRom(results);
 }
 
@@ -1229,7 +1248,7 @@ void Z80Compiler::exitCompareAWithImmediate(Z80Parser::CompareAWithImmediateCont
     auto instruction = interpolate(instructionFormat, dest, src);
     auto data = readByte(context->number());
 
-    auto results = instructionEncoder.encodeInstructionWithImmediateBytes(instruction, {data});
+    auto results = instructionEncoder.encodeInstructionWithImmediateBytes(instruction, 1, data);
     addBytesToRom(results);
 }
 
@@ -1240,7 +1259,7 @@ void Z80Compiler::exitCompareAWithIXOffset(Z80Parser::CompareAWithIXOffsetContex
     auto instruction = interpolate(instructionFormat, dest, src);
     auto data = readByte(context->ixPointerWithOffset()->number());
 
-    auto results = instructionEncoder.encodeInstructionWithImmediateBytes(instruction, {data});
+    auto results = instructionEncoder.encodeInstructionWithImmediateBytes(instruction, 1, data);
     addBytesToRom(results);
 }
 
@@ -1251,7 +1270,7 @@ void Z80Compiler::exitCompareAWithIYOffset(Z80Parser::CompareAWithIYOffsetContex
     auto instruction = interpolate(instructionFormat, dest, src);
     auto data = readByte(context->iyPointerWithOffset()->number());
 
-    auto results = instructionEncoder.encodeInstructionWithImmediateBytes(instruction, {data});
+    auto results = instructionEncoder.encodeInstructionWithImmediateBytes(instruction, 1, data);
     addBytesToRom(results);
 }
 
@@ -1360,7 +1379,7 @@ void Z80Compiler::exitIncrementIXOffset(Z80Parser::IncrementIXOffsetContext* con
     string instruction = "INC (ix+n)";
 
     auto data = readByte(context->ixPointerWithOffset()->number());
-    auto results = instructionEncoder.encodeInstructionWithImmediateBytes(instruction, {data});
+    auto results = instructionEncoder.encodeInstructionWithImmediateBytes(instruction, 1, data);
     addBytesToRom(results);
 }
 
@@ -1369,7 +1388,7 @@ void Z80Compiler::exitIncrementIYOffset(Z80Parser::IncrementIYOffsetContext* con
     string instruction = "INC (iy+n)";
 
     auto data = readByte(context->iyPointerWithOffset()->number());
-    auto results = instructionEncoder.encodeInstructionWithImmediateBytes(instruction, {data});
+    auto results = instructionEncoder.encodeInstructionWithImmediateBytes(instruction, 1, data);
     addBytesToRom(results);
 }
 
@@ -1439,7 +1458,7 @@ void Z80Compiler::exitDecrementIXOffset(Z80Parser::DecrementIXOffsetContext* con
     auto instruction = interpolate(instructionFormat, src);
     auto data = readByte(context->ixPointerWithOffset()->number());
 
-    auto results = instructionEncoder.encodeInstructionWithImmediateBytes(instruction, {data});
+    auto results = instructionEncoder.encodeInstructionWithImmediateBytes(instruction, 1, data);
     addBytesToRom(results);
 }
 
@@ -1450,7 +1469,7 @@ void Z80Compiler::exitDecrementIYOffset(Z80Parser::DecrementIYOffsetContext* con
     auto instruction = interpolate(instructionFormat, src);
     auto data = readByte(context->iyPointerWithOffset()->number());
 
-    auto results = instructionEncoder.encodeInstructionWithImmediateBytes(instruction, {data});
+    auto results = instructionEncoder.encodeInstructionWithImmediateBytes(instruction, 1, data);
     addBytesToRom(results);
 }
 
@@ -1728,7 +1747,7 @@ void Z80Compiler::exitRotateLeftThroughCarryIYOffset(Z80Parser::RotateLeftThroug
 }
 
 void Z80Compiler::exitRotateRightCircularHLPointer(Z80Parser::RotateRightCircularHLPointerContext* context) {
-
+    Z80BaseListener::exitRotateRightCircularHLPointer(context);
 }
 
 void Z80Compiler::exitRotateRightCircularRegister(Z80Parser::RotateRightCircularRegisterContext* context) {
@@ -2117,5 +2136,6 @@ std::vector<unsigned char> Z80Compiler::readWordBytes(Z80Parser::NumberContext* 
 std::vector<unsigned char> Z80Compiler::readWordBytes(Z80Parser::NumberPointerContext* numberContext) {
     return readWordBytes(numberContext->number());
 }
+
 
 

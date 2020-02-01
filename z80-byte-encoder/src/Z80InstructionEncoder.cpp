@@ -3,6 +3,9 @@
 #include <regex>
 #include <stdexcept>
 #include <sstream>
+
+#define CSV_IO_NO_THREAD 1
+
 #include "csv.h"
 
 using namespace std;
@@ -1978,14 +1981,14 @@ Z80InstructionEncoder::Z80InstructionEncoder() {
     initializeInstructionTable();
 }
 
-std::vector<unsigned char> Z80InstructionEncoder::encodeInstructionWithoutImmediateBytes(std::string instruction) {
+std::vector<unsigned char> Z80InstructionEncoder::encodeInstructionWithoutImmediateBytes(std::string_view instruction) {
     if (instructionHasImmediateBytes(instruction)) {
-        throw std::runtime_error("The Instruction (" + instruction + ") has immediate bytes.");
+        throw std::runtime_error("The Instruction (" + string(instruction) + ") has immediate bytes.");
     }
 
     vector<unsigned char> bytes;
 
-    auto opCode = performInstructionLookup(move(instruction));
+    auto opCode = performInstructionLookup(instruction);
 
     buildBytes(opCode, bytes);
 
@@ -1993,15 +1996,15 @@ std::vector<unsigned char> Z80InstructionEncoder::encodeInstructionWithoutImmedi
 }
 
 std::vector<unsigned char>
-Z80InstructionEncoder::encodeInstructionWithImmediateBytes(std::string instruction,
+Z80InstructionEncoder::encodeInstructionWithImmediateBytes(std::string_view instruction,
                                                            std::vector<unsigned char> immediateBytes) {
     if (!instructionHasImmediateBytes(instruction)) {
-        throw std::runtime_error("The instruction (" + instruction + ") doesn't have any immediate bytes.");
+        throw std::runtime_error("The instruction (" + string(instruction) + ") doesn't have any immediate bytes.");
     }
 
     vector<unsigned char> bytes;
 
-    auto opCode = performInstructionLookup(move(instruction));
+    auto opCode = performInstructionLookup(instruction);
 
     buildBytes(opCode, bytes);
 
@@ -2013,7 +2016,7 @@ Z80InstructionEncoder::encodeInstructionWithImmediateBytes(std::string instructi
 
 }
 
-int Z80InstructionEncoder::performInstructionLookup(std::string instruction) { // NOLINT
+int Z80InstructionEncoder::performInstructionLookup(std::string_view instruction) { // NOLINT
     string keyString = instructionToKey(instruction);
 
 
@@ -2021,7 +2024,7 @@ int Z80InstructionEncoder::performInstructionLookup(std::string instruction) { /
         return instructionTable[keyString];
     }
 
-    throw std::runtime_error("Unknown instruction (" + instruction + ").");
+    throw std::runtime_error("Unknown instruction (" + string(instruction) + ").");
 }
 
 
@@ -2045,14 +2048,16 @@ void Z80InstructionEncoder::buildBytes(int opCode, std::vector<unsigned char>& b
     }
 }
 
-std::string Z80InstructionEncoder::instructionToKey(std::string instruction) { // NOLINT
-    toUpper(instruction);
-    removeAllWhiteSpaces(instruction);
-    return instruction;
+std::string Z80InstructionEncoder::instructionToKey(std::string_view instruction) { // NOLINT
+    std::string str = string(instruction);
+    toUpper(str);
+    removeAllWhiteSpaces(str);
+
+    return str;
 }
 
-bool Z80InstructionEncoder::instructionHasImmediateBytes(std::string& instruction) { // NOLINT
-    return regex_match(instruction, RE_IMMEDIATE_DATA_PATTERN);
+bool Z80InstructionEncoder::instructionHasImmediateBytes(std::string_view& instruction) { // NOLINT
+    return regex_match(string(instruction), RE_IMMEDIATE_DATA_PATTERN);
 }
 
 void Z80InstructionEncoder::initializeInstructionTable() {
@@ -2069,4 +2074,22 @@ void Z80InstructionEncoder::initializeInstructionTable() {
 
         instructionTable[key] = stoi(opCodeString, nullptr, 16);
     }
+}
+
+#include <cstdarg>
+
+std::vector<unsigned char> Z80InstructionEncoder::encodeInstructionWithImmediateBytes(std::string_view instruction, int numberOfBytes, ...) {
+    std::va_list args;
+    std::vector<unsigned char> vec{};
+
+    va_start(args, numberOfBytes);
+
+    for (int i = 0; i < numberOfBytes; ++i) {
+        auto ch = va_arg(args, int); // NOLINT
+        vec.push_back(ch);
+    }
+
+    va_end(args);
+
+    return encodeInstructionWithImmediateBytes(instruction, vec);
 }

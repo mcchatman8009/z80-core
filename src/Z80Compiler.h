@@ -3,14 +3,21 @@
 
 #include <vector>
 #include <string>
+#include <string_view>
 #include <Z80BaseListener.h>
 #include <Z80InstructionEncoder.h>
 
 class Z80Compiler : private Z80BaseListener {
     public:
-        std::vector<unsigned char> compile(std::string& assemblyCode);
+        void compileAndPutIntoByteVector(std::string_view assemblyCode, std::vector<unsigned char>& bytes);
+
+        std::vector<unsigned char> compile(std::string_view assemblyCode);
 
     private:
+
+        template <class ParserProviderCallbackFunction>
+        void provideParserFromText(std::string_view assemblyCode, ParserProviderCallbackFunction callbackFunction);
+
         template<class Rule>
         void addEncodedInstructionBytesToRom(std::string name, Rule* context);
 

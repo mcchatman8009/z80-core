@@ -28,6 +28,7 @@ add_executable(Z80ParserTest
     test/Test8BitLoadCommands.cpp test/Z80ParserTestFixture.cpp test/Z80ParserTestFixture.h test/TestNumbers.cpp test/Test16BitCommands.cpp test/TestExchangeCommands.cpp test/TestArithmeticCommands.cpp test/TestArithmeticControlCommands.cpp test/TestWordArithemeticCommands.cpp test/TestRotateCommands.cpp test/TestBitManipulationCommands.cpp test/TestBranchCommands.cpp test/TestInputAndOutputCommand.cpp)
 target_link_libraries(Z80ParserTest antlr4_static gtest gmock gtest_main)
 add_dependencies(Z80ParserTest antlr4_static)
+add_test(Z80ParserTest Z80ParserTest)
 
 add_library(z80parser STATIC
     generated/Z80BaseListener.cpp

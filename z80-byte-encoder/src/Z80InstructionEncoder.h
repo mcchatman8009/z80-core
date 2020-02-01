@@ -3,29 +3,32 @@
 
 #include <vector>
 #include <string>
+#include <string_view>
 #include <map>
 
 class Z80InstructionEncoder {
     public:
         Z80InstructionEncoder();
 
-        std::vector<unsigned char> encodeInstructionWithoutImmediateBytes(std::string instruction);
+        std::vector<unsigned char> encodeInstructionWithoutImmediateBytes(std::string_view instruction);
 
-        std::vector<unsigned char> encodeInstructionWithImmediateBytes(std::string instruction, std::vector<unsigned char> immediateBytes);
+        std::vector<unsigned char> encodeInstructionWithImmediateBytes(std::string_view instruction, std::vector<unsigned char> immediateBytes);
+
+        std::vector<unsigned char> encodeInstructionWithImmediateBytes(std::string_view instruction, int numberOfBytes, ...);
 
     private:
 
         void initializeInstructionTable();
 
-        int performInstructionLookup(std::string instruction);
+        int performInstructionLookup(std::string_view instruction);
 
         void buildBytes(int opCode, std::vector<unsigned char>& bytes);
 
         std::map<std::string, int> instructionTable;
 
-        std::string instructionToKey(std::string instruction);
+        std::string instructionToKey(std::string_view instruction);
 
-        bool instructionHasImmediateBytes(std::string& instruction);
+        bool instructionHasImmediateBytes(std::string_view& instruction);
 
 
 };

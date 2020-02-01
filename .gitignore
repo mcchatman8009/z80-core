@@ -1,3 +1,5 @@
+dist
+.vagrant
 antlr4
 build
 cmake-build-debug

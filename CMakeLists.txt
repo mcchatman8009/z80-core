@@ -18,14 +18,6 @@ include_directories(include)
 include_directories(z80-parser/generated)
 include_directories(z80-byte-encoder/src)
 include_directories(${LIBANTLR4_SOURCE_DIR}/runtime/src)
-#message(${LIBANTLR4_SOURCE_DIR})
-#include_directories(${LIBANTLR4_SOURCE_DIR}/runtime/Cpp/runtime/src)
-
-#get_cmake_property(_variableNames VARIABLES)
-#list (SORT _variableNames)
-#foreach (_variableName ${_variableNames})
-#    message(STATUS "${_variableName}=${${_variableName}}")
-#endforeach()
 
 #
 # Unit Tests
