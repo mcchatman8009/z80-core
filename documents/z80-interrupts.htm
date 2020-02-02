@@ -1,0 +1,67 @@
+<HTML>
+<HEAD>
+<TITLE>Z80 Interrupts, I and R register</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF">
+<H1>Z80 Interrupts, I and R register</H1>
+<H2>The R register</H2>
+The R register is used for memory refresh. It is increased after each 
+instruction, whereby the CB, DD, ED, FD, DDCB and FDCB prefixes are 
+viewed as separate instructions. Bit 7 is never changed by this increasing 
+but it can be changed with LD R,A.
+<P>
+The LDIR, LDDR increase the R register by two times BC, etc. 
+In LD A,R and LD R,A the R register is first increased before 
+being read or written too. 
+<P>
+Generating a maskable interrupt increases the R register by 1. 
+<P>
+<H2>DAA</H2>
+Okay, this is my theory so far: <BR>
+<PRE>
+if (F AND 2) ; sub
+ if (A >= 09ah) or carry(set) then A=A-60h
+ if ( (A AND 15) >= 9) or halfcarry(set) then A=A-6
+else ; add
+ if (A >= 09ah) or carry(set) then A=A+60h
+ if ( (A AND 15) >= 9) or halfcarry(set) then A=A+6
+endif
+</PRE>
+<P>
+<H2>Interrupts</H2>
+There are two flags used for interrupts: 
+IFF<SUB>1</SUB> and IFF<SUB>2</SUB>. 
+The state of these two flags is:
+<PRE>
+		IFF<SUB>1</SUB>	IFF<SUB>2</SUB>
+/reset		0	0
+EI		1	1
+DI		0	0
+/INT		0	0
+/NMI		0	IFF<SUB>2</SUB>
+RETN		IFF<SUB>2</SUB>	IFF<SUB>2</SUB>
+</PRE>
+IFF<SUB>1</SUB>	determines whether or not maskable interrupts are 
+excepted. IFF<SUB>1</SUB> can't be read, but IFF<SUB>2</SUB> can be 
+with LD A,R and LD A,I.
+<H2>Interrupt Modes</H2>
+<H3>IM 0</H3>
+The device that generates the interrupt also provides an one byte opcode, 
+which is executed. RST instructions are used. 
+<H3>IM 1</H3>
+A call is made to 38h.
+<H3>IM 2</H3>
+A call is made to an address read from register I x 256 + byte from 
+device. 
+<H2>MSX Specific</H2>
+On a MSX, NMI are not supported; they never occur. Because of this, 
+the two interrupt flip-flops always have the same state. 
+<P>
+The only device that generates an interrupt on a MSX is the VDP. 
+It always provides value FFh (=RST 38h) so the MSX effectively 
+operates the same in IM 0 as in IM 1. In IM 2, a call is made 
+to an address read from register I x 256 + FFh.
+<HR SIZE=4>
+<I>This page is maintained by <A HREF="mailto:syoung@cs.vu.nl">Sean Young</A>.</I><BR>
+</BODY>
+</HTML>

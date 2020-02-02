@@ -1,0 +1,1073 @@
+                                comp.sys.sinclair
+                            Sinclair ZX Spectrum FAQ
+                              v.2.6b (July 11 1995)
+
+                       Maintained by Marat Fayzullin [FMS]
+                            email:  fms@wam.umd.edu
+                                  IRC: RST38h
+
+
+  Updated: By Brian Gaff:
+           1) New address/phone number for Richardson and Co added
+           2) B G Services address added
+           By me:
+           3) Added info about Fergus McNeil
+           4) Changed info about John Ritman
+           5) Added some more info on the emulators
+           6) Added some new links
+           7) Description of .SP format added
+           8) etc.
+
+           BTW, you can always get recent copy of this FAQ file off
+
+               http://www.cs.umd.edu/users/fms/
+
+           which also contains links to ZX Spectrum related sites around
+           the Net. Hope you will like it.
+
+  Send your additions and corections to fms@wam.umd.edu. Sorry, if I made
+any errors. There is now a Spectrum emulator for Windows around. If you
+have info about it, please, send it to me.
+
+
+********************************** CONTENTS ****************************
+
+I.   NET ADDRESSES       - ZX-Spectrum-related Net addresses
+II.  EMULATORS           - comparison of existing ZX-Spectrum emulators
+III. VARIOUS QUESTIONS   - no comments :)
+IV.  WHERE IS?...        - what happened to famous ZX-Spectrum people
+V.   SNAPSHOT FORMATS    - descriptions of snapshot formats
+     1. KGB format
+     2. .SNA format
+     3. .SP format
+VI.  GENERAL INFORMATION - info on ZX-Spectrum's hardware
+     1. Z80 CPU          - undocumented opcodes and weird features
+        a) CBh opcodes
+        b) FDh and DDh opcodes
+        c) EDh opcodes
+        d) R register
+        e) Undocumented flags
+        f) IFF1 and IFF2
+     2. ULA and I/O ports
+     3. Interface I
+        a) Port E7h
+        b) Port EFh
+VII. PINOUTS
+     1. ULA
+     2. AY-3-8912
+     3. Keyboard layout
+VIII.ACKNOWLEDGEMENTS
+
+
+
+*************************** NET ADDRESSES ******************************
+FTP      ftp://ftp.inf.tu-dresden.de/pub/incoming/zxspectrum
+FTP      ftp://ftp.nvg.unit.no/pub/spectrum
+FTP      ftp://wuarchive.wustl.edu/systems/sinclair
+FTP      ftp://oak.oakland.edu/pub/msdos/emulators
+FTP      ftp://ftp.sun.ac.za/pub/msdos/zx
+FTP      ftp://ftp.ijs.si/pub/zx
+FTP      ftp://ftp.dcc.uchile.cl/pub/OS/sinclair
+
+WWW      http://www.nvg.unit.no/spectrum
+WWW      http://www.comlab.ox.ac.uk/oucl/users/ian.collier/Spectrum
+WWW      http://sable.ox.ac.uk/~tr95006/sinclair.html
+WWW      http://www.cs.umd.edu/users/fms/comp/
+WWW      http://www.maths.nott.ac.uk/personal/cpg/zx81/
+WWW      http://whirligig.ecs.soton.ac.uk/~tsp93/Coupe/home.html
+WWW      http://www.aston.ac.uk/~goringgn/
+WWW      http://www.xs4all.nl/~bsarempt/speccy.html
+
+NEWS     news://comp.sys.sinclair
+GOPHER   gopher://gopher.nvg.unit.no
+LISTSERV lserv@psg.com  subscribe sincnews <usercode>@<host.domain>
+BBS      Venture +358-0-8092126 [Finland]
+
+
+******************************* EMULATORS ******************************
+  Strong points of emulators are labeled with asterisk [*].
+
+1. Spectrum 1.7 [Amiga]   Author: Peter McGavin [peterm@kea.grace.cri.nz]
+
+*  a) Multitasks.
+   b) Loads/saves snapshots in Mirage Microdrive .SNA format compatible
+      with JPP.
+*  c) Loads/saves Spectrum files from/to tapes [through a sound-digitizer]
+      or Amiga disks [in this case, each block is written into a separate
+   d) Is reasonably fast on 68030/25MHz, but slow on 68000/7.14MHz machines.
+      At least 68020/14MHz [A1200] and FAST RAM are recommended.
+   e) Color palette is a bit strange.
+   g) Emulates Cursor Joystick with cursor keys on keyboard and Kempston
+      Joystick with joystick connected to Port 2 of Amiga.
+
+2. KGB 1.3 [Amiga]
+
+   a) Loads/saves snapshots in the format described below.
+   b) Doesn't multitask.
+   c) Loads/Saves Spectrum files from/to tapes [through a sound-digitizer].
+   d) Isn't completely compatible with ZX-Spectrum
+   e) Emulates Cursor Joystick with cursor keys, and Kempston Joystick
+      with a joystick connected to Port 2 of Amiga.
+*  f) Has a pitch-compensated mode, that transposes the sound two octaves
+      up (handy on slow Amigas)
+*  g) Operates in a monocrome mode as well as in color.
+
+3. JPP [IBM PC]   Author: Arnt Gulbrandsen [agulbra@nvg.unit.no]
+
+   a) Loads/saves snapshots in Mirage Microdrive .SNA format compatible
+      with Spectrum 1.7.
+   b) Loads/saves Spectrum files from/to tapes digitized into .VOC files.
+   c) 386/25MHz or faster is needed for the best perfomance. 486/25MHz
+      or 386/44MHz is needed for good sound emulation.
+   d) Emulates Cursor Joystick with arrow keys and [ALT] key. Emulates
+      Kempston Joystick with IBM PC joystick.
+   e) Screws up system screen mode on quit. Restore with MODE 80
+      command.
+*  f) Includes special program to convert snapshots between various
+      formats such as .SNA,.PRG,.Z80,.SP and RAW.
+   g) Needs ROM image file (included).
+   h) Includes program reading and converting snapshots from MGT disks.
+
+4. SPECEM [IBM PC] (a.k.a. Irish emulator)
+
+*  a) Works reasonably fast on 286 and a bit faster than necessary on
+      386/486 systems. 386/40MHz or 486/25MHz is needed for good sound
+      emulation.
+   b) Allows to select between VGA and EGA modes.
+   c) Loads/saves snapshots in .PRG format.
+   d) Includes program loading snapshots from MGT/Datel Plus-D disks.
+   e) Loads/saves Spectrum files to/from disk.
+   f) Both Cursor and Kempston Joysticks are emulated by cursor keys.
+      Kempston [FIRE] button is emulated with [ALT].
+
+5. SP [IBM PC] (a.k.a. Polish emulator)
+
+   a) Doesn't load/save snapshots.
+   b) Works in either CGA or EGA mode.
+   c) Stores files in so-called .SPC or .ZX format. Each such file is an
+      exact image of corresponding tape, with blocks written into the file
+      one after another. Thus, .ZX file may contain several games. Program
+      splitting .ZX files into separate blocks which can be later loaded
+      into Spectrum emulator on Amiga and saved as .SNA files is available
+      from fms@wam.umd.edu.
+   d) Needs ROM image file called ROM.SPC (not included, use one from JPP
+      package).
+
+6. Z80 3.00 [IBM PC]   Author: Gerton Lunter [gerton@rcondw.rug.nl]
+
+*  a) Emulates both Spectrum 48k and Spectrum 128k.
+   b) Is fast on 286 and *very* fast on 386/486.
+   c) Shareware. Some options are disabled in PD version.
+   d) Has lots of options including monochrome option.
+   e) Has small built-in debugger.
+
+7. Speculator [Acorn Archimedes]    Author: Dave Lawrence
+
+   a) Is not officially available at the moment - any copies circulating
+      are pirate copies. As a result, documentation of the file format
+      is not complete, and the conversion programs supplied with it do
+      not work correctly.
+   b) Is extremely fast on an ARM3 machine. To get normal Spectrum speed
+      an ARM2 machine or an ARM3 machine with the cache turned off is
+      required.
+   c) Can save and load in its own file format.
+   d) It is possible to return to the desktop from the emulator, and then
+      re-enter the emulator at the point you left off.
+
+8. Elwro 800-3 Jr v1.0 [IBM PC]   Authors: Piotr Schmidt & Piotr Wolter
+
+   a) Is not 100% compatible with ZX Spectrum (the real Elwro
+      had problems with JetPac while other games were ok).
+   b) Capable of running CP/M.
+   c) Runs either in CGA, Hercules, or EGA mode.
+   d) Emulates 2 disk drives accessed via * commands (e.g. SAVE * "file")
+      with capacity of about 700kB. These are physically files.
+   e) Changeable interrupt frequency (45, 50, 65, 70 Hz).
+   f) All system messages are in Polish.
+   g) No tape support.
+   h) Utility to read the real Elwro Junior disks on PC
+   i) Commercial only.
+
+9. ZX-SPECTRUM Emulator v1.2 [Atari]   Author: Christian Gandler
+
+*  a) Works with ST (>=1MB), TT and Falcon030 in ST-low and ST-high.
+   b) Doesn't load/save snapshots.
+   c) Performance is ~70% of original Spectrum on plain STs.
+   d) Emulates Kempston and Interface 2 Joysticks.
+*  e) Emulates Interface 1 (Microdrives and RS232).
+   f) Only keyboard ports read are those mentioned in the orange manual.
+
+10. !Speccy [Acorn Archimedes]   Author: Karsten Witt
+
+*  a) Runs at normal Spectrum speed on an ARM2 machine and very fast on an
+      ARM3 machine. The speed is adjustable.
+   b) Saves/loads Spectrum files to/from disk in its own file format.
+   c) At the moment does not load/save in any snapshot formats. Apparently,
+      the author is currently working on making it run in the desktop
+      (multi-tasking) and allow loading of .SNA files.
+   d) Comes with application and instructions for transferring files to/from
+      tapes through the serial port.
+   e) Doesn't fully implement the R register - however this doesn't affect most
+      programs.
+   f) Has an enhanced keyboard layout - there are keyboard short cuts to Caps
+      Lock, Extended Mode, and also the cursor keys, the keypad, and other
+      symbols (commas, colons etc.) can be entered easily.
+
+11. xzx v1.0 [Unix/X]   Author: Des Herriott [dnh@mfltd.co.uk]
+
+*  a) Emulates a 48K, 128K, and 3+ Spectrums.
+*  b) Needs approx 486/33 to run at the correct speed (this is from
+      general impressions, not exact timings). Sparc 10 or DEC Alpha
+      will run it very fast.
+   c) Makes heavy use of the MIT-SHM X11 extension, and works a good
+      deal slower without it.
+*  d) Sound support for Sparc and NEC EWS workstations via /dev/audio.
+      Sound support for Linux via direct speaker manipulation.
+      X server bell audio for most X servers (traps ROM BEEP routine
+      only).
+   e) Reads and writes .SNA and .Z80 snapshots (including 128K).
+   f) Emulates Kempston joystick with preset keys.
+   g) LOAD/SAVE read and write programs and data to Unix files.
+
+12. !MZX v1.0 [Acorn Archimedes]   Author: Graham Willmott
+
+*  a) Multitasks. (can also single task if required)
+   b) Loads/saves snapshots in .SNA format.
+   c) Doesn't emulate R register correctly, or certain undocumented
+      instructions.
+   d) Runs at ~60% normal spectrum speed on an ARM2 machine, and
+      considerably faster on other machines - currently there is
+      no speed control available.
+
+13. SPECTRUM v0.99c [IBM PC]   Author: Pedro Gimeno
+
+*  a) Loads from tapes through a wire connected to the parallel port.
+   b) Uses .SP format for snapshots.
+   c) R register and I/O [other than tape] are not emulated.
+   d) Matches real Spectrum speed at 386/25MHz.
+   e) VGASPEC emulator is an *illegal* prerelease of this emulator.
+
+14. MacSpeccy 1.1 [MAC]   Author: Danny Keogan [djkeogan@unix2.tcd.ie]
+
+   a) Written in C and seems to be extremely slow. Requires 68040.
+   b) Loads .SNA snapshots and [probably] .Z80 snapshots.
+*  c) Allows copying of Spectrum screen to clipboard.
+   d) No flash attribute emulation.
+
+15. PowerSpectrum 1.0 [PowerMAC]   Author: Bo Lindbergh [d88-bli@nada.kth.se]
+
+   a) 1x1, 2x2, 3x3, and 4x4 screen emulation.
+   b) Runs at true Spectrum speed.
+*  c) Has perfect sound.
+*  d) Does realtime tape I/O (this probably requires 44 kHz sound hardware).
+   e) Supports all undocumented Z80 instructions.
+   f) Emulates a Kempston joystick.
+   g) Reads and writes .SNA format snapshots.
+
+16. xz80 v0.1 [Unix/X]   Author: Ian Collier [Ian.Collier@comlab.ox.ac.uk]
+
+*  a) Faster than xzx.
+   b) True-speed emulation without hogging the CPU on fast machines.
+*  c) Realistic sound output via /dev/audio.
+   d) ZX Printer emulation.
+   e) LOAD/SAVE and level-loader hacks installed.
+   f) No ZX Interface 1 or 128K Spectrum emulation.
+
+17. ZXAM [Amiga]
+
+*  a) Has decent sound with AY8912 emulation.
+   b) Comes in both AGA and ECS versions. Runs in a window on Workbench
+      screen, on a separate draggable screen, or in exclusive mode.
+
+18. Spectacle 1.5.5 [MAC]   Author: Guenter Woigk [kio@vanilla.nbg.sub.org] 
+
+   a) Needs MacOS 7.0 or higher, Color QuickDraw and at least a 68020
+      CPU or a PowerMAC.
+   b) Loads and saves .SNA, .Z80, .ROM, and .SCR files.
+   c) Loads .TAP files and saves .PICT files.
+   d) Single or double sized window, all monitor depths.
+   e) Sound and joystick support.
+
+
+**************************** VARIOUS QUESTIONS *************************
+
+1. Is it legal to use ZX-Spectrum ROM images?
+   Yes, it is. Amstrad, owning copyright for ZX-Spectrum ROM, recently
+   announced that ROM image can be freely distributed with emulators,
+   although it can not be changed.
+
+2. Is it legal to use memory snapshots?
+   Formally, using snapshotted game without legal owning a copy of it
+   on a tape is a *copyright violation*. Nevertheless, ZX-Spectrum games
+   are not being sold anymore and using snapshots doesn't harm copyright
+   holders much, if you don't make profit from it and don't distribute
+   snapshots on a large scale. It seems that some companies [Ultimate/
+   USGold] have nothing against free distribution of their games, but
+   there is no written permission yet.
+
+3. Is there a ZX-Spectrum emulator for X-Windows?
+   YES, THERE IS. xzx by Des Herriott alows to run 48K, 128K, and 3+
+   Spectrum programs on a Unix machine with X-Windows. MIT SHM extension
+   is highly recommended. The current version of xzx is 1.0 and can be
+   obtained from ftp.nvg.unit.no. Another Unix/X ZX-Spectrum emulator is
+   xz by Ian Collier. You can get it from the same FTP site.
+
+4. How to convert snapshots between various formats?
+   Most snapshots can be converted into one another using SPCONV program
+   by Henk de Groot [hegr@ensae.ericsson.se]. MSDOS version of this
+   program is supplied with JPP emulator [source included]. More portable
+   version is available from FTP archive at ftp.nvg.unit.no. SPCONV
+   converts files between following formats: .SNA,.Z80,.PRG,.SP and RAW.
+   Also, registered version of Z80 contains a converter.
+
+5. How to convert .ZX [or .SPC] files used with "polish" emulator into
+   snapshots?
+   Program called Butcher is available at ftp.nvg.unit.no. This program
+   splits .ZX file into series of .header/.bytes files which can be
+   loaded by Spectrum 1.7 emulator on Amiga. Program is written by Marat
+   Fayzullin [fms@wam.umd.edu] and includes a binary for AmigaOS and a
+   source code in C which will allow you to write your converter.
+
+6. Where to get Microdrive cartridges?
+   Microdrive cartridges [as well as complete Microdrive kits] can be
+   obtained from
+
+   W.N. Richardson & Co.
+   6 Ravensmead
+   Chiltern Hill
+   Chalfont St Peter,
+   Bucks, SL9 0NB
+
+   PHONE/FAX 01494-871319
+
+7. Address of "Spectrum Profi Club" in Germany:
+
+   SPC
+   c/o Haller
+   Ernastr. 33
+
+   D-51069 K"oln
+   Germany
+
+8. Fixing worn out ZX-Spectrum keyboard:
+   If the connectors on the PCB have scratched off the silver from the
+   ribbon, buy some so-called "conductive paint" which is a suspension
+   of fine silver particles. If you let it dry, it conducts. Use a fine
+   brush to replace what is scratched off from the ribbons. This paint
+   is available from most electronics hobbyist stores [for example, from
+   RadioShack in US]. B G Services in UK sells keyboard membranes.
+
+   B G Services
+   64 Roebuck Road
+   Chessington
+   Surrey KT9 1JX
+   UK
+
+   Phone 0181-287-4180 Fax 0181-391-0644
+
+9. What is the difference between several ROM-files included with JPP
+   emulator?
+   SPECTRUM.ROM - Spectrum ROM, exactly the same as in the original
+                  Spectrum.
+   GROOT.ROM    - Same ROM, but with lots of bug fixes and extensions
+                  by Henk de Groot [hegr@ensae.ericsson.se]. List of
+                  changes follows:
+                  o Bug fixes as mentioned in "The complete Spectrum Rom
+                    Disassembly" by Dr Ian Logan and Dr Frank O'Hara.
+                  o Support for EPSON printer via an Z80-PIO chip and
+                    Centronics connection.
+                  o Monitor support: start up with black screen and white
+                    characters.
+                  o Lightpen support: Lightpen routine for DK'Tronics
+                    lightpen is built in.
+   TK95.ROM     - ROM from a Brazilian Spectrum clone called Micro
+                  Digital TK95.
+
+10. I'm trying to convert .Z80 file into .SNA format using SPCONV and
+    it doesn't work. Why?
+    You are probably using SPCONV v1.05 which came with JPP distribution.
+    It has problems converting .Z80 files created by Z80 v2.01. Get
+    SPCONV v1.06 off ftp.nvg.unit.no. It works.
+
+11. What is the difference between different Spectrum models?
+
+    1) 16K   - original model
+    2) 48K   - [most widespread] original model with RAM extension
+    3) 48K+  - had "real" keyboard
+    4) 128K  - 128kB RAM and "real" keyboard
+    5) +2    - 128K with builtin tape deck
+    6) +3    - 128K with builtin disk drive and some
+               internal changes on the bus
+    7) +2A   - +3 with a tape deck instead of disk drive
+
+
+
+****************************** WHERE IS... ****************************
+
+1. Imagine/Denton Designs [Stonkers, Frankie goes to Holywood, etc.]
+   o Dave Lawson (director)
+     Last seen running Kinetica Software in Birkenhead.
+   o Ally Noble (artist) and John Heap (programmer)
+     Still own and run Denton Designs.
+   o Marc Dawson (programmer)
+     Project manager for Barbie the Video Game for software
+     house in Manchester.
+   o Dougie Burns (programmer)
+     Last seen in Glasgow as a used car salesman.
+   o Fred Gray (musician)
+     Became programmer in Liverpool. Works for Psygnosis, as do
+     most of Denton Designs.
+   * INFO BY:
+     Stuart Fotheringham [stuarto@stoo.demon.uk]
+     Andrew Toone [andrewt@smallworld.co.uk]
+2. Gargoyle Games
+   o Roy Carter
+     Roy Carter is a registered user of Z80 and has given spoken
+     permission to distribute the Gargoyle games. They are
+     doing things for Psygnosis - not all of them game writing.
+   o Greg Follis
+     ???
+   * INFO BY:
+     Brian Gaff [briang@bgserv.demon.co.uk]
+     Andrew Toone [andrewt@smallworld.co.uk]
+3. Design Design
+   o Simon Brattel
+     Writing serious software.
+   o Graham Stafford
+     Works for Psygnosis, as do most of Denton Designs.
+   * INFO BY: Andrew Toone [andrewt@smallworld.co.uk]
+4. Lerm Tape Copiers
+   o David Smith [davidsm@x.co.uk]
+     "Not only do I remember Lerm, I did some work for them. Lerm
+      itself was a husband and wife company, in the back room, in the
+      traditional fashion. The husband was a high-flying software
+      a.k.a my Maths teacher at school."
+5. Ultimate
+   o Calling themselves Rare and working with Nintendo to produce
+     Donkey Kong Country and Killer Instinct for the new Nintendo
+     Ultra 64.
+   * INFO BY: Dylan Cuthbert [dylan@takoyaki.demon.cu.uk]
+6. Realtime Graphics [Starglider]
+   o Jez San
+     Developing 3D systems for anyone with with enough hardware
+     (Nintendo et. al.)
+   * INFO BY: Andrew Toone [andrewt@smallworld.co.uk]
+7. Ocean [Batman, Head over Heals, Matchday, etc.]
+   These guys (along with many ex-Spectrum coders) are now
+   programming on the Nintendo Gameboy (which is also a Z80 machine).
+   o Jon Ritman
+     Was sighted doing a Computer Science degree in UCL a few years
+     back. John Ritman is reading/posting to comp.sys.sinclair and
+     has started a new videogame company in UK called The Cranberry
+     Source.
+   * INFO BY: Vartan Narinian [vsa@ic.ak.uk]
+              Peter Watsons [pwats@cyberspace.com]
+8. Vortex
+   o Costa Panayi
+     Doing some consultancy design work.
+   o Mark Haigh-Hutchinson
+     Working for either Lucasfilm or Electronic Arts.
+   * INFO BY: Arnt Gulbrandsen [agulbra@flode.nvw.unit.no]
+9. OTHERS:
+   o Eugene Evans
+     Currently working in Chicago at Viacom New Media. He's been there
+     for a good few years before which it was Icom Simulations, Inc.
+     the people who did the CD-ROM Sherlock Holmes games, T-MON for the
+     Mac, and Dracula Unleashed.
+   * INFO BY: phyd@interaccess.com [Brian Leake]
+   o Simon Goodwin [Crash Tech Tips writer]
+     Was still writing for Sinclair QL World when the final issue
+     (July 94) came out. Simon Goodwin is used to write for Amiga
+     magazines and Computer Shopper. He was also seen at the Last
+     Sinclair and SAM show in Gloucester. Messing with both
+     Speccy emulator for Amiga and hardware Speccy emulation for
+     IBM PC.
+   * INFO BY:
+     Jenni the Satsuma [yockneyj@cs.man.ac.uk]
+     Brian Gaff [briang@bgserv.demon.co.uk]
+   o Mike Singleton [Lords Of Midnight]
+     Mike Singleton is alive and well and writing Lords Of Midnight
+     for the IBM PC.
+   * INFO BY: Chris Wild [CJWILD@civy.demon.co.uk]
+   o John Hollis, Nick Lambert
+     John Hollis founded Hollis Research, who develop MIDI sequencers
+     (including "Trackman" for AtariST).
+   * INFO BY: Stephen K. Mulrine [robotron@moroder.demon.co.uk]
+   o Fergus McNeil [Bored Of The Rings, etc.]
+     Works at Sales Curve Interactive (SCi), exStorm.
+   * INFO BY: Chris Wild [CJWILD@civy.demon.co.uk]
+10. Spectrum people reading comp.sys.sinclair
+   o John Ritman [jritman@cix.compulink.co.uk] of Head Over Wheels
+     fame. Also wrote Batman, Matchday and other excellent games.
+   o Alan Fothergill [afotherg@oracle.com] from Imagine.
+   o Paul Holmes [paulh@unlimited.com] from Elite wrote and
+     co-wrote Robotron 2084, Bomb Jack I & II, Wild West Hero, Dustman,
+     designed and co-designed Grand National, Frank Bruno's Boxing and
+     others.
+   o Duncan Sinclair [sinclair@dis.strath.ac.uk] worked on an unfinished
+     Tapper with Paul Holmes.
+   o Stuart Fotheringham [stuarto@stoo.demon.co.uk] did work on those
+     beautiful graphics in Odin games Nodes of Yesod, Robin O' the Wood,
+     Arc of Yesod, and Heartland.
+   o Simon Cooke [csl@fs2.ee.umist.ac.uk] was Your Sinclair's technical
+     editor.
+
+
+**************************** SNAPSHOT FORMATS **************************
+
+1. KGB v.1.2-1.3 [Contributed by Troels Norgaard]
+   Notice, that in 680x0 the most significant byte goes first.
+
+Offset   Size   Description
+------------------------------------------------------------------------
+0        49284  RAM dump 16252..65535
+49284    132    unused, make 0
+49416    10     dc.w  10,10,4,1,1 (different settings)
+49426    1      dc.b  InterruptStatus (0=DI/1=EI)
+49427    2      dc.b  0,3
+49429    1      dc.b  ColorMode (0=BW/1=Color)
+49430    4      dc.l  0
+49434    16     dc.w  BC,BC',DE,DE',HL,HL',IX,IY
+49450    2      dc.b  I,R
+49452    2      dc.w  0
+49454    8      dc.b  0,A',0,A,0,F',0,F
+49462    8      dc.w  0,PC,0,SP
+49470    2      dc.w  SoundMode (0=Simple/1=Pitch/2=RomOnly)
+49472    2      dc.w  HaltMode  (0=NoHalt/1=Halt)
+49474    2      dc.w  IntMode   (-1=IM0/0=IM1/1=IM2)
+49476    10     unused, make 0
+------------------------------------------------------------------------
+Total: 49486 bytes
+
+2. Mirage Microdrive .SNA format used by Spectrum 1.7 and JPP
+   Notice, that in Intel CPUs the least significant byte goes first.
+   When the registers have been loaded, a RETN command is required to
+   start the program. IFF2 is short for interrupt flip-flop 2, and for
+   all practical purposes is the interrupt-enabled flag. Set means
+   enabled.
+
+Offset   Size   Description
+------------------------------------------------------------------------
+0        1      db    I
+1        8      dw    HL',DE',BC',AF'
+9        10     dw    HL,DE,BC,IY,IX
+19       1      db    Interrupt (bit 2 contains IFF2, 1=EI/0=DI)
+20       1      db    R
+21       4      dw    AF,SP
+25       1      db    IntMode (0=IM0/1=IM1/2=IM2)
+26       1      db    BorderColor (0..7, not used by Spectrum 1.7)
+27       49152  RAM dump 16384..65535
+------------------------------------------------------------------------
+Total: 49179 bytes
+
+3. .SP file format used in "ZX Spectrum", the ZX Spectrum emulator for
+   Macintosh from Lorenzo Jose Ayuda Serrano.
+
+Offset   Size   Description
+------------------------------------------------------------------------
+0        2      dc.b   "SP" (signature)
+2        2      dc.w   Program length in bytes (49152 bytes)
+4        2      dc.w   Program location (16384)
+6        8      dc.w   BC,DE,HL,AF
+14       4      dc.w   IX,IY
+18       8      dc.w   BC',DE',HL',AF'
+26       2      dc.b   R,I
+28       4      dc.w   SP,PC
+32       2      dc.w   0 (reserved for future use)
+34       1      dc.b   Border color
+35       1      dc.b   0 (reserved for future use)
+36       2      dc.w   Status word
+------------------------------------------------------------------------
+
+Status word:
+Bit     Description
+------------------------------------------------------------------------
+15-8    Reserved for future use
+ 7-6    Reserved for internal use (0)
+   5    Flash: 0=INK/1=PAPER
+   4    Interrupt pending for execution
+   3    Reserved for future use
+   2    IFF2 (internal use)
+   1    Interrupt Mode: 0=IM1/1=IM2
+   0    IFF1: 0=DI/1=EI
+
+
+****************** GENERAL INFORMATION ABOUT ZX-SPECTRUM ***************
+  This section is based on the text contributed by Gerton Lunter, author of 
+"Z80" Spectrum emulator. I allowed myself to make some changes which 
+don't change the content.
+  Most Z80 opcodes are one byte long, not counting a possible byte or 
+word operand. The four opcodes CB, DD, ED and FD are shift opcodes: they 
+change the meaning of the opcode following them.
+
+a) CB opcodes:
+  There are 248 different CB opcodes. 
+The block CB 30 to CB 37 is missing from the official list. These 
+instructions, usually denoted by the mnemonic SLL, Shift Left Logical,
+shift left the operand and make bit 0 always one. These instructions are
+quite commonly used. For example, Bounder and Enduro Racer use them.
+
+b) DD and FD opcodes:
+  The DD and FD opcodes precede instructions using the IX and IY 
+registers. If you look at the instructions carefully, you see how they 
+work:
+
+    2A nn      LD HL,(nn)
+    DD 2A nn   LD IX,(nn)
+    7E         LD A,(HL)
+    DD 7E d    LD A,(IX+d)
+
+A DD opcode simply changes the meaning of HL in the next instruction. If a
+memory byte is addressed indirectly via HL, as in the second example, a
+displacement byte is added. Otherwise the instruction simply acts on IX
+instead of HL (A notational awkwardness, that will only bother assembler
+and disassembler writers: JP (HL) is not indirect; it should have been
+denoted by JP HL). If a DD opcode precedes an instruction that doesn't use
+the HL register pair at all, the instruction is executed as usual.
+However, if the instruction uses the H or L register, it will now use the
+high or low halves of the IX register! Example:
+
+    44         LD B,H
+    FD 44      LD B,IYh
+
+These types of inofficial instructions are used in very many programs. By the
+way, many DD or FD opcodes after each other will effectively be NOPs, doing
+nothing except repeatedly setting the flag "treat HL as IX" (or IY) and taking
+up 4 T states (But try to let MONS disassemble such a block.).
+
+c) ED opcodes:
+   There are a number of inofficial ED instructions, but none of them are very
+useful. The ED opcodes in the range 00-3F and 80-FF (except for the block
+instructions of course) do nothing at all but taking up 8 T states and
+incrementing the R register by 2.  Most of the unlisted opcodes in the range
+40-7F do have an effect, however. The complete list: (* = not official)
+
+        ED40   IN B,(C)                 ED60   IN H,(C)
+        ED41   OUT (C),B                ED61   OUT (C),H
+        ED42   SBC HL,BC                ED62   SBC HL,HL
+        ED43   LD (nn),BC               ED63 * LD (nn),HL
+        ED44   NEG                      ED64 * NEG
+        ED45   RETN                     ED65 * RET
+        ED46   IM 0                     ED66 * IM 0
+        ED47   LD I,A                   ED67   RRD
+        ED48   IN C,(C)                 ED68   IN L,(C)
+        ED49   OUT (C),C                ED69   OUT (C),L
+        ED4A   ADC HL,BC                ED6A   ADC HL,HL
+        ED4B   LD BC,(nn)               ED6B * LD HL,(nn)
+        ED4C * NEG                      ED6C * NEG
+        ED4D   RETI                     ED6D * RET
+        ED4E * IM 0/1                   ED6E * IM 0/1
+        ED4F   LD R,A                   ED6F   RLD
+        ED50   IN D,(C)                 ED70 * IN (C)
+        ED51   OUT (C),D                ED71 * OUT (C),0
+        ED52   SBC HL,DE                ED72   SBC HL,SP
+        ED53   LD (nn),DE               ED73   LD (nn),SP
+        ED54 * NEG                      ED74 * NEG
+        ED55 * RET                      ED75 * RET
+        ED56   IM 1                     ED76 * IM 1
+        ED57   LD A,I                   ED77 * NOP
+        ED58   IN E,(C)                 ED78   IN A,(C)
+        ED59   OUT (C),E                ED79   OUT (C),A
+        ED5A   ADC HL,DE                ED7A   ADC HL,SP
+        ED5B   LD DE,(nn)               ED7B   LD SP,(nn)
+        ED5C * NEG                      ED7C * NEG
+        ED5D * RET                      ED7D * RET
+        ED5E   IM 2                     ED7E * IM 2
+        ED5F   LD A,R                   ED7F * NOP
+
+The ED70 instruction reads from port (C), just like the other instructions,
+but throws away the result. It does change the flags in the same way as the
+other IN instructions, however. The ED71 instruction OUTs a byte zero to port
+(C), interestingly.  These instructions "should", by regularity of the
+instruction set, use (HL) as operand, but since from the processor's point of
+view accessing memory or accessing I/O devices is almost the same thing, and
+since the Z80 cannot access memory twice in one instruction (disregarding
+instruction fetch of course) it can't fetch or store the data byte (A hint in
+this direction is that, even though the NOP-synonyms LD B,B, LD C,C etcetera
+do exist, LD (HL),(HL) is absent and replaced by the HALT instruction.).
+
+The IM 0/1 instruction puts the processor in either IM 0 or 1, I couldn't
+figure out which on my own Spectrum.
+
+d) About the R register:
+   This is not really an undocumented feature, although I have never seen any
+thorough description of it anywhere. The R register is a counter that is
+updated every instruction, where DD, FD, ED and CB are to be regarded as
+separate instructions. So shifted instruction will increase R by two. There's
+an interesting exception: doubly-shifted opcodes, the DDCB and FDCB ones,
+increase R by two too. LDI increases R by two, LDIR increases it by 2 times
+BC, as does LDDR etcetera.  The sequence LD R,A/LD A,R increases A by two,
+except for the highest bit: this bit of the R register is never changed. This
+is because in the old days everyone used 16 Kbit chips. Inside the chip the
+bits where grouped in a 128x128 matrix, needing a 7 bit refresh cycle.
+Therefore ZiLOG decided to count only the lowest 7 bits. You can easily check
+that the R register is really crucial to memory refresh. Assemble this program:
+
+        ORG 32768
+        DI
+        LD B,0
+    L1: XOR A
+        LD R,A
+        DEC HL
+        LD A,H
+        OR L
+        JR NZ,L1
+        DJNZ L1
+        EI
+        RET
+
+It will take about three minutes to run.  Look at the upper 32K of memory,
+for instance the UDG graphics.  It will have faded.  Only the first few bytes
+of each 256 byte block will still contain zeros, because they were refreshed
+during the execution of the loop. The ULA took care of the refreshing of the
+lower 16K (This example won't work on the emulator, of course!).
+
+e) Undocumented flags:
+   This undocumented "feature" of Z80 has its effect on programs like Sabre
+Wulf, Ghosts'n Goblins and Speedlock. Bits 3 and 5 of the F register are not
+used. They can contain information, as you can readily figure out by PUSHing
+AF onto the stack and then POPping some it into another pair of registers.
+Furthermore, sometimes their values change. I found the following empirical
+rule:
+
+    The values of bits 7, 5 and 3 follow the values of the corresponding
+    bits of the last 8 bit result of an instruction that changed the usual
+    flags.
+
+For instance, after an ADD A,B those bits will be identical to the bits of
+the A register (Bit 7 of F is the sign flag, and fits the rule exactly). An
+exception is the CP x instruction (x=register, (HL) or direct argument). In
+this case the bits are copied from the argument.
+If the instruction is one that operates on a 16 bit word, the 8 bits of the
+rule are the highest 8 bits of the 16 bit result - that was to be expected
+since the S flag is extracted from bit 15.
+Ghosts'n Goblins use the undocumented flag due to a programming error. The
+rhino in Sabre Wulf walks backward or keeps running in little circles in a
+corner, if the (in this case undocumented) behaviour of the sign flag in the
+BIT instruction isn't right. I quote:
+
+        AD86    DD CB 06 7E        BIT 7,(IX+6)
+        AD8A    F2 8F AD           JP P,#AD8F
+
+An amazing piece of code!  Speedlock does so many weird things that all must
+be exactly right for it to run. Finally, the '128 ROM uses the AF register to
+hold the return address of a subroutine for a while.
+
+f) Interrupt flip-flops IFF1 and IFF2:
+   There seems to be a little confusion about these. These flip flops are
+simultaneously set or reset by the EI and DI instructions. IFF1 determines
+whether interrupts are allowed, but its value cannot be read. The value of
+IFF2 is copied to the P/V flag by LD A,I and LD A,R. When an NMI occurs, IFF1
+is reset, thereby disallowing further [maskable] interrupts, but IFF2 is left
+unchanged. This enables the NMI service routine to check whether the
+interrupted program had enabled or disabled maskable interrupts. So, Spectrum
+snapshot software can only read IFF2, but most emulators will emulate both,
+and then the one that matters most is IFF1.
+
+2. ZX-Spectrum Hardware:
+   At the hardware level, the Spectrum is a very simple machine. There's the
+16K ROM which occupies the lowest part of the address space, and 48K of RAM
+which fills up the rest. An ULA which reads the lowest 6912 bytes of RAM to
+display the screen, and contains the logic for just one I/O port completes the
+machine, from a software point of view at least.
+Every even I/O address will address the ULA, but to avoid problems with other
+I/O devices only port FE should be used. If this port is written to, bits have
+the following meaning:
+
+        Bit   7   6   5   4   3   2   1   0
+            +-------------------------------+
+            |   |   |   | E | M |   Border  |
+            +-------------------------------+
+
+The lowest three bits specify the border color; a zero in bit 3 activates the
+MIC output, and a one in bit 4 activates the EAR output (which sounds the
+internal speaker). The real Spectrum also activates he MIC when the ear is
+written to. The upper three bits are unused.
+If port FE is read from, the highest eight address lines are important too. A
+zero on one of these lines selects a particular half-row of five keys:
+
+      IN:    Reads keys (bit 0 to bit 4 inclusive)
+
+      #FEFE  SHIFT, Z, X, C, V            #EFFE  0, 9, 8, 7, 6
+      #FDFE  A, S, D, F, G                #DFFE  P, O, I, U, Y
+      #FBFE  Q, W, E, R, T                #BFFE  ENTER, L, K, J, H
+      #F7FE  1, 2, 3, 4, 5                #7FFE  SPACE, SYM SHFT, M, N,
+
+A zero in one of the five lowest bits means that the corresponding key is
+pressed. If more than one address line is made low, the result is the logical
+AND of all single inputs, so a zero in a bit means that at least one of the
+appropriate keys is pressed. For example, only if each of the five lowest bits
+of the result from reading from port 00FE (for instance by XOR A/IN A,(FE)) is
+one, no key is pressed. A final remark about the keyboard. It is connected in
+a matrix-like fashion, with 8 rows of 5 columns, as is obvious from the above
+remarks. Any two keys pressed simultaneously can be uniquely decoded by reading
+from the IN ports. However, if more than two keys are pressed decoding may not
+be uniquely possible.  For instance, if you press Caps shift, B and V, the
+Spectrum will think also the Space key is pressed, and react by giving the
+"Break into Program" report. Without this matrix behaviour Zynaps, for
+instance, won't pause when you press 5,6,7,8 and 0 simultaneously.
+Bit 5 (value 64) of IN-port FE is the ear input bit. When the line is silent,
+its value is zero, except in the early Model 2 of the Spectrum, where it was
+one. When there is a signal, this bit toggles. The Spectrum loading software is
+not sensitive to the polarity of this bit (which it definitely should not be,
+not only because of this model difference, but also because you cannot be sure
+the tape recorder doesn't change the polarity of the signal recorded!). Some
+old programs rely on the fact that bit 5 is always one (for instance Spinads).
+Bits 6 and 7 are always one. The ULA with the lower 16K of RAM, and the
+processor with the upper 32K RAM and 16K ROM are working independently of each
+other. The data and address buses of the Z80 and the ULA are connected by
+small resistors; normally, these do effectively decouple the buses. However, if
+the Z80 wants to read of write the lower 16K, the ULA halts the processor if it
+is busy reading, and after it's finished lets the processor access lower memory
+through the resistors. A very fast, cheap and neat design indeed!
+If you run a program in the lower 16K of RAM, or read or write in that memory,
+the processor is halted sometimes. This part of memory is therefore somewhat
+slower than the upper 32K block. This is also the reason that you cannot write
+a sound- or save-routine in lower memory; the timing won't be exact, and the
+music will sound harsh. Also, INning from port FE will halt the processor,
+because the ULA has to supply the result. Therefore, INning from port FE is a
+tiny bit slower on average than INning from other ports; whilst normally an
+IN A,(nn) instruction would take 11 T states, it takes 12.15 T states on
+average if nn=FE. See below for more exact information.
+If the processor reads from a non-existing IN port, for instance FF, the ULA
+won't stop, but nothing will put anything on the data bus. Therefore, you'll
+read a mixture of FF's (idle bus), and screen and ATTR data bytes (the latter
+being very scarce, by the way). This will only happen when the ULA is reading
+the screen memory, about 60% of the 1/50th second time slice in which a frame
+is generated. The other 40% the ULA is building the border or generating a
+vertical retrace. This behaviour is actually used in some programs, for
+instance, in Arkanoid.
+Finally, there is an interesting bug in the ULA which also has to do with this
+split bus. After each instruction fetch cycle of the processor, the processor
+puts the I-R register "pair" (not the 8 bit internal Instruction Register, but
+the Interrupt and R registers) on the address bus. The lowest 7 bits, the R
+register, are used for memory refresh. However, the ULA gets confused if I is
+in the range 64-127, because it thinks the processor wants to read from lower
+16K ram very, very often. The ULA can't cope with this read-frequency, and
+regularly misses a screen byte.  Instead of the actual byte, the byte
+previously read is used to build up the video signal.  The screen seems to be
+filled with 'snow'; however, the Spectrum won't crash, and program will
+continue to run normally.  There's one program I know of that uses this
+to generate a nice effect: Vectron (which has very nice music too, by the way).
+The processor has three interrupt modes, selected by the instructions IM 0,
+IM 1 and IM 2. In mode 1, the processor simply executes an RST #38 instruction
+if an interrupt is requested. This is the mode the Spectrum is normally in.
+The other mode that is commonly used is IM 2. If an interrupt is requested,
+egister (as
+the high byte) with whatever the interrupting device places on the data bus.
+The subroutine at this address is then called. Rodnay Zaks in his book
+"Programming the Z80" states that only even bytes are allowed as low index
+byte, but that isn't true. The normal Spectrum contains no hardware to place
+a byte on the bus, and the bus will therefore always read FF (because the ULA
+also doesn't read the screen if it generates an interrupt), so the resulting
+index address is 256*I+255. However, some not-so-neat hardware devices put
+things on the data bus when they shouldn't, so later programs didn't assume
+the low index byte was FF. These programs contain a 257 byte table of equal
+bytes starting at 256*I, and the interrupt routine is placed at an address
+that is a multiple of 257. A useful but not so much used trick is to make the
+table contain FF's (or use the ROM for this) and put a byte 18 hex, the opcode
+for JR, at FFFF. The first byte of the ROM is a DI, F3 hex, so the JR will jump
+to FFF4, where a long JP to the actual interrupt routine is put.
+In interrupt mode 0, the processor executes the instruction that the
+interrupting device places on the data bus. On a standard Spectrum this will be
+the byte FF, coincidentally (...) the opcode for RST #38. But for the same
+reasons as above, this is not really reliable.
+The 50 Hz interrupt is synchronized with the video signal generation by the
+ULA; both the interrupt and the video signal are generated by it. Many programs
+use the interrupt to synchronize with the frame cycle. Some use it to generate
+fantastic effects, such as full-screen characters, full-screen horizon
+(Aquaplane) or pixel colour (Uridium for instance). Very many modern programs
+use the fact that the screen is "written" (or "fired") to the CRT in a finite
+time to do as much time-consuming screen calculations as possible without
+causing character flickering: although the ULA has started displaying the
+screen for this frame already, the electron beam will for a moment not "pass"
+this or that part of the screen so it's safe to change something there. So the
+exact time in the 1/50 second time-slice at which the screen is updated is
+very important. Each line takes exactly 224 T states. After an interrupt
+occurs, 64 line times pass before the byte 16384 is displayed. At least the
+last 48 of these are actual border-lines. I could not determine whether my
+monitor didn't display the others or whether it was in vertical retrace, but
+luckily that's not really important. Then the 192 screen+border lines are
+displayed, followed by about 56 border lines again. 56.5 border lines would
+make up exactly 70000 T states, 1/50th of 3500000. However, I noticed that the
+frequency of the 50 Hz interrupt (measured in 1/T states!) changes very
+slightly when my Spectrum gets hot (I think it has something to do with the
+relative change of the frequencies of the two crystals in the Spectrum), so the
+time between interrupts will probably not be exactly 70000 T states. Anyway,
+whether the final border block is of fixed or variable length doesn't concern
+us either, the timings of the start and end of the screen, which are the
+timings of real interest, are fixed.
+Now for the timings of each line itself. I define a screen line to start with
+256 screen pixels, then border, then horizontal retrace, and then border again.
+All this takes 224 T states. Every half T state a pixel is written to the CRT,
+so if the ULA is reading bytes it does so each 4 T states (and then it reads
+two: a screen and an ATTR byte). The border is 48 pixels wide at each side. A
+video screen line is therefore timed as follows: 128 T states of screen, 24 T
+states of right border, 48 T states of horizontal retrace and 24 T states of
+left border.
+When an interrupt occurs, the running instruction has to be completed first.
+So the start of the interrupt is fixed relatively to the start of the frame
+up to the length of the last instruction in T states. If the processor was
+executing a HALT (which, according to the Z80 books I read, is effectively
+many NOPs), the interrupt routine starts at most 3 T states away from the
+start of the frame. Of course the processor also needs some T states to store
+the program counter on the stack, read the interrupt vector and jump to the
+routine, but since I cannot determine that by only using the Spectrum, it is
+useless information by that very reason alone!
+Now when to OUT to the border to change it at the place you want? First of
+all, you cannot change the border within a "byte", an 8-pixel chunk. If we
+forget about the screen for a moment, if you OUT to port FE after 14326 to
+14329 T states (including the OUT) from the start of the IM 2 interrupt
+routine, the border will change at exactly the position of byte 16384 of the
+screen. The other positions can be computed by remembering that 8 pixels take
+4 T states, and a line takes 224 T states. You would think that OUTing after
+14322 to 14325 T states, the border would change at 8 pixels left of the upper
+left corner of the screen. This is right for 14322, 14323 and 14324 T states,
+but if you wait 14325 T states the ULA happens to be reading byte 16384 (or
+22528, or both) and will halt the processor for a while, thereby making you
+miss the 8 pixels. This exception happens again after 224 T states, and
+again after 448, an so forth. These 192 exceptions left of the actual screen
+rectangle are the only ones; similar things don't happen at the right edge
+because the ULA don't need to read things there - it has just finished!
+As noted above, reading or writing in low ram (or OUTing to the ULA) causes
+the ULA to halt the processor. When and how much? The processor is halted each
+time you want to access the ULA or low memory and the ULA is busy reading. Of
+the 312.5 'lines' the ULA generates, only 192 contain actual screen pixels,
+and the ULA will only read bytes during 128 of the 224 T states of each screen
+line. But if it does, the processor is halted for exactly 4 T states.
+
+3. Interface I:
+
+   The Interface I is quite complicated. It uses three different I/O ports,
+and contains logic to page and unpage an 8K ROM if new commands are used. The
+ROM is paged if the processor executes the instruction at ROM address 0008 or
+1708 hexadecimal, the error and close# routines. It is inactivated when the
+Z80 executes the RET at address 0700.
+
+a) Port E7:
+   I/O port E7 is used to send or receive data to and from the microdrive.
+Accessing this port will halt the Z80 until the Interface I has collected 8
+bits from the microdrive head; therefore, it the microdrive motor isn't
+running, or there is no formatted cartridge in the microdrive, the Spectrum
+hangs. This is the famous 'IN 0 crash'.
+
+b) Port EF:
+
+       Bit    7   6    5    4    3    2    1     0
+            +---------------------------------------+
+        READ|   |   |    |busy| dtr |gap| sync|write|
+            |   |   |    |    |     |   |     |prot.|
+            |---+---+----+----+-----+---+-----+-----|
+       WRITE|   |   |wait| cts|erase|r/w|comms|comms|
+            |   |   |    |    |     |   | clk | data|
+            +---------------------------------------+
+
+Bits DTR and CTS are used by the RS232 interface.  The WAIT bit is used by the
+Network to synchronise, GAP, SYNC, WR_PROT, ERASE, R/_W, COMMS CLK and COMMS
+DATA are used by the microdrive system. If the microdrive is not being used,
+the COMMS DATA output selects the function of bit 0 of out-port F7:
+
+
+       Bit      7    6   5   4   3   2   1       0
+            +------------------------------------------+
+        READ|txdata|   |   |   |   |   |   |    net    |
+            |      |   |   |   |   |   |   |   input   |
+            |------+---+---+---+---+---+---+-----------|
+       WRITE|      |   |   |   |   |   |   |net output/|
+            |      |   |   |   |   |   |   |   rxdata  |
+            +------------------------------------------+
+
+TXDATA and RXDATA are the input and output of the RS232 port. COMMS DATA
+determines whether bit 0 of F7 is output for the RS232 or the network.
+
+
+********************************** PINOUTS ********************************
+
+1. ULA pinout
+
+he *multiplexed* address-lines.
+/WR   2    39 Q          One of the +5V is decoupled through a RC-low-pass.
+/RD   3    38 /MREQ      U,V are the color-difference signals.
+/WE   4    37 A15        /Y is the inverted video including sync.
+A0    5    36 A14        D are the data-lines, decoupled from the CPU by
+A1    6    35 /RAS       resistors.
+A2    7    34 /ROM CS    T are the data-lines to the keyboard (address-lines
+A3    8    33 /IO-ULA    through diodes).
+A4    9    32 CLOCK      SOUND is the analog-I/O-line for beep, save and load.
+A5   10    31 D7         CLK is the clock-source to the CPU including the
+A6   11    30 D6         inhibited T-states.
+/INT 12    29 D5         IO-ULA is (A0(CPU) OR /IORQ) for the I/O-port FEh
++5V  13    28 SOUND      Q is the 14MHz-crystal, other side grounded through
++5V  14    27 D4         a capacitor
+U    15    26 T4
+V    16    25 D3
+/Y   17    24 T3
+D0   18    23 T2
+T0   19    22 D2
+T1   20    21 D1
+
+2. AY-3-8912
+
+SOUND C   1    28  D0       Vcc is +5V.
+PORT      2    27  D1       SOUND A, B and C can be tied together.
+Vcc       3    26  D2       CLOCK can be some MHz.
+SOUND B   4    25  D3
+SOUND A   5    24  D4
+GND       6    23  D5
+PORT      7    22  D6
+PORT      8    21  D7
+PORT      9    20  BC1
+PORT     10    19  BC2
+PORT     11    18  BDIR
+PORT     12    17  A8
+PORT     13    16  RESET
+CLOCK    14    15  CLOCK
+
+3. Keyboard layout
+
+  OUTER SIDE   A 15 14 8  13 12 9  10 11  INNER SIDE
+             D
+             0   BR EN CS P  0  A  Q  1
+             1   SS L  Z  O  9  S  W  2
+             2   M  K  X  I  8  D  E  3
+             3   N  J  C  U  7  F  R  4
+             4   B  H  V  Y  6  G  T  5
+  INNER SIDE
+
+  [BR] BREAK   [EN] ENTER   [CS] CAPS SHIFT   [SS] SYMBOL SHIFT
+
+  In real the matrix connections are in one row on the top side of
+  the membrane.
+
+
+***************************** ACKNOWLEDGEMENTS ****************************
+
+Thanks to:
+
+  Gerton Lunter     - for the excellent information about ZX-Spectrum internals
+                      and Z80 emulator for IBM PC.
+  Peter McGavin     - for some useful information and [of course =:)] his
+                      excellent Spectrum emulator which actually *multitasks*
+                      under AmigaDOS and is system-friendlier than many other
+                      programs I have seen.
+  Arnt Gulbrandsen  - for keeping Spectrum WWW page, FTP archive and multiple
+                      contributions to this file. Also, for his IBMPC-based
+                      JPP emulator. Your WWW page *is* cool, Arnt. ;)
+  Des Herriott      - for his xzx emulator, which is the first and the only
+                      way to play LodeRunner on a Unix workstation! :)
+  Emil Obermayr     - for pinouts of ULA, AY-3-8912 and keyboard layout.
+  Ian Collier       - xz emulator, and advices, and other things.
+  Boudewijn Rempt   - compilation of postings for "WHERE IS?..."
+  A.G.Jackson        - information about emulators for Acorn Archimedes.
+  Troels Norgaard    - information about KGB.
+  Krzysztof Czysciak - information about Elwro emulator.
+  Thorsten Roskowetz - information about Atari-based emulator.
+  Guenter Woigk     - MacSpectacle emulator and description of .SP
+                      file format.
+  Brian Gaff        - For addresses.
+  Rick H. Wesson    - For the list of WWW addresses.
+
+  Everybody else who contributed to FAQ, manages FTP archives, writes
+  ZX-Spectrum emulators, generally, keeps ZX-Spectrum alive!
+
+

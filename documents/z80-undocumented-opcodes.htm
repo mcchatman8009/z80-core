@@ -1,0 +1,166 @@
+<HTML>
+<HEAD>
+<TITLE>Z80 Undocumented Opcodes</TITLE>
+<BODY BGCOLOR="#FFFFFF">
+<H1>Z80 Undocumented Opcodes</H1>
+There are quite a few undocumented opcodes, most of which 
+the Sinclair FAQ describes. There are a few more though. 
+This document contains extracts from the 
+<A HREF="http://www.kendalls.demon.co.uk/cssfaq/technica.html">Sinclair FAQ</A> and
+<A HREF="http://www.acorn.co.uk/~mrison/en/cpc/tech.html">Mark Rison's Z80 Page</A>.
+<H2>Prefixes</H2>
+There are different prefixes. CB, ED, DD, FD, CBDD and FDCB.
+<H3>CB Prefix</H3>
+An opcode with a CB prefix is rotate, shift or BIT instruction. 
+There are a few instructions missing from the official list, which 
+are usually denoted with SLL (Shift Logical Left).
+<PRE>
+	CB30	SLL B
+	CB31	SLL C
+	CB32	SLL D
+	CB33	SLL E
+	CB34	SLL H
+	CB35	SLL L
+	CB36	SLL (HL)
+	CB37	SLL A
+</PRE>
+The SLL instruction operates exactly as SLA, 
+though SLL inserts 1 in stead of 0.
+<P>
+<H3>DD Prefix</H3>
+In general, after a DD prefix the instruction is executed as if the DD 
+weren't there. There are some exceptions.
+<UL>
+ <LI>Any access to HL is treated as an access to IX
+ <LI>Any access to (HL) is changed to (IX+d), where d is a signed 
+     displacement byte placed after the main opcode
+ <LI>Any access to H is treated as an access to IXh (the high byte 
+     of IX)
+ <LI>Any access to L is treated as an access to IXl (the low byte 
+     of IX)
+</UL>
+Please note that in JP (HL) the HL register isn't used indirectly; 
+that's why opcode DDE9 is JP (IX) and <I>not</I> JP (IX+d). 
+If the main opcode doesn't access the HL register in any way, the 
+DD opcode effectively acts as a NOP. 
+And, as with any rule, there must exist exceptions.
+<PRE>
+Main instruction                Effect of preceding DD
+----------------                ----------------------
+LD H,(HL)                       Causes LD H,(IX+d)
+LD (HL),H                       Causes LD (IX+d),H
+LD L,(HL)                       Causes LD L,(IX+d)
+LD (HL),L                       Causes LD (IX+d),L
+EX DE,HL                        None (left as EX DE,HL)
+EXX                             None (left as EXX)
+EDxx                            None (left as EDxx)
+CBxx                            See below (DDCB Prefix)
+</PRE>
+<H3>FD Prefix</H3>
+This prefix has the same effect as the DD prefix, though IY is accessed 
+in stead of IX.
+<P>
+Multiple DDs or FDs after each other operate effectively as NOPs.
+<H3>ED Prefix</H3>
+There are a number of undocumented EDxx instructions, of which most 
+are duplicates of documented EDxx instructions.
+The ED opcodes in the range 00-3F and 80-FF (except for the block instructions of course) 
+do nothing at all but taking up 8 T states and incrementing the R register by 2.  
+Most of the unlisted opcodes in the range 40-7F do have an effect, however. 
+The complete list: (* = undocumented)
+<PRE>
+        ED40   IN B,(C)                 ED60   IN H,(C)
+        ED41   OUT (C),B                ED61   OUT (C),H
+        ED42   SBC HL,BC                ED62   SBC HL,HL
+        ED43   LD (nn),BC               ED63   LD (nn),HL
+        ED44   NEG                      ED64 * NEG
+        ED45   RETN                     ED65 * RETN
+        ED46   IM 0                     ED66 * IM 0
+        ED47   LD I,A                   ED67   RRD
+        ED48   IN C,(C)                 ED68   IN L,(C)
+        ED49   OUT (C),C                ED69   OUT (C),L
+        ED4A   ADC HL,BC                ED6A   ADC HL,HL
+        ED4B   LD BC,(nn)               ED6B   LD HL,(nn)
+        ED4C * NEG                      ED6C * NEG
+        ED4D   RETI                     ED6D * RETN
+        ED4E * IM 0/1                   ED6E * IM 0/1
+        ED4F   LD R,A                   ED6F   RLD
+
+        ED50   IN D,(C)                 ED70 * IN (C) / IN F,(C)
+        ED51   OUT (C),D                ED71 * OUT (C),0
+        ED52   SBC HL,DE                ED72   SBC HL,SP
+        ED53   LD (nn),DE               ED73   LD (nn),SP
+        ED54 * NEG                      ED74 * NEG
+        ED55 * RETN                     ED75 * RETN
+        ED56   IM 1                     ED76 * IM 1
+        ED57   LD A,I                   ED77 * NOP
+        ED58   IN E,(C)                 ED78   IN A,(C)
+        ED59   OUT (C),E                ED79   OUT (C),A
+        ED5A   ADC HL,DE                ED7A   ADC HL,SP
+        ED5B   LD DE,(nn)               ED7B   LD SP,(nn)
+        ED5C * NEG                      ED7C * NEG
+        ED5D * RETN                     ED7D * RETN
+        ED5E   IM 2                     ED7E * IM 2
+        ED5F   LD A,R                   ED7F * NOP
+</PRE>
+The ED70 instruction reads from port (C), just like the other instructions, but does not store the result. 
+It does change the flags in the same way as the other IN instructions, however. 
+The ED71 instruction OUTs a byte zero to port (C), interestingly.  
+These instructions "should", by regularity of the instruction set, use (HL) as operand, 
+but since from the processor's point of view accessing memory or accessing I/O devices is almost the same thing, 
+and since the Z80 cannot access memory twice in one instruction (disregarding instruction fetch of course) it 
+can't fetch or store the data byte (A hint in this direction is that, even though the NOP-synonyms LD B,B, LD C,C et cetera
+do exist, LD (HL),(HL) is absent and replaced by the HALT instruction.).
+<P>
+The IM 0/1 instruction puts the processor in either IM 0 or 1. 
+I cannot figure it out on my MSX (IM 0 operates the same as IM 1, as 
+the only interrupting device always provides value FFh (RST 38h) ). 
+<P>
+The list also has some undocumented RETIs and RETNs. 
+On a MSX these instructions cannot be distinguished from a normal RET. 
+Only because of the opcode sequence I think these are RETIs and RETNs. 
+It isn't verified. 
+<H3>DDCB Prefixes</H3>
+The undocumented DDCB instructions store the result of the operation 
+in one of the seven all-purpose 8 bit registers. Which register depends on the 
+lower 3 bits of the last byte of the opcode.
+<PRE>
+	000	B
+	001	C
+	010	D
+	011	E
+	100	H
+	101	L
+	110	(none: documented opcode)
+	111	A
+</PRE>
+As the BIT x,(IX+d) instructions only reads (IX+d), these instructions 
+do not store anything in one of the all-purpose registers.
+<P>
+So, the DDCB0100 opcode effectively does the following:
+<PRE>
+LD B,(IX+01)
+RLC B
+LD (IX+01),B
+</PRE>
+I would propose a shorthand: LD B,RLC (IX+01).
+<P>
+Note: I've seen these instructions as follows:
+<P>
+DDCB0100 RLC (IX+01), followed by LD B,(IX+01)
+<P>
+This is incorrect, as the Z80 stores the result of RLC (IX+01) 
+in (IX+01) <I>and</I> the B register. It doesn't load the value from 
+(IX+01). If (IX+01) would point to ROM memory, the B register 
+would contain the rotated value. Also, the Z80 never accesses 
+the memory three times during one instruction.
+<P>
+<H3>FDCB Prefix</H3>
+The FDCB prefix has the same effect as the DDCB prefix, though it uses 
+the IY register in stead of the IX register.
+<P>
+See <A HREF="Z80.txt">Opcode list</A> for a complete list of all opcodes. 
+<HR SIZE=4>
+<I>This page is maintained by <A HREF="mailto:syoung@cs.vu.nl">Sean Young</A>.</I><BR>
+</BODY>
+</HTML>

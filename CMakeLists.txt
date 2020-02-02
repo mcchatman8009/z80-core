@@ -81,7 +81,8 @@ target_link_libraries(Z80Test z80encoder z80parser gtest gmock gtest_main)
 add_dependencies(Z80Test z80encoder z80parser gtest gmock gtest_main)
 add_test(Z80Test Z80Test)
 
-add_library(z80core
+add_library(Z80CoreObjectLibrary
+    OBJECT
     src/IOMemoryHandler.h
     src/Z80Byte.cpp
     src/Z80Byte.h
@@ -119,15 +120,37 @@ add_library(z80core
     src/Z80CpuMnemonicMapper.h
     src/OpcodeType.h
     src/Z80Compiler.cpp src/Z80Compiler.h src/ImmediateValueReader.h src/interpolate.h)
-target_link_libraries(z80core z80encoder z80parser)
-add_dependencies(z80core z80encoder z80parser)
-set_target_properties(z80core PROPERTIES PUBLIC_HEADER "include/Z80Core.h")
+set_property(TARGET Z80CoreObjectLibrary PROPERTY POSITION_INDEPENDENT_CODE 1)
 
+add_library(Z80CoreShared SHARED $<TARGET_OBJECTS:Z80CoreObjectLibrary>)
+
+target_link_libraries(Z80CoreShared z80encoder z80parser)
+add_dependencies(Z80CoreShared z80encoder z80parser)
+set_target_properties(Z80CoreShared
+    PROPERTIES PUBLIC_HEADER "include/Z80Core.h"
+    OUTPUT_NAME "z80core"
+    )
 install(
-    TARGETS z80core
+    TARGETS Z80CoreShared
     DESTINATION lib
     COMPONENT libraries
 )
+
+add_library(Z80CoreStatic STATIC $<TARGET_OBJECTS:Z80CoreObjectLibrary>)
+target_link_libraries(Z80CoreStatic z80encoder z80parser)
+add_dependencies(Z80CoreStatic z80encoder z80parser)
+set_target_properties(
+    Z80CoreStatic
+    PROPERTIES PUBLIC_HEADER "include/Z80Core.h"
+    OUTPUT_NAME "z80core"
+)
+install(
+    TARGETS Z80CoreStatic
+    DESTINATION lib
+    COMPONENT libraries
+)
+
+
 
 install(
     FILES include/Z80Core.h

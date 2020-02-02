@@ -1,0 +1,29 @@
+<HTML>
+<HEAD>
+<TITLE>Errors in Official Z80 Documentation</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF">
+<H1>Errors in Official Z80 Documentation</H1>
+There are a few errors, most of them are minor.
+<H2>Flag Affection Summary</H2>
+<OL>
+ <LI>The LDI/LDIR/LDD/LDDR do not affect the S and Z flag. 
+     They leave them untouched.
+ <LI>The INI/INIR/IND/INDR/OUTI/OTIR/OUTD/OTDR set both the N and the C 
+     flag in an undefined state.
+</OL>
+<H2>Instruction Descriptions</H2>
+<OL>
+ <LI>In the 8-bit Load Group, the last two bits of the second byte of 
+     the LD r,(IX + d) opcode should be 10 and not 01.
+ <LI>In the 16-bit Arithmetic Group, bit 6 of the second byte of 
+     the ADD IX, pp opcode should be 0, not 1.
+ <LI>In the Input and Output Group, the H flag of IN r,(C) should be 
+     0 not 1.
+ <LI>The INI/INIR/IND/INDR/OUTI/OTIR/OUTD/OTDR set both the N and the C 
+     flag in an undefined state.
+</OL>
+<HR SIZE=4>
+<I>This page is maintained by <A HREF="mailto:syoung@cs.vu.nl">Sean Young</A>.</I><BR>
+</BODY>
+</HTML>

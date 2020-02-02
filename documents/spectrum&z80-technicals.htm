@@ -1,0 +1,1556 @@
+<HTML><HEAD><TITLE>Spectrum FAQ - Technical Info</TITLE></HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#660099" ALINK="#FF0000"><A NAME="TOP">
+
+<!--web2text-ignore-from-here-->
+<CENTER><P ALIGN=CENTER>
+<A HREF="index.html">[FAQ]</A><BR>
+<A HREF="faqs.html">[Frequently&nbsp;Asked&nbsp;Questions]</A>
+<A HREF="resource.html">[Resources]</A>
+<A HREF="emulator.html">[Emulators]</A>
+<A HREF="where_is.html">[Where&nbsp;Is...?]</A>
+<A HREF="fileform.html">[File&nbsp;Formats]</A>
+[Technical&nbsp;Information]
+<A HREF="pinouts.html">[Pinouts]</A>
+<A HREF="acknowle.html">[Acknowledgements]</A>
+</P></CENTER>
+
+<TABLE NOBORDER WIDTH=100% BGCOLOR="#EEEEAA">
+<TH><FONT FACE="Comic Sans MS" SIZE=+3>SPECCY TECHNICAL INFORMATION</FONT></TH>
+</TABLE>
+<CENTER><P ALIGN=CENTER>This page last updated on 5 June 1998</P></CENTER>
+<!--web2text-ignore-until-here-->
+
+<P>In addition to reading this, if you are interested in lots of
+technical information about various aspects of the Spectrum and how to
+emulate it, you are strongly advised to read the documentation
+accompanying Gerton Lunter's <A HREF="emu_pc.html#Z80">Z80</A>, in
+particular the <TT>techinfo.doc</TT> file. Many other emulators also
+include useful information in their documentation.</P>
+
+<!--web2text-ignore-from-here-->
+<CENTER><P ALIGN=CENTER>
+<A HREF="#Z80CPU">[Z80&nbsp;CPU]</A>
+<A HREF="#CB">[CB&nbsp;ops]</A>
+<A HREF="#DDFD">[DD/FD&nbsp;ops]</A>
+<A HREF="#ED">[ED&nbsp;ops]</A>
+<A HREF="#RREG">[R&nbsp;reg]</A>
+<A HREF="#UNDOC">[Undocumented&nbsp;flags]</A>
+<A HREF="#IFF">[IFF1/2]</A>
+<A HREF="#STREAMS">[Channels&nbsp;&amp;&nbsp;Streams]</A>
+<BR>
+<A HREF="#HARDWARE">[Hardware]</A>
+<BR>
+<A HREF="#IF1">[Interface&nbsp;1]</A>
+<A HREF="#E7">[Port&nbsp;E7]</A>
+<A HREF="#EF">[Port&nbsp;EF]</A>
+<BR>
+<A HREF="#JOYSTICKS">[Joysticks]</A>
+<BR>
+<A HREF="#128K">[The&nbsp;128K&nbsp;Spectrums]</A>
+<A HREF="#MEM">[Memory]</A>
+<A HREF="#KEYPAD">[Keypad]</A>
+<A HREF="#AY">[Sound&nbsp;chip]</A>
+<A HREF="#DISK">[Disk&nbsp;drive]</A>
+</P></CENTER>
+<!--web2text-ignore-until-here-->
+
+<A NAME="Z80CPU">
+<TABLE NOBORDER WIDTH=100% BGCOLOR="#F0F0B0">
+<TH><FONT FACE="Comic Sans MS" SIZE=+1>ZILOG Z80 CPU</FONT></TH>
+</TABLE>
+<P>I had hoped to add some information from several threads on the newsgroup
+(Z80 emulation related facts, BIT and the flags and Z80 interrupts) but just
+never got the time, if someone wants to compile the relevant
+information together so I can just paste it in, I'd be most grateful ;)</P>
+
+<P>This section is based on the text contributed by <B>Gerton Lunter</B>, author of the
+<A HREF="emu_pc.html#Z80">Z80 Spectrum emulator</A>. <B>Marat Fayzullin</B> made some changes which didn't change
+the content and <B>Ian Collier</B> has contributed some extra information (some of
+which conflicts with Gerton's).</P>
+
+<P>Most Z80 opcodes are one byte long, not counting a possible byte or 
+word operand. The four opcodes CB, DD, ED and FD are shift opcodes: they 
+change the meaning of the opcode following them.</P>
+
+<A NAME="CB">
+<TABLE NOBORDER WIDTH=100% BGCOLOR="#FFFFBB">
+<TH><FONT FACE="Comic Sans MS">CB opcodes</FONT></TH>
+</TABLE>
+<P>There are 248 different CB opcodes. 
+The block <TT>CB 30</TT> to <TT>CB 37</TT> is missing from the official list. These 
+instructions, usually denoted by the mnemonic <TT>SLL</TT>, Shift Left Logical,
+shift left the operand and make bit 0 always one. These instructions are
+quite commonly used. For example, <B>Bounder</B> and <B>Enduro Racer</B> use them.</P>
+
+<A NAME="DDFD">
+<TABLE NOBORDER WIDTH=100% BGCOLOR="#FFFFBB">
+<TH><FONT FACE="Comic Sans MS">DD and FD opcodes</FONT></TH>
+</TABLE>
+<P>The DD and FD opcodes precede instructions using the IX and IY 
+registers. If you look at the instructions carefully, you see how they 
+work:</P>
+<PRE>
+    2A nn      LD HL,(nn)
+    DD 2A nn   LD IX,(nn)
+    7E         LD A,(HL)
+    DD 7E d    LD A,(IX+d)
+</PRE>
+<P>A DD opcode simply changes the meaning of HL in the next instruction. If a
+memory byte is addressed indirectly via HL, as in the second example, a
+displacement byte is added. Otherwise the instruction simply acts on IX
+instead of HL (A notational awkwardness, that will only bother assembler
+and disassembler writers: <TT>JP (HL)</TT> is not indirect; it should have been
+denoted by <TT>JP HL</TT>). If a DD opcode precedes an instruction that doesn't use
+the HL register pair at all, the instruction is executed as usual.
+However, if the instruction uses the H or L register, it will now use the
+high or low halves of the IX register! Example:</P>
+<PRE>
+    44         LD B,H
+    FD 44      LD B,IYh
+</PRE>
+<P>These types of 'undocumented' instructions are used in very many programs. By the
+way, many DD or FD opcodes after each other will effectively be <TT>NOP</TT>s, doing
+nothing except repeatedly setting the flag "treat HL as IX" (or IY) and taking
+up 4 T states (But try to let <B>MONS</B> disassemble such a block.).</P>
+
+<P><I>From <A HREF="mailto:jsm28@hermes.cam.ac.uk.no.junk.mail">Joseph S. Myers</A>:</I><BR>
+[DD and FD have no effect on ED instructions, or on <TT>EX DE,HL</TT>. If an
+instruction references both (HL), and one of H and L, then (HL) becomes
+(IX+d) or (IY+d), but H or L stays as it is. For example, <TT>DD6601</TT> is
+<TT>LD H,(IX+01)</TT>.</P>
+
+<P>DDCB and FDCB prefix instructions in which the next byte is a displacement
+byte, and the byte after that is the instruction byte. If the CB instruction
+references (HL), the effect is as expected; otherwise, the instruction seems
+to act on (IX+d) or (IY+d), and, if the instruction is such as to change the
+value acted on (any instruction other than BIT), the new value is loaded into
+the register the CB instruction would act on. Thus:</P>
+
+<P>CB07 is <TT>RLC A</TT>; DDCB0107 is effectively <TT>RLC (IX+01)</TT> followed by <TT>LD A,(IX+01)</TT>.]</P>
+
+<A NAME="ED">
+<TABLE NOBORDER WIDTH=100% BGCOLOR="#FFFFBB">
+<TH><FONT FACE="Comic Sans MS">ED opcodes</FONT></TH>
+</TABLE>
+<P>There are a number of unofficial ED instructions, but none of them are very
+useful. The ED opcodes in the range <TT>00-3F</TT> and <TT>80-FF</TT> (except for the block
+instructions of course) do nothing at all but taking up 8 T states and
+incrementing the R register by 2.  Most of the unlisted opcodes in the range
+<TT>40-7F</TT> do have an effect, however. The complete list:<BR>
+(*  = not official, i.e. not listed in Zilog documentation)<BR>
+(++ = documented in Spectrum manual)</P>
+<PRE>
+        ED40   IN B,(C)                 ED60   IN H,(C)
+        ED41   OUT (C),B                ED61   OUT (C),H
+        ED42   SBC HL,BC                ED62   SBC HL,HL
+        ED43   LD (nn),BC               ED63 * LD (nn),HL    ++
+        ED44   NEG                      ED64 * NEG
+        ED45   RETN                     ED65 * RET
+        ED46   IM 0                     ED66 * IM 0
+        ED47   LD I,A                   ED67   RRD
+        ED48   IN C,(C)                 ED68   IN L,(C)
+        ED49   OUT (C),C                ED69   OUT (C),L
+        ED4A   ADC HL,BC                ED6A   ADC HL,HL
+        ED4B   LD BC,(nn)               ED6B * LD HL,(nn)    ++
+        ED4C * NEG                      ED6C * NEG
+        ED4D   RETI                     ED6D * RET
+        ED4E * IM 0/1                   ED6E * IM 0/1
+        ED4F   LD R,A                   ED6F   RLD
+        ED50   IN D,(C)                 ED70 * IN (C)        ++ as IN F,(C)
+        ED51   OUT (C),D                ED71 * OUT (C),0
+        ED52   SBC HL,DE                ED72   SBC HL,SP
+        ED53   LD (nn),DE               ED73   LD (nn),SP
+        ED54 * NEG                      ED74 * NEG
+        ED55 * RET                      ED75 * RET
+        ED56   IM 1                     ED76 * IM 1
+        ED57   LD A,I                   ED77 * NOP
+        ED58   IN E,(C)                 ED78   IN A,(C)
+        ED59   OUT (C),E                ED79   OUT (C),A
+        ED5A   ADC HL,DE                ED7A   ADC HL,SP
+        ED5B   LD DE,(nn)               ED7B   LD SP,(nn)
+        ED5C * NEG                      ED7C * NEG
+        ED5D * RET                      ED7D * RET
+        ED5E   IM 2                     ED7E * IM 2
+        ED5F   LD A,R                   ED7F * NOP
+</PRE>
+<P>The <TT>ED70</TT> instruction reads from port (C), just like the other instructions,
+but throws away the result. It does change the flags in the same way as the
+other IN instructions, however. The <TT>ED70</TT> instruction <I>is</I> documented in at
+least two other publications beside the original Spectrum manual - one of
+which is an SGS Z80 data booklet.</P>
+
+<P>The <TT>ED71</TT> instruction OUTs a byte zero to port (C). In fact the instructions
+<TT>INI</TT> and <TT>OUTI</TT> do almost exactly the same as the proposed action for <TT>ED70</TT> and
+<TT>ED71</TT> as well as incrementing the registers.</P>
+
+<P>The <TT>IM 0/1</TT> instruction puts the processor in either IM 0 or 1 (undetermined
+at this time). The SGS booklet says that there are two flip-flops which
+determine the interrupt mode and are set by the IM instructions. The possible
+values are:</P>
+<PRE>
+  00  IM 0
+  01  not used
+  10  IM 1
+  11  IM 2
+</PRE>
+<P>...so it is entirely possible that the <TT>IM 0/1</TT> instruction sets these registers
+to 01. What the Z80 does when this happens is anyone's guess.</P>
+
+<A NAME="RREG">
+<TABLE NOBORDER WIDTH=100% BGCOLOR="#FFFFBB">
+<TH><FONT FACE="Comic Sans MS">The R Register</FONT></TH>
+</TABLE>
+<P>This is not really an undocumented feature, although I have never seen any
+thorough description of it anywhere. The R register is a counter that is
+updated every instruction, where DD, FD, ED and CB are to be regarded as
+separate instructions. So shifted instruction will increase R by two. There's
+an interesting exception: doubly-shifted opcodes, the <TT>DDCB</TT> and <TT>FDCB</TT> ones,
+increase R by two too. <TT>LDI</TT> increases R by two, <TT>LDIR</TT> increases it by 2 times
+BC, as does <TT>LDDR</TT> etcetera.  The sequence <TT>LD R,A/LD A,R</TT> increases A by two,
+except for the highest bit: this bit of the R register is never changed. This
+is because in the old days everyone used 16 Kbit chips. Inside the chip the
+bits where grouped in a 128x128 matrix, needing a 7 bit refresh cycle.
+Therefore ZiLOG decided to count only the lowest 7 bits. You can easily check
+that the R register is really crucial to memory refresh. Assemble this program:</P>
+<PRE>
+        ORG 32768
+        DI
+        LD B,0
+    L1: XOR A
+        LD R,A
+        DEC HL
+        LD A,H
+        OR L
+        JR NZ,L1
+        DJNZ L1
+        EI
+        RET
+</PRE>
+
+<P>It will take about three minutes to run.  Look at the upper 32K of memory,
+for instance the UDG graphics.  It will have faded.  Only the first few bytes
+of each 256 byte block will still contain zeros, because they were refreshed
+during the execution of the loop. The ULA took care of the refreshing of the
+lower 16K (This example won't work on the emulator, of course!).</P>
+
+<P><I>From <A HREF="mailto:aralbrec@concentric.net.no.junk.mail">Alvin Albrecht</A></I>:<BR>
+[The effect of interrupts upon the R register is as follows:</P>
+
+<UL>
+<LI>An NMI performs a fake opcode fetch during acknowledge (ie increments R
+by 1).
+<LI>Following assertion of /M1 and /IORQ during a maskable interrupt
+acknowledge, the z80 performs a refresh (R increased by 1).
+<LI>In mode 0, following the maskable interrupt acknowledge, the z80
+inserts the instruction provided by the peripheral (likely a <TT>RST</TT> or
+possibly a <TT>CALL</TT> where the peripheral will provide the address
+when the time comes). Increase R by 1 more.
+<LI>In mode 1, the z80 executes a <TT>RST #38</TT> internally.  Don't increase R
+by any more.
+<LI>In mode 2, address of interrupt routine fetched through memory read
+cycles. Don't increase R by any more.]
+</UL>
+
+<A NAME="UNDOC">
+<TABLE NOBORDER WIDTH=100% BGCOLOR="#FFFFBB">
+<TH><FONT FACE="Comic Sans MS">Undocumented Flags</FONT></TH>
+</TABLE>
+<P>This undocumented "feature" of Z80 has its effect on programs like <B>Sabre
+Wulf</B>, <B>Ghosts'n Goblins</B> and <B>Speedlock</B>. Bits 3 and 5 of the F register are not
+used. They can contain information, as you can readily figure out by <TT>PUSH</TT>ing
+AF onto the stack and then <TT>POP</TT>ping some it into another pair of registers.
+Furthermore, sometimes their values change. I found the following empirical
+rule:</P>
+
+<P><I>The values of bits 7, 5 and 3 follow the values of the corresponding
+bits of the last 8 bit result of an instruction that changed the usual
+flags.</I></P>
+
+<P>For instance, after an <TT>ADD A,B</TT> those bits will be identical to the bits of
+the A register (Bit 7 of F is the sign flag, and fits the rule exactly). An
+exception is the <TT>CP x</TT> instruction (x=register, (HL) or direct argument). In
+this case the bits are copied from the argument.</P>
+
+<P>If the instruction is one that operates on a 16 bit word, the 8 bits of the
+rule are the highest 8 bits of the 16 bit result - that was to be expected
+since the S flag is extracted from bit 15.</P>
+
+<P>Ghosts'n Goblins use the undocumented flag due to a programming error. The
+rhino in Sabre Wulf walks backward or keeps running in little circles in a
+corner, if the (in this case undocumented) behaviour of the sign flag in the
+<TT>BIT</TT> instruction isn't right. I quote:</P>
+<PRE>
+        AD86    DD CB 06 7E        BIT 7,(IX+6)
+        AD8A    F2 8F AD           JP P,#AD8F
+</PRE>
+<P>An amazing piece of code!  Speedlock does so many weird things that all must
+be exactly right for it to run. Finally, the '128 ROM uses the AF register to
+hold the return address of a subroutine for a while.</P>
+
+<A NAME="IFF">
+<TABLE NOBORDER WIDTH=100% BGCOLOR="#FFFFBB">
+<TH><FONT FACE="Comic Sans MS">Interrupt flip-flops IFF1 and IFF2</FONT></TH>
+</TABLE>
+<P>There seems to be a little confusion about these. These flip flops are
+simultaneously set or reset by the <TT>EI</TT> and <TT>DI</TT> instructions. IFF1 determines
+whether interrupts are allowed, but its value cannot be read. The value of
+IFF2 is copied to the P/V flag by <TT>LD A,I</TT> and <TT>LD A,R</TT>. When an NMI occurs, IFF1
+is reset, thereby disallowing further [maskable] interrupts, but IFF2 is left
+unchanged. This enables the NMI service routine to check whether the
+interrupted program had enabled or disabled maskable interrupts. So, Spectrum
+snapshot software can only read IFF2, but most emulators will emulate both,
+and then the one that matters most is IFF1.</P>
+
+<A NAME="STREAMS">
+<TABLE NOBORDER WIDTH=100% BGCOLOR="#F0F0B0">
+<TH><FONT FACE="Comic Sans MS" SIZE=+1>CHANNELS &amp; STREAMS</FONT></TH>
+</TABLE>
+
+<P>[This section from <A HREF="mailto:sirvine@cs.waikato.ac.nz.no.junk.mail">Sean A. Irvine</A>]</P>
+
+<H3>Introduction</H3>
+
+<P>The Spectrum has a surprisingly modern system of input and output when
+the age of the Spectrum is considered. However, what is more surprising
+is the fact that the Spectrum manual barely scratches the surface of
+what is possible.</P>
+
+<P>I/O on the Spectrum is based on channels and streams. Since the standard
+Spectrum has only a limited range of I/O devices is makes sense that
+different commands are available for each I/O device. For example, PRINT
+is used to send output to the screen; whereas LPRINT is used to send
+output to the printer.</P>
+
+<P>The extra devices catered for by Interface 1 (microdrives, RS232, and
+networking) reduced the practicality of continuing to invent new commands,
+although this was provided for in the case of the microdrives.</P>
+
+<P>Streams and channels intuitively correspond to the software and hardware
+parts of I/O respectively. That is, a stream should be thought of merely
+as a collection of data going to or coming from a piece of hardware; and
+a channel should be associated with a particular piece of hardware such
+as a printer. On the Spectrum streams are numbered from 0 through 15;
+and their basic operations are reading and writing data.</P>
+
+<P>The BASIC statement INPUT #s; &lt;input-list&gt; will read data from stream
+number s, 0 &lt;= s &lt;= 15, into the variables specified in the input-list.
+Conversely, the BASIC statement PRINT #s; &lt;print-list&gt; will write data
+to stream s, 0 &lt;= s &lt;= 15. In general both INPUT # and PRINT # can be
+used in the same way as their ordinary counterparts INPUT and PRINT.
+In particular all the normal complexity of a PRINT statement can be
+used equally well in a PRINT # statement. In each case the data sent to
+the stream is exactly the same as the data which would be sent to the
+screen by the PRINT statement. The INPUT # statement is slightly more
+complicated in that is can both read and write data, as in INPUT
+"What is your name? "; A$. In fact each stream really has two components,
+an input stream and an output stream. Data written to the stream by
+either PRINT # or INPUT # goes to the output stream while input comes
+from the input stream.</P>
+
+<P>It is even possible to change streams part way through a PRINT statement,
+as in PRINT #3; "hello"; #6; "there". Such practice, however, should be
+avoided as a style matter unless there is compelling reason to do so.</P>
+
+<H3>Opening and Closing</H3>
+
+<P>How do you know which stream numbers are associated with which channel?
+Before a stream is used it must be OPENed. Opening a stream serves two
+purposes. It associates the given stream with a particular piece of
+hardware (the channel), and actually signals the relevant device that it
+is going to be used. Stream are opened in BASIC using the syntax
+OPEN #s, c where s is the stream number being opened and c is a string
+specifying the channel to associate the stream with. Following this command
+any data sent to stream s will go to the specified channel. It is possible
+to open several streams to the same device; but each stream can only be
+associated with a single channel.</P>
+
+<P>The statement CLOSE #s, c is used to end the association of stream s with
+channel c. It also informs that associated hardware that it is no longer
+required by stream s.</P>
+
+<P>The unexpanded Spectrum supports four channels: "K" the keyboard channel,
+"S" the screen channel, "P" the printer channel, and "R" an internal
+channel used by the Spectrum to send data to the edit buffer. In practice
+the only channel that has both input and output of these is the keyboard
+channel. When the Spectrum is first powered up the following streams are
+opened automatically: 0 -- "K", 1 -- "K", 2 -- "S", 3 -- "P". Thus, the
+command LPRINT is really an alternative to writing PRINT #3. The "R"
+channel cannot be opened from BASIC. It is possible to redefine the
+standard channels, thus OPEN #2, "P" will cause output normally sent to
+the screen to be redirected to the printer.</P>
+
+<P>For example, OPEN #5, "K" associates stream 5 with the keyboard, and
+thereafter INPUT #5; A$ would behave in an identical manner to INPUT A$.</P>
+
+<H3>Device Independence</H3>
+
+<P>The most important advantage of using streams is in the writing of
+device independent programs. Say that you wish to give the user the
+option of having all output go to either the screen or to the printer.
+Without using streams it is necessary then to have separate output
+statements for each device, as in</P>
+
+<PRE>
+IF (output = printer) THEN LPRINT "Hello" ELSE PRINT "Hello"
+</PRE>
+
+<P>but using streams we can just open a particular stream (say 4) to the
+desired output device and thereafter use only one output statement</P>
+
+<PRE>
+PRINT #4; "Hello"
+</PRE>
+
+<P>Obviously this will result is a much shorter program, particularly,
+if there are many output statements in the program. Further, it is an
+easy matter to add even further output devices if they become an option
+later in the programs development.</P>
+
+<H3>More Stream Commands</H3>
+
+<P>BASIC also allows LIST and INKEY$ to be used to streams. LIST #s will
+send a copy of the program to stream s; e.g. normally LIST #3 is the
+same thing as LLIST. On the standard Spectrum INKEY$ can only be used
+with the keyboard channel.</P>
+
+<H3>Memory Formats</H3>
+
+<P>Technical section for machine code programmers.</P>
+
+<P>Knowing about the actually layout of the stream records in memory is
+useful if you want to add your own hardware devices to the Spectrum,
+or if you which to make you own specialized streams. The information
+that defines each channel is stored in the channel information area
+starting at CHANS and ending at PROG - 2. Each channel record has the
+following format:</P>
+
+<PRE>
+two-byte address of the output routine
+two-byte address of the input routine
+one-byte channel code letter
+</PRE>
+
+<P>where the input and output routines are address of machine code sub-
+routines. The output routine must accept Spectrum character codes
+passed to it in the A register. The input routine must return data
+in the form of Spectrum character codes, and signal that data is
+available by setting the carry flag. If no data is available then
+this is indicated be resetting both the carry and zero flags. Stubs
+should be provided if a channel does not support either input or
+output (e.g. the stub may simply call RST 8 with an error code).</P>
+
+<P>With Interface 1 attached an extended format is used. The above
+fields are followed by</P>
+
+<PRE>
+two-byte address 8K error routine 40
+two-byte address 8K error routine 40
+one-byte length of channel descriptor
+</PRE>
+
+<P>Data about which streams are associated with which channels is in a
+38-byte area of memory starting at STRMS. The table is a series of
+16-bit offsets to the channel record vectored from CHANS. A value
+of one indicates the channel record starting at CHANS, and so on.
+This accounts for 32 bytes of the 38. The remaining 6 bytes are for
+three hidden streams (253, 254, 255) used internally by BASIC. A
+zero entry in the table indicates a stream not open.</P>
+
+<P>It is possible to redirect existing channels to your own I/O routines.
+This can be used among other things to cause LPRINT to use your own
+printer driver rather than the one provided in the ROM. It allows
+you to perform I/O for your own hardware devices, or for you to write
+your own handlers from PRINT and INPUT.</P>
+
+<P>It is easiest to modify the existing "P" channel record. The "K" channel
+is not a good option for modification because its values are restored
+every time a INPUT statement is executed. It is possible to create new
+channel records elsewhere in memory, e.g. by changing the value of CURCHL.
+Another difficulty is that without Interface 1, OPEN will only work with
+K, S, and P and so it is necessary to provide some other way of opening
+your own channels.</P>
+
+<P>To make space for a new record a call should be made to the ROM routine
+at 5717. This will allocate the requested space and alter any system
+variables affected by the change. The amount of space required is passed
+in BC, and the address of the first location to be allocated is passed in
+Hl. For example, LD BC, 100; LD HL, 23700; CALL 5717 will allocate 100
+bytes starting at 23700. A new channel descriptor should start at one less
+than PROG.</P>
+
+<A NAME="HARDWARE">
+<TABLE NOBORDER WIDTH=100% BGCOLOR="#F0F0B0">
+<TH><FONT FACE="Comic Sans MS" SIZE=+1>HARDWARE</FONT></TH>
+</TABLE>
+<P>At the hardware level, the Spectrum is a very simple machine. There's the
+16K ROM which occupies the lowest part of the address space, and 48K of RAM
+which fills up the rest. An ULA which reads the lowest 6912 bytes of RAM to
+display the screen, and contains the logic for just one I/O port completes the
+machine, from a software point of view at least.
+Every even I/O address will address the ULA, but to avoid problems with other
+I/O devices only port FE should be used. If this port is written to, bits have
+the following meaning:</P>
+<PRE>
+        Bit   7   6   5   4   3   2   1   0
+            +-------------------------------+
+            |   |   |   | E | M |   Border  |
+            +-------------------------------+
+</PRE>
+
+<P>The lowest three bits specify the border colour; a zero in bit 3 activates the
+MIC output, and a one in bit 4 activates the EAR output (which sounds the
+internal speaker). The real Spectrum also activates he MIC when the ear is
+written to. The upper three bits are unused.</P>
+
+<P>If port FE is read from, the highest eight address lines are important too. A
+zero on one of these lines selects a particular half-row of five keys:</P>
+<PRE>
+      IN:    Reads keys (bit 0 to bit 4 inclusive)
+
+      #FEFE  SHIFT, Z, X, C, V            #EFFE  0, 9, 8, 7, 6
+      #FDFE  A, S, D, F, G                #DFFE  P, O, I, U, Y
+      #FBFE  Q, W, E, R, T                #BFFE  ENTER, L, K, J, H
+      #F7FE  1, 2, 3, 4, 5                #7FFE  SPACE, SYM SHFT, M, N,
+</PRE>
+
+<P>A zero in one of the five lowest bits means that the corresponding key is
+pressed. If more than one address line is made low, the result is the logical
+AND of all single inputs, so a zero in a bit means that at least one of the
+appropriate keys is pressed. For example, only if each of the five lowest bits
+of the result from reading from port 00FE (for instance by <TT>XOR A/IN A,(FE)</TT>) is
+one, no key is pressed. A final remark about the keyboard. It is connected in
+a matrix-like fashion, with 8 rows of 5 columns, as is obvious from the above
+remarks. Any two keys pressed simultaneously can be uniquely decoded by reading
+from the IN ports. However, if more than two keys are pressed decoding may not
+be uniquely possible.  For instance, if you press Caps shift, B and V, the
+Spectrum will think also the Space key is pressed, and react by giving the
+"Break into Program" report. Without this matrix behaviour <B>Zynaps</B>, for
+instance, won't pause when you press 5,6,7,8 and 0 simultaneously.</P>
+
+<P>Bit 6 (not 5!) (value 64) of IN-port FE is the ear input bit. When the line is silent,
+its value is zero, except in the early Model 2 of the Spectrum, where it was
+one. When there is a signal, this bit toggles. The Spectrum loading software is
+not sensitive to the polarity of this bit (which it definitely should not be,
+not only because of this model difference, but also because you cannot be sure
+the tape recorder doesn't change the polarity of the signal recorded!). Some
+old programs rely on the fact that bit 6 (not 5!) is always one (for instance <B>Spinads</B>).</P>
+
+<P><I>From <A HREF="mailto:piters@EUnet.yu.no.junk.mail">Pera Putnik</A>:</I><BR>
+[In this letter I will try correct some incomplete and partially incorrect
+explanations about port 254 of the ZX Spectrum, about MIC and EAR sockets, and
+give what I hope is the correct explanation about the differences between
+Issue 2 and 3 Spectrums.</P>
+ 
+<P>All this started when I tested some games on different Spectrum emulators: I
+found that the games <B>Abu Simbel Profanation</B> and <B>Rasputin</B> wouldn't
+start play from the control selection menu.</P>
+
+<P>When I downloaded <A HREF="emu_pc.html#X128">x128 v0.8s</A>, I was very
+impressed with the many new features and the quality of this emulator, so I
+decided to help the author. I tried to find the reason why <B>Abu Simbel
+Profanation</B> wasn't working with x128: I did some tests/experiments, and
+I found the reason; I sent an e-mail to James McKay, but never received an
+answer. This was around October 1997.</P>
+
+<P>Fortunately in December 1997, I found a Spectrum board with old ULA chip,
+and could determine the exact difference between Issue 2 and 3.<P>
+
+<P>This program is intended for authors of Spectrum emulators:</P>
+      
+<PRE>
+      10 OUT 254,BIN 11101111
+      20 PRINT IN 254
+      30 OUT 254,BIN 11111111
+      40 PRINT IN 254
+      50 GOTO 10
+</PRE>
+   
+<P>For a correct test do not press any key while running, and of course have
+no EAR input.</P>
+   
+<UL>
+<LI>If the output is 191,255,191,255 etc, you are on real Spectrum Issue 3.
+<LI>If output is always 191 or always 255, change the value in line 10 to BIN 11100111.
+<LI>If output is then 191,255,191,255 etc, then you are on Spectrum Issue 2.
+<LI>If output is still always 191 or always 255 you are on Spectrum emulator on a PC!
+(Warajevo gives something like 255,255,255,255,255,191,191,191,255,...).
+</UL>
+
+<P>The only correctly responding emulator which I found is <A HREF="emu_pc.html#ZX32">zx32</A>
+by Vaggelis Kapartzianis: in this test this emulator acts exactly like an
+Issue 2, and also zx32 was the only emulator which correctly started <B>Abu
+Simbel Profanation</B> and <B>Rasputin</B>. (I tested <A HREF="emu_pc.html#X128">x128 v0.8</A>,
+<A HREF="emu_pc.html#Z80">Z80 v3.05</A>, <A HREF="emu_pc.html#WARAJEVO">Warajevo v1.5</A>,
+<A HREF="emu_pc.html#SP_UKV">UKV</A>, <A HREF="emu_pc.html#JPP">JPP</A>,
+<A HREF="emu_pc.html#ZXJAM">ZX-Jam</A>, <A HREF="emu_pc.html#WSPECEM">WSpecEm</A>,
+<A HREF="emu_pc.html#SP">SP2</A> and <A HREF="emu_pc.html#SPECTRUM">VGASpec</A>.)</P>
+
+<P><I>From <A HREF="mailto:mackay@sedgehill.lewisham.sch.uk.no.junk.mail">Joe Mackay</A>:</I><BR>
+[The above test on <A HREF="emu_amig.html#ZXAM">ZXAM</A> produces results
+identical to an Issue 2 Spectrum]</P>
+
+<P>From the above there is a visible difference between Issue 2 and 3 Spectrums.</P>
+ 
+<P>Well, now an explanation of port 254, only part of which is for tape
+storage and sound output: the ULA chip uses the same pin for 3 functions:
+MIC output, EAR input and internal speaker drive. That's why <TT>OUT 254</TT>
+or sound generation affects bit 6 as read by <TT>IN 254</TT>.</P>
+          
+<P>In <TT>techinfo.doc</TT> by Gerton Lunter (which is the reference for most other
+documents) there are some errors:</P>
+
+<UL>
+<LI>"..bit 5 (value 64)..". This should be bit 6 - this has been noticed the <A HREF="index.html">Spectrum FAQ</A>,
+and is probably only a mistype, as the value is OK.  
+<LI>The explanation of bits 3 and 4 produced by <TT>OUT 254</TT> is not
+correct, because ULA does not have separate pins for EAR and MIC: the
+difference is that bit 4 produces louder sound (You may hear it from program
+above). And EAR is normally input, not output... but you may use it as output as well, as it is the same pin.
+Bit 3 is mostly used for setting correct voltage level on this pin by loading from tape: 
+the MIC and EAR socket are separated only with resistors.
+</UL>
+
+<P>What is missing from <TT>techinfo.doc</TT> and from the hardware
+section of the Spectrum FAQ is the fact that not only the input level
+at EAR affects bit 6 by <TT>IN 254</TT>: bits 3 and 4 from the
+previous <TT>OUT 254</TT> also have an effect, and it is here that
+there is a little difference between Issue 2 and 3, and it isn't
+something like the inversion of the EAR input. The difference between
+Issue 2 and 3 is:
+
+<UL>
+<LI>In Issue 3 is enough that bit 4 in <TT>OUT 254</TT> is zero to get bit 6=0 from <TT>IN 254</TT>.
+<LI>In Issue 2 both bits 3 and 4 must be zero for the same.
+</UL>
+
+<P>Therefore, I think the situation is:</P>
+
+<PRE><U>Value output to bit: 4  3  |  Iss 2  Iss 3   Iss 2 V    Iss 3 V</U>
+                     1  1  |    1      1       3.79       3.70
+                     1  0  |    1      1       3.66       3.56
+                     0  1  |    1      0       0.73       0.66
+                     0  0  |    0      0       0.39       0.34
+</PRE>
+
+<P><TT>Iss 2</TT> is value of bit 6 read by <TT>IN 254</TT> after the
+appropriate <TT>OUT</TT> from an Issue 2, and <TT>Iss 3</TT> is same
+for an Issue 3. <TT>Iss 2 V</TT> and <TT>Iss 3 V</TT> are voltage
+levels on pin 28 of the ULA chip after the <TT>OUT</TT>, with no input
+signal on the EAR socket. (Pin 28 is the common pin for MIC, EAR and
+the internal speaker).</P>
+
+<P>I tested the level at pin 28 at which input bit 6 changes from 0 to
+1 or reverse. This is exactly 0.70 Volts on both Issue 2 and Issue 3,
+with no inverting or hysteresis; this means that bit 6 is 1 if the
+voltage on pin 28 is over 0.70 V, and otherwise it is 0, on both
+Issues. At the hardware level, the only difference between Issue 2 and
+3 is that there are slightly higher voltages from Issue 2 machines. As
+can be seen from the table, the input combination '0 1' gives output
+voltages that are very close to the crucial 0.7 V.</P>
+
+<P>However, for faster programs the situation isn't so simple, as
+<B>there is some delay when output bit 4 changes from 1 to 0</B>. To
+illustrate this, here are 2 short assembler routines:</P>
+
+<PRE>       ORG 45000
+       LD A,#18
+       OR #F8
+       OUT (254),A
+       LD A,#08&
+       OR #E8
+       OUT (254),A
+TIMING LD B,7      ;crucial value
+DL     LD IX,0
+       DJNZ DL
+       IN A,(254)  ;query state</PRE>
+
+<P>In this case <TT>IN A,(254)</TT>, or output of this value sometimes
+gives 255 and sometimes 191. If you make the constant in the
+<TT>TIMING</TT> line smaller then result will be always 255, if delay
+is longer then result will be always 191. Of course, the effect occurs
+only for Issue 3 machines.</P>
+
+<P>The situation is again slightly different for a longer duration of high output level on port 254:
+
+<PRE>       ORG 50000
+       HALT        ;synchronize with interrupts
+       LD A,#18
+       OUT (254),A
+       HALT        ;wait 20ms
+       LD A,#08
+       OUT (254),A
+       LD B,107    ;crucial value
+       LD IX,0
+       DJNZ DL
+       IN A,(254)</PRE>
+
+<P>As you can see, after a longer high level duration, the delay is
+also much longer. The delay varies from approximately 180 T states
+(about 50 microsec) to 2800 T states (about 800 microsec), depending
+from duration of high level on port 254. The explanation for this
+delay are the capacitors connected between pin 28 of the ULA and the
+EAR and MIC connectors. <B>There is no delay when bit 4 changes from 0
+to 1</B>.
+
+<P>In the ROM 'Beeper' subroutine, at address #03CF there is the
+instruction <TT>OR 8</TT>, which is before <TT>OUT (#FE),A</TT>, and
+this routine is activated every time you type a character in Basic;
+Well, this is the reason why <TT>IN 254</TT> on an Issue 2 normally
+gives 255, and 191 on an Issue 3.</P>
+
+<P>In my opinion, the reason why <B>Abu Simbel Profanation</B> doesn't work in
+Z80 (and other emulators) is that that authors didn't know that <TT>OUT 254</TT>
+affects bit 6 of <TT>IN 254</TT>, which is very visible when you start the
+simple Basic program above on these.]</P>
+
+<P>Bits 5 (not 6!) and 7 are always one. The ULA with the lower 16K of RAM, and the
+processor with the upper 32K RAM and 16K ROM are working independently of each
+other. The data and address buses of the Z80 and the ULA are connected by
+small resistors; normally, these do effectively decouple the buses. However, if
+the Z80 wants to read or write the lower 16K, the ULA halts the processor if it
+is busy reading, and after it's finished lets the processor access lower memory
+through the resistors. A very fast, cheap and neat design indeed!</P>
+
+<P><I>From Rui Ribeiro:</I><BR>
+[If you read from a port that activates both the keyboard and a joystick port
+(e.g. Kempston), the joystick takes priority. Every emulator except <A HREF="emu_pc.html#SPECTRUMEMULATOR">SpecEm</A>,
+<A HREF="emu_pc.html#WSPECEM">WSpecEm</A> and <A HREF="emu_unix.html#XZX2">xzx</A>
+get this wrong - see <B>Street Hawk</B> and <B>Command4</B>.]</P>
+
+<P><I><IMG SRC="new.gif" WIDTH=31 HEIGHT=12 ALT="NEW"> From <A HREF="mailto:scet@rmplc.co.uk.no.junk.mail">James McKay</A>:</I><BR>
+[<A HREF="emu_pc.html#X128">x128</A> has had this right since V0......  I
+can't remember, but V0.8 does.]</P>
+
+<P>If you run a program in the lower 16K of RAM, or read or write in that memory,
+the processor is halted sometimes. This part of memory is therefore somewhat
+slower than the upper 32K block. This is also the reason that you cannot write
+a sound- or save-routine in lower memory; the timing won't be exact, and the
+music will sound harsh. Also, <TT>IN</TT>ning from port FE will halt the processor,
+because the ULA has to supply the result. Therefore, <TT>IN</TT>ning from port FE is a
+tiny bit slower on average than <TT>IN</TT>ning from other ports; whilst normally an
+<TT>IN A,(nn)</TT> instruction would take 11 T states, it takes 12.15 T states on
+average if nn=FE. See below for more exact information.</P>
+
+<P>If the processor reads from a non-existing IN port, for instance FF, the ULA
+won't stop, but nothing will put anything on the data bus. Therefore, you'll
+read a mixture of FF's (idle bus), and screen and ATTR data bytes (the latter
+being very scarce, by the way). This will only happen when the ULA is reading
+the screen memory, about 60% of the 1/50th second time slice in which a frame
+is generated. The other 40% the ULA is building the border or generating a
+vertical retrace. This behaviour is actually used in some programs, for
+instance, in <B>Arkanoid</B>.</P>
+
+<P>Finally, there is an interesting bug in the ULA which also has to do with this
+split bus. After each instruction fetch cycle of the processor, the processor
+puts the I-R register "pair" (not the 8 bit internal Instruction Register, but
+the Interrupt and R registers) on the address bus. The lowest 7 bits, the R
+register, are used for memory refresh. However, the ULA gets confused if I is
+in the range 64-127, because it thinks the processor wants to read from lower
+16K ram very, very often. The ULA can't cope with this read-frequency, and
+regularly misses a screen byte.  Instead of the actual byte, the byte
+previously read is used to build up the video signal.  The screen seems to be
+filled with 'snow'; however, the Spectrum won't crash, and program will
+continue to run normally.  There's one program I know of that uses this
+to generate a nice effect: <B>Vectron</B> (which has very nice music too, by the way).</P>
+
+<P>The processor has three interrupt modes, selected by the instructions <TT>IM 0</TT>,
+<TT>IM 1</TT> and <TT>IM 2</TT>. In mode 1, the processor simply executes an <TT>RST #38</TT> instruction
+if an interrupt is requested. This is the mode the Spectrum is normally in.</P>
+
+<P>The other mode that is commonly used is <TT>IM 2</TT>. If an interrupt is requested,
+the processor first builds a 16 bit address by combining the I register (as
+the high byte) with whatever the interrupting device places on the data bus.
+The subroutine at this address is then called. Rodnay Zaks in his book
+"<I>Programming the Z80</I>" states that only even bytes are allowed as low index
+byte, but that isn't true. The normal Spectrum contains no hardware to place
+a byte on the bus, and the bus will therefore always read FF (because the ULA
+also doesn't read the screen if it generates an interrupt), so the resulting
+index address is 256*I+255. However, some not-so-neat hardware devices put
+things on the data bus when they shouldn't, so later programs didn't assume
+the low index byte was FF. These programs contain a 257 byte table of equal
+bytes starting at 256*I, and the interrupt routine is placed at an address
+that is a multiple of 257. A useful but not so much used trick is to make the
+table contain FF's (or use the ROM for this) and put a byte 18 hex, the opcode
+for <TT>JR</TT>, at FFFF. The first byte of the ROM is a DI, F3 hex, so the <TT>JR</TT> will jump
+to FFF4, where a long <TT>JP</TT> to the actual interrupt routine is put.</P>
+
+<P>In interrupt mode 0, the processor executes the instruction that the
+interrupting device places on the data bus. On a standard Spectrum this will be
+the byte FF, coincidentally (...) the opcode for <TT>RST #38</TT>. But for the same
+reasons as above, this is not really reliable.</P>
+
+<P>The 50 Hz interrupt is synchronized with the video signal generation by the
+ULA; both the interrupt and the video signal are generated by it. Many programs
+use the interrupt to synchronize with the frame cycle. Some use it to generate
+fantastic effects, such as full-screen characters, full-screen horizon
+(<B>Aquaplane</B>) or pixel colour (<B>Uridium</B> for instance). Very many modern programs
+use the fact that the screen is "written" (or "fired") to the CRT in a finite
+time to do as much time-consuming screen calculations as possible without
+causing character flickering: although the ULA has started displaying the
+screen for this frame already, the electron beam will for a moment not "pass"
+this or that part of the screen so it's safe to change something there. So the
+exact time in the 1/50 second time-slice at which the screen is updated is
+very important. Each line takes exactly 224 T states.</P>
+
+<P>After an interrupt
+occurs, 64 line times pass before the byte 16384 is displayed. At least the
+last 48 of these are actual border-lines. I could not determine whether my
+monitor didn't display the others or whether it was in vertical retrace, but
+luckily that's not really important.</P>
+
+<P><I>From Ian Collier:</I><BR>
+[This is probably not quite correct.  I have some exact figures, but so
+far I have failed to bring them into the lab in order to program them
+into xz80.  The 48K constants in there at the moment are wrong, but the +3
+ones are correct.  On the +3 there are exactly 14368 (well, give or take 1)
+cycles between the interrupt and byte 16384 being displayed, which turns out
+to be 63 lines and 4 cycles. On the 48K it's 14339 cycles. <I>I think!</I>]</P>
+
+<P>Then the 192 screen+border lines are
+displayed, followed by about 56 border lines again. 56.5 border lines would
+make up exactly 70000 T states, 1/50th of 3500000. However, I noticed that the
+frequency of the 50 Hz interrupt (measured in 1/T states!) changes very
+slightly when my Spectrum gets hot (I think it has something to do with the
+relative change of the frequencies of the two crystals in the Spectrum), so the
+time between interrupts will probably not be exactly 70000 T states.
+
+<P><I>From Malyrules:</I><BR>
+[The changing speed in 128 k depends NOT of "the relative frequency of the
+two crystals...". One is ULA crystal, one is colour crystal. They are 100%
+independent. The reason is still unknown, but Omega said, that placing
+cooler onto ula fixes problem.]</P>
+
+<P><I>From Ian Collier:</I><BR>
+[This can't be true.  A line contains exactly 224 cycles, and the screen
+contains exactly 312 lines.  If the screen didn't contain a whole number
+of lines then the TV would not be able to display it correctly.  This means
+that there are exactly 69888 cycles in a frame.  Unfortunately I have never
+determined whether this means that the 50Hz clock is too quick or the 3.5MHz
+clock is too slow (or neither, which would prove me wrong - note, though,
+that I have written a program which depends on the correct number of cycles
+per frame).]</P>
+
+<P>Anyway,
+whether the final border block is of fixed or variable length doesn't concern
+us either, the timings of the start and end of the screen, which are the
+timings of real interest, are fixed.</P>
+
+<P>Now for the timings of each line itself. I define a screen line to start with
+256 screen pixels, then border, then horizontal retrace, and then border again.
+All this takes 224 T states. Every half T state a pixel is written to the CRT,
+so if the ULA is reading bytes it does so each 4 T states (and then it reads
+two: a screen and an ATTR byte). The border is 48 pixels wide at each side. A
+video screen line is therefore timed as follows: 128 T states of screen, 24 T
+states of right border, 48 T states of horizontal retrace and 24 T states of
+left border.</P>
+
+<P>When an interrupt occurs, the running instruction has to be completed first.
+So the start of the interrupt is fixed relatively to the start of the frame
+up to the length of the last instruction in T states. If the processor was
+executing a <TT>HALT</TT> (which, according to the Z80 books I read, is effectively
+many <TT>NOP</TT>s), the interrupt routine starts at most 3 T states away from the
+start of the frame. Of course the processor also needs some T states to store
+the program counter on the stack, read the interrupt vector and jump to the
+routine. In interrupt modes 0, 0/1 and 1 the total time taken to get to address 56
+is 13 cycles.  In interrupt mode 2 the time taken to get to the interrupt
+routine is 19 cycles. Interpreted as follows:</P>
+<PRE>
+  5 cycles: a read of the data bus (in IM 1 this is thrown away)
+  6 cycles: a read of the 2-byte interrupt vector IM 2 only)
+  8 cycles: to push the current PC and set the new one.
+</PRE>
+
+<P>When an NMI occurs, the total time taken to get to address 102 is 15 cycles.
+This is the same as for an ordinary interrupt but with two extra cycles (because it
+must also put IFF2 flipflop to the P flag, and reset IFF1).</P>
+
+<P>Now when to <TT>OUT</TT> to the border to change it at the place you want? First of
+all, you cannot change the border within a "byte", an 8-pixel chunk. If we
+forget about the screen for a moment, if you <TT>OUT</TT> to port FE after 14326 to
+14329 T states (including the OUT) from the start of the IM 2 interrupt
+routine, the border will change at exactly the position of byte 16384 of the
+screen. The other positions can be computed by remembering that 8 pixels take
+4 T states, and a line takes 224 T states. You would think that <TT>OUT</TT>ing after
+14322 to 14325 T states, the border would change at 8 pixels left of the upper
+left corner of the screen. This is right for 14322, 14323 and 14324 T states,
+but if you wait 14325 T states the ULA happens to be reading byte 16384 (or
+22528, or both) and will halt the processor for a while, thereby making you
+miss the 8 pixels. This exception happens again after 224 T states, and
+again after 448, an so forth. These 192 exceptions left of the actual screen
+rectangle are the only ones; similar things don't happen at the right edge
+because the ULA don't need to read things there - it has just finished!
+As noted above, reading or writing in low ram (or <TT>OUT</TT>ing to the ULA) causes
+the ULA to halt the processor. When and how much? The processor is halted each
+time you want to access the ULA or low memory and the ULA is busy reading. Of
+the 312.5 'lines' the ULA generates, only 192 contain actual screen pixels,
+and the ULA will only read bytes during 128 of the 224 T states of each screen
+line. But if it does, the processor is halted for exactly 4 T states.</P>
+
+<P><I>From <A HREF="mailto:pgimeno@iname.com.no.junk.mail">Pedro Gimeno</A>:</I><BR>
+[In the 48K Spectrum the time taken by the TV electron beam to go
+from a point to the one exactly below that (i.e. the time for a
+scanline) is exactly 224 cycles. The time used by a single pixel is 1/2 clock
+cycle, so the time used by a 256-pixel wide screen line is 128 cycles, and the
+remaining 96 are for screen border and horizontal retrace.</P>
+
+<P>The Speccy generates exactly 312 lines of video (not 312.5), which
+means there are 69888 cycles between the start of each frame
+(moment in which an interrupt is generated), not 70000. The 312
+lines are divided as follows: 64 are for vertical retrace and
+border, 192 for screen data and border, and the remaining 56 for
+border until the next frame/interrupt.</P>
+
+<P>So 64 scanlines (14336 cycles) after the generation of an
+interrupt, the electron beam reaches the top left corner of the
+actual screen (not border). The border and the screen are both
+byte-granular. This means that changes may be applied only in a
+8-pixel chunk, so it's not possible to make horizontal colour
+changes with pixel precision in either the border or the screen.</P>
+
+<P>The ULA is the holder of the contents of the border colour value,
+so to update the border everything is OK. But when the thing to be
+updated is the video screen itself, the ULA needs to read the
+video memory to get the TV updated whilst the CPU needs to access
+memory to execute instructions. The electron beam can't be
+interrupted, so the ULA is given a higher priority to access the
+contended memory. When it needs to read from video memory, and the
+CPU needs to access the memory bank containing video memory or I/O
+port 254, then the CPU is halted. The exact number of cycles by
+which the CPU is halted depends on the current cycle relative to
+the generation of an interrupt. Here's how:</P>
+
+<UL>
+
+<LI>At cycle #14335 (just one cycle before the top left corner is
+reached) the delay is 6 cycles.
+
+<LI>At cycle #14336 the delay is 5 cycles, and so on according to the
+following table:
+</UL>
+
+<PRE>      Cycle #    Delay
+      -------    -----
+       14335       6 (until 14341)
+       14336       5 (  "     "  )
+       14337       4 (  "     "  )
+       14338       3 (  "     "  )
+       14339       2 (  "     "  )
+       14340       1 (  "     "  )
+       14341   No delay
+       14342   No delay
+       14343       6 (until 14349)
+       14344       5 (  "     "  )
+       14345       4 (  "     "  )
+       14346       3 (  "     "  )
+       14347       2 (  "     "  )
+       14348       1 (  "     "  )
+       14349   No delay
+       14350   No delay
+</PRE>
+
+<P>etc., until the cycle #14463 (always relative to the start of the
+interrupt), in which the electron beam reaches the border again
+for 96 more cycles. And at cycle #14559 the same situation
+repeats. This is valid for all 192 lines of screen data. While the
+ULA is updating the border the delay does not happen at any time.</P>
+
+<P>When counting cycles several things must be taken into account.
+One is the interrupt setup time; another one is the precise moment
+within an instruction in which the R/W or I/O operation is
+performed (see the table below). And one more thing: the fact that
+an interrupt can't happen in the middle of a instruction (and a
+<TT>HALT</TT> counts as many <TT>NOP</TT>s), so some cycles may be lost while
+waiting for the current instruction to end. That's an additional
+difficulty e.g. for byte-precision colour changes.</P>
+
+<P>Now all that remains is to know exactly in which point(s) within
+an instruction is the R/W or I/O operation acting, to know where
+to apply the delay. That depends on each instruction. For those
+one-byte ops which do not perform memory or I/O access, the only
+affected point is the opcode fetch which happens at the first
+cycle of the instruction, and the address to test for contention
+is the current value of the program counter PC.</P>
+
+<P>For example, for a <TT>NOP</TT> (4 cycles), only the first cycle will be
+affected and only if PC lies within the contended memory range. So
+if it's executed in contended memory at cycle #14334, no delay
+will happen and the next instruction will (try to) be executed at
+cycle #14338, but if the <TT>NOP</TT> is executed at cycle #14335, it will
+be delayed for 6 cycles thus taking 6+4=10 cycles so the next
+instruction will (try to) be executed at cycle #14345. This case
+will be annotated in the table below as <TT>pc:4</TT>, meaning that if PC
+lies within contended memory then the first cycle will be subject
+to delay and the remaining three will be free of delays.</P>
+
+<P>The "try to" in the above paragraph is because, unless the <TT>NOP</TT> is
+at PC=32767, the next instruction will be subject to another delay
+when its opcode is fetched (the first cycle in an opcode fetch is
+always subject to delays) since the cycle number relative to the
+start of the frame is also delayed.</P>
+
+<P>So an entry like '<TT>hl+1:3</TT>' means that if HL+1 is in range
+16384-32767 and the current cycle number is subject to delays, then the
+delay corresponding to the current cycle must be inserted before
+the number of T-states that figure after the colon.</P>
+
+<P>Things get a bit more difficult with more-than-one-byte-long
+instructions. Here's the sample pseudocode to apply delays to an
+instruction with an entry in the table which reads '<TT>pc:4,hl:3</TT>'
+(e.g. <TT>LD (HL),A</TT>):</P>
+
+<PRE>  If 16384&lt;=PC&lt;=32767 then
+     &lt;Insert the delay corresponding to the current cycle,
+     relative to the start of the frame&gt; (according to the above
+     table).
+  (end if)
+  Delay for 4 cycles (time after 'pc:').
+  If 16384&lt;=HL&lt;=32767 then
+     &lt;Insert the delay corresponding to the current cycle...&gt;
+  (end if)
+  Store A into (HL)
+  Delay for 3 cycles (time taken to store A)
+</PRE>
+
+<P><B>Example 1</B>: if PC = 25000 and HL = 26000 and the instruction at
+address 25000 is <TT>LD (HL),A</TT> and we're in cycle #14335:</P>
+
+<UL>
+<LI>Insert 6 cycles (count for cycle #14335) going to #14341.
+<LI>Read the opcode.
+<LI>Insert 4 cycles (opcode fetch). We're at cycle #14345.
+<LI>Insert 4 cycles (count for cycle #14345). We're at #14349.
+<LI>Store the byte.
+<LI>Insert 3 cycles (write to (HL)).
+</UL>
+
+<P>Next opcode will be read at cycle #14352 (and 5 cycles will be
+inserted then for sure because PC=25001).</P>
+
+<P><B>Example 2</B>: same but PC=40000 (not contended):</P>
+
+<UL>
+<LI>Read the opcode.
+<LI>Insert 4 cycles (opcode fetch). We're at cycle #14339.
+<LI>Insert 2 cycles (count for cycle #14339). We're at #14341.
+<LI>Store the byte.
+<LI>Insert 3 cycles (write to (HL)).
+</UL>
+
+<P>If an entry in the table has something like '<TT>io:5</TT>', it means that
+if the I/O port is even (bit 0 = 0, like port FEh) then it counts
+exactly like an address lying in contended memory.</P>
+
+<P>The values for the registers listed in the table below are
+relative to the starting value of the register when the
+instruction is about to be executed.</P>
+
+<P>In the table below:</P>
+
+<UL>
+<LI><TT>dd</TT> is any of the registers BC,DE,HL,SP
+<LI><TT>qq</TT> is any of the registers BC,DE,HL,AF
+<LI><TT>ss</TT> is any of the registers BC,DE,HL
+<LI><TT>cc</TT> is any (applicable) condition NZ,Z,NC,C,PO,PE,P,M
+<LI><TT>nn</TT> is a 16-bit number
+<LI><TT>n</TT> is an 8-bit number
+<LI><TT>b</TT> is a number from 0 to 7 (<TT>BIT</TT>/<TT>SET</TT>/<TT>RES</TT> instructions)
+<LI><TT>r</TT> and <TT>r'</TT> are any of the registers A,B,C,D,E,H,L
+<LI><TT>alo</TT> is an arithmetic or logical operation:
+    <TT>ADD</TT>/<TT>ADC</TT>/<TT>SUB</TT>/<TT>SBC</TT>/<TT>AND</TT>/<TT>XOR</TT>/<TT>OR</TT>/<TT>CP</TT>
+<LI><TT>sro</TT> is a shift/rotate operation:
+    <TT>RLC</TT>/<TT>RRC</TT>/<TT>RL</TT>/<TT>RR</TT>/<TT>SLA</TT>/<TT>SRA</TT>/<TT>SRL</TT> and <TT>SLL</TT> (undocumented)
+</UL>
+
+<P>For conditional instructions, entries in {} mean that they have
+only to be applied if the condition is met. If the instruction is
+not conditional (e.g. <TT>CALL nn</TT>) the entries in {} should be
+ignored.</P>
+
+<P>The CB/ED/DD/FD prefixes count always as <TT>pc:4</TT>. It will not be
+counted in each instruction: I found it convenient to count them
+as separate instructions. Also, in places where HL appears we
+assume that it may be replaced by IX or IY (same for H and L
+alone) when valid. Timings for instructions with an operand of the
+form (IX/IY+n) have not been thoroughly tested.</P>
+
+<P>Some formats of the instructions may be illegal. For example, the
+instruction <TT>LD r,(ss)</TT> is not valid for r=B and ss=DE. Just ignore
+the illegal combinations.</P>
+
+<P>In some read-modify-write operations (like <TT>INC (HL)</TT>), the write
+operation is always the last one. That may be important to know
+the exact point in which video is updated, for example. In such
+instructions that point is annotated for clarity as "(write)"
+after the address.</P>
+
+<PRE>
+    Instruction    Breakdown
+    -----------    ---------
+    NOP;           pc:4
+    CB prefix;
+    ED prefix;
+    DD prefix;
+    FD prefix;
+    LD r,r';
+    alo A,r;
+    sro r;
+    BIT b,r;
+    SET b,r;
+    RES b,r;
+    INC/DEC r;
+    EXX;
+    EX AF,AF';
+    EX DE,HL;
+    DAA;
+    CPL;
+    NEG;
+    IM 0/1/2;
+    CCF;
+    SCF;
+    DI;
+    EI;
+    RLA;
+    RRA;
+    RLCA;
+    RRCA;
+    JP (HL)
+
+    LD A,I;        pc:5
+    LD A,R;
+    LD I,A;
+    LD R,A
+
+    INC/DEC dd;    pc:6
+    LD SP,HL
+
+    ADD HL,dd;     pc:11
+    ADC HL,dd;
+    SBC HL,dd
+
+    LD r,n;        pc:4,pc+1:3
+    alo A,n
+
+    LD r,(ss);     pc:4,ss:3
+    LD (ss),r
+
+    alo A,(HL)     pc:4,hl:3
+
+    BIT b,(HL)     pc:4,hl:4
+
+    LD dd,nn;      pc:4,pc+1:3,pc+2:3
+    JP nn;
+    JP cc,nn
+
+    LD (HL),n      pc:4,pc+1:3,hl:3
+
+    LD A,(nn);     pc:4,pc+1:3,pc+2:3,nn:3
+    LD (nn),A
+
+    LD dd,(nn);    pc:4,pc+1:3,pc+2:3,nn:3,nn+1:3
+    LD (nn),dd
+
+    INC/DEC (HL);  pc:4,hl:4,hl(write):3
+    SET b,(HL);
+    RES b,(HL);
+    sro (HL)
+
+    POP dd;        pc:4,sp:3,sp+1:3
+    RET;
+    RETI;
+    RETN
+
+    RET cc         pc:5,{sp:3,sp+1:3}
+
+    PUSH dd;       pc:5,sp-1:3,sp-2:3
+    RST n
+
+    CALL nn;       pc:4,pc+1:3,pc+2:3,{pc+2:1,
+    CALL cc,nn     sp-1:3,sp-2:3}
+
+    JR n;          pc:4,pc+1:3,{pc+1:1,pc+1:1,pc+1:1,
+    JR cc,n        pc+1:1,pc+1:1}
+
+    DJNZ n         pc:5,pc+1:3,{pc+1:1,pc+1:1,pc+1:1,
+                   pc+1:1,pc+1:1}
+
+    RLD;           pc:4,hl:7,hl(write):3
+    RRD
+
+    IN A,(n);      pc:4,pc+1:4,io:3
+    OUT (n),A
+
+    IN r,(C);      pc:5,io:3
+    OUT (C),r
+
+    EX (SP),HL     pc:4,sp:3,sp+1:4,sp(write):3,sp+1(write):5
+
+    LDI/LDIR;      pc:4,hl:3,de:3,de:1,de:1,{de:1,de:1,de:1,
+    LDD/LDDR       de:1,de:1}
+
+    CPI/CPIR;      pc:4,hl:3,hl:1,hl:1,hl:1,hl:1,hl:1,{hl:1,
+    CPD/CPDR       hl:1,hl:1,hl:1,hl:1}
+
+    INI/INIR;      pc:6,io:3,hl:3,{hl:1,hl:1,hl:1,hl:1,hl:1}
+    IND/INDR
+
+    Note: The next instruction is not very clear because of its
+    complexity - help on confirmation would be appreciated:
+
+    OUTI/OTIR;     if last time or non-repeated version:
+    OUTD/OTDR      pc:5,hl:4,io:3
+                   if not last time (for repeated versions):
+                   pc:5,hl:4,io:1,pc+1:1,pc+1:1,pc+1:1,pc+1:1,
+                   pc+1:1,pc+1:1,pc:1
+</PRE>
+
+<P>If anyone out there can further this information (especially about the
+effect of (IX+n), (IY+n) and the differences for the 128K/+2), please
+contact <a href="mailto:pgimeno@iname.com.no.junk.mail">Pedro</A>.]</P>
+
+<A NAME="IF1">
+<TABLE NOBORDER WIDTH=100% BGCOLOR="#F0F0B0">
+<TH><FONT FACE="Comic Sans MS" SIZE=+1>INTERFACE 1</FONT></TH>
+</TABLE>
+<P>The Interface I is quite complicated. It uses three different I/O ports,
+and contains logic to page and unpage an 8K ROM if new commands are used. The
+ROM is paged if the processor executes the instruction at ROM address 0008 or
+1708 hexadecimal, the error and close# routines. It is inactivated when the
+Z80 executes the <TT>RET</TT> at address 0700.</P>
+
+<A NAME="E7">
+<TABLE NOBORDER WIDTH=100% BGCOLOR="#FFFFBB">
+<TH><FONT FACE="Comic Sans MS">Port E7</FONT></TH>
+</TABLE>
+<P>I/O port E7 is used to send or receive data to and from the microdrive.
+Accessing this port will halt the Z80 until the Interface I has collected 8
+bits from the microdrive head; therefore, it the microdrive motor isn't
+running, or there is no formatted cartridge in the microdrive, the Spectrum
+hangs. This is the famous '<TT>IN 0</TT> crash'.</P>
+
+<A NAME="EF">
+<TABLE NOBORDER WIDTH=100% BGCOLOR="#FFFFBB">
+<TH><FONT FACE="Comic Sans MS">Port EF</FONT></TH>
+</TABLE>
+<PRE>
+       Bit    7   6    5    4    3    2    1     0
+            +---------------------------------------+
+        READ|   |   |    |busy| dtr |gap| sync|write|
+            |   |   |    |    |     |   |     |prot.|
+            |---+---+----+----+-----+---+-----+-----|
+       WRITE|   |   |wait| cts|erase|r/w|comms|comms|
+            |   |   |    |    |     |   | clk | data|
+            +---------------------------------------+
+</PRE>
+<P>Bits DTR and CTS are used by the RS232 interface.  The WAIT bit is used by the
+Network to synchronise, GAP, SYNC, WR_PROT, ERASE, R/_W, COMMS CLK and COMMS
+DATA are used by the microdrive system. If the microdrive is not being used,
+the COMMS DATA output selects the function of bit 0 of out-port F7:</P>
+<PRE>
+       Bit      7    6   5   4   3   2   1       0
+            +------------------------------------------+
+        READ|txdata|   |   |   |   |   |   |    net    |
+            |      |   |   |   |   |   |   |   input   |
+            |------+---+---+---+---+---+---+-----------|
+       WRITE|      |   |   |   |   |   |   |net output/|
+            |      |   |   |   |   |   |   |   rxdata  |
+            +------------------------------------------+
+</PRE>
+<P>TXDATA and RXDATA are the input and output of the RS232 port. COMMS DATA
+determines whether bit 0 of F7 is output for the RS232 or the network.</P>
+
+<A NAME="JOYSTICKS">
+<TABLE NOBORDER WIDTH=100% BGCOLOR="#F0F0B0">
+<TH><FONT FACE="Comic Sans MS" SIZE=+1>JOYSTICKS</FONT></TH>
+</TABLE>
+<P>[<I>From <A HREF="mailto:aralbrec@concentric.net.no.junk.mail">Alvin Albrecht</A>:</I>] The ports assigned to joysticks are:</P>
+<PRE>
+#7F    Fuller Box  (FxxxRLDU, active low)
+#1F    Kempston    (000FUDLR, active high)
+#EFFE  Sinclair1   (000LRDUF, active low, corresponds to keys '6' to '0')
+#F7FE  Sinclair2   (000FUDRL, active low, corresponds to keys '1' to '5')
+</PRE>
+<P>TS2068 (joysticks attached to R14 of sound chip):</P>
+<PRE>
+  LD A,7
+  OUT (#F5),A   ;set R7
+  IN A,(#F6)
+  AND #BF       ;clear bit 6 to read from i/o port a - R14
+  OUT (#F6),A
+  LD A,14
+  OUT (#F5),A   ;set R14
+  LD A,3        ;(3=both joysticks, 2=left only, 1=right only)
+  IN A,(#F6)    ;(FxxxRLDU, active low)
+</PRE>
+<P>This method ensures other sound chip functions aren't messed with.</P>
+
+<A NAME="128K">
+<TABLE NOBORDER WIDTH=100% BGCOLOR="#F0F0B0">
+<TH><FONT FACE="Comic Sans MS" SIZE=+1>THE 128K SPECTRUMS</FONT></TH>
+</TABLE>
+
+<A NAME="MEM">
+<TABLE NOBORDER WIDTH=100% BGCOLOR="#FFFFBB">
+<TH><FONT FACE="Comic Sans MS">Memory</FONT></TH>
+</TABLE>
+
+<P>When memory is being paged, interrupts should be disabled and the stack should
+be in an area which is not going to change. If normal interrupt code is to
+run, then the system variable at 5B5Ch (23388) must be kept updated with the
+last value sent to port 7FFDh. It is not possible to read this port.</P>
+
+<P>On the 128 and +2, memory is entirely controlled by port 7FFDh. The byte to
+output will be interpreted thus:</P>
+<PRE>
+Bits 0-2: RAM page (0-7) to map into memory at 0C000h
+Bit  3:   Select normal (0) or shadow (1) screen. The normal screen is in bank
+          5 and normally appears at 4000h; the shadow screen is in bank 7 and
+          can be switched in at 0C000h
+Bit  4:   ROM select. ROM 0 is the 128k editor and menu system; ROM 1 contains
+          48k BASIC.
+Bit  5:   If set, memory paging will be disabled and further output to this
+          port will be ignored until the computer is reset.
+</PRE>
+<P>The memory map of these computers is:</P>
+<PRE>
+FFFFh +--------+--------+--------+--------+--------+--------+--------+--------+
+      | Bank 0 | Bank 1 | Bank 2 | Bank 3 | Bank 4 | Bank 5 | Bank 6 | Bank 7 |
+      |        |        |(also at|        |        |(also at|        |        |
+      |        |        | 8000h) |        |        | 4000h) |        |        |
+      |        |        |        |        |        | screen |        | screen |
+C000h +--------+--------+--------+--------+--------+--------+--------+--------+
+      | Bank 2 |        Any one of these pages may be switched in.
+      |        |
+      |        |
+      |        |
+8000h +--------+
+      | Bank 5 |
+      |        |
+      |        |
+      | screen |
+4000h +--------+--------+
+      | ROM 0  | ROM 1  | Either ROM may be switched in.
+      |        |        |
+      |        |        |
+      |        |        |
+0000h +--------+--------+
+</PRE>
+<P>Memory banks 4-7 are contended, i.e. the processor shares them with the ULA.
+This reduces the speed of memory access in these banks.</P>
+
+<P>[<I>From <A HREF="mailto:Erik.Kunze@fantasy.muc.de.no.junk.mail">Erik Kunze</A>:</I>]</P>
+
+<P>The basic principle of paging on the +2A and +3 is the same.
+However, the +2A and +3 have four ROMs rather than two, and certain extra memory configurations.</P>
+
+<P>Port 7FFDh behaves in the same way as before, except that bit 4 is now the
+low bit of the ROM selection. The extra features are controlled by
+port 1FFDh. This port is also write-only, and its last value should be saved
+at 5B67h (23399).</P>
+
+<P>Port 1FFDh responds thus:</P>
+<PRE>
+  Bit 0: Paging mode. 0=normal, 1=special
+  Bit 1: In normal mode, ignored.
+  Bit 2: In normal mode, high bit of ROM selection. The four ROMs are:
+          ROM 0: 128k editor, menu system and self-test program
+          ROM 1: 128k syntax checker
+          ROM 2: +3DOS
+ 	  ROM 3: 48 BASIC
+  Bit 3: Disk motor; 1=on, 0=off
+  Bit 4: Printer port strobe.
+</PRE>
+<P>When special mode is selected, the memory map changes to one of four
+configurations specified in bits 1 and 2 of port 1FFDh:</P>
+<PRE>
+       Bit 2 =0    Bit 2 =0    Bit 2 =1    Bit 2 =1
+       Bit 1 =0    Bit 1 =1    Bit 1 =0    Bit 1 =1
+ FFFFh+--------+  +--------+  +--------+  +--------+
+      | Bank 3 |  | Bank 7 |  | Bank 3 |  | Bank 3 |
+      |        |  |        |  |        |  |        |
+      |        |  |        |  |        |  |        |
+      |        |  | screen |  |        |  |        |
+ C000h+--------+  +--------+  +--------+  +--------+
+      | Bank 2 |  | Bank 6 |  | Bank 6 |  | Bank 6 |
+      |        |  |        |  |        |  |        |
+      |        |  |        |  |        |  |        |
+      |        |  |        |  |        |  |        |
+ 8000h+--------+  +--------+  +--------+  +--------+
+      | Bank 1 |  | Bank 5 |  | Bank 5 |  | Bank 7 |
+      |        |  |        |  |        |  |        |
+      |        |  |        |  |        |  |        |
+      |        |  | screen |  | screen |  | screen |
+ 4000h+--------+  +--------+  +--------+  +--------+
+      | Bank 0 |  | Bank 4 |  | Bank 4 |  | Bank 4 |
+      |        |  |        |  |        |  |        |
+      |        |  |        |  |        |  |        |
+      |        |  |        |  |        |  |        |
+ 0000h+--------+  +--------+  +--------+  +--------+
+</PRE>
+<P>An example of a typical bank switch on the 128 is:</P>
+<PRE>
+     LD      A,(5B5Ch)       ;Previous value of port
+     AND     0F8h
+     OR      4               ;Select bank 4
+     LD      BC,7FFDh
+     DI
+     LD      (5B5Ch),A
+     OUT     (C),A
+     EI
+</PRE>
+<P>The principle is the same for all bank switching; only change the bits you
+need to.</P>
+
+<P>On the 128 and +2, Banks 1,3,4,6 and most of 7 are used for the silicon 
+disc; the rest of 7 contains editor scratchpads. On the +2A and +3, 
+Banks 1,3,4 and 6 are used for the disc cache and RAMdisc, while Bank 7
+contains editor scratchpads and +3DOS workspace.</P>
+
+<P><IMG SRC="new.gif" WIDTH=31 HEIGHT=12 ALT="NEW"> <I>From <A HREF="mailto:pgimeno@iname.com.no.junk.mail">Pedro Gimeno</A>
+and Jose Luis Sanchez:</I><BR>
+[The basic principle behind the contended memory timings is the same on the
++2A/+3 and the 48K machine, but the specifics are different:</P>
+
+<UL>
+<LI>There are 228 T-states per scanline, as opposed to 224.
+<LI>There are 311 scanlines per frame, as opposed to 312.
+<LI>There are 63 scanlines before the television picture, as opposed to 64.
+</UL>
+
+<P>This means that the top-left pixel of the screen is displayed 14364
+T-states after the 50 Hz interrupt occurs, as opposed to 13336. The T-states
+(relative to the interrupt) at which delays occur are given in the following
+table:</P>
+
+<PRE>      Cycle #    Delay
+      -------    -----
+       14361       1
+       14362   No delay
+       14363       7
+       14364       6
+       14365       5
+       14366       4
+       14367       3
+       14368       2
+       14369       1
+       14370   No delay
+       14371       7
+       14372       6
+</PRE>
+
+<P>and so on, until cycle 14490, when the display of the first scanline on the
+screen has been completed, and no more delays are inserted until 14589 
+(=14361+228) when the cycle repeats.</P>
+
+<P>This information here is not complete; some things which have not been
+tested so far:</P>
+
+<UL>
+<LI>Is port #FEh (or any others) contended?
+<LI>Which memory banks are contended.]
+</UL>
+
+<A NAME="KEYPAD">
+<TABLE NOBORDER WIDTH=100% BGCOLOR="#FFFFBB">
+<TH><FONT FACE="Comic Sans MS">Keypad</FONT></TH>
+</TABLE>
+
+<P>The 128K machine's keypad extra editing facilities are also available via
+the normal keyboard:</P>
+<PRE>
+                 FUNCTION                        KEYS
+                 -----------------------------------------
+                 Beginning of next word          [E] [S] J
+                 Beginning of previous word      [E] I
+                 Up ten lines                    [E] P
+                 Down ten lines                  [S] I
+                 Start of line                   [E] [S] 2
+                 End of line                     [E] M
+                 First line                      [E] N
+                 Last line                       [E] T
+                 Screen                          [E] [S] 8
+                 Delete this character           [E] [S] K
+                 Delete word left                [E] E
+                 Delete word right               [E] W
+                 Delete to start of line         [E] K
+                 Delete to end of line           [E] J
+
+                 [E] = Extended Mode
+                 [S] = Symbol Shift
+</PRE>
+
+<A NAME="AY">
+<TABLE NOBORDER WIDTH=100% BGCOLOR="#FFFFBB">
+<TH><FONT FACE="Comic Sans MS">Sound Chip</FONT></TH>
+</TABLE>
+
+<P>The AY-3-8912 sound chip is a widely used one, to be found in the MSX,
+Vectrex, Amstrad CPC range, etc. It is controlled by two I/O ports:</P>
+<PRE>
+OUT (0FFFDh)   - Select a register 0-14
+IN  (0FFFDh)   - Read the value of the selected register
+OUT (0BFFDH)   - Write to the selected register
+</PRE>
+<P>There's a guide to how to use the registers at
+<A HREF="http://andercheran.aiind.upv.es/~amstrad/CPC_Guide/Hardware_Programming/Chips/psg.html">this site</A>
+ - this is for the CPC, so the I/O commands used will be different, and on the
+Spectrum register 14 is used for the serial ports rather than the keyboard as
+on the CPC. There is also an excellent load of info on the AY chip in the <TT>techinfo.doc</TT>
+file accompanying the <A HREF="emu_pc.html#Z80">Z80</A> emulator.</P>
+
+<P>The Fuller Box also used the Speccy 128's AY sound chip:</P>
+
+<P>[<I>From <A HREF="mailto:aralbrec@concentric.net.no.junk.mail">Alvin Albrecht</A>:</I>] The ports assigned to the Fuller Box are:</P>
+<PRE>
+#3F      AY register
+#5F      AY data
+#7F      joystick (byte read=FxxxRLDU, active low)
+</PRE>
+
+<P>The Timex TS2068 is one of the Spectrum clones and also had an AY chip:</P>
+
+<P>[<I>From <A HREF="mailto:aralbrec@concentric.net.no.junk.mail">Alvin Albrecht</A>:</I>] TS2068 AY
+ports are:</P>
+<PRE>
+#F5    AY register
+#F6    AY data
+</PRE>
+<P>For a more complete list of TS2068 ports, see the TS2068 ROMs file (to be found on NVG).</P>
+
+<P>Typically, the AY chip is written to inside 128K games using:</P>
+<PRE>
+LD BC,#FFFD      01 FD FF
+OUT (C),D        ED 51
+LD B,#BF         06 BF
+OUT (C),E        ED 59
+</PRE>
+<P>To convert to a ts2068 poke a few values as follows:</P>
+<PRE>
+LD BC,#FFF5      01  F5* FF
+OUT (C),D        ED  51
+LD C,#F6         0E* F6*
+OUT (C),E        ED 59
+</PRE>
+<P>If you've got a Fuller box, you can do the same mod, replacing F5 with 3F
+and F6 with 5F.</P>
+
+<A NAME="DISK">
+<TABLE NOBORDER WIDTH=100% BGCOLOR="#FFFFBB">
+<TH><FONT FACE="Comic Sans MS">Disk Drive</FONT></TH>
+</TABLE>
+
+<P>[<I>From <A HREF="mailto:damien.guard@nrgi.com.no.junk.mail">Damien Guard</A>:</I>]</P>
+
+<P>Another useful bit of information is that it is possible to add an Amiga 3.5" 
+drive to a Spectrum +3 by Simply wiring the pins by name and providing 
+it with some external power source (or in my case using an Amiga PSU 
+with increased amp's to power the entire +3 and external drive in one 
+go).  There is a public domain formatter around to format it to 720k - 
+this is quite useful as 3" disks are now a rarity and were never that 
+reliable.</P>
+
+<P>The added advantage is that PC users equipped with a copy of Sybex's 
+shareware package 22Disk can read these files into a PC too.</P>
+
+<CENTER><P ALIGN=CENTER><IMG SRC="zxline.gif" WIDTH=540 HEIGHT=8></P></CENTER>
+
+</BODY></HTML>

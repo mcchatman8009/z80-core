@@ -15,15 +15,15 @@ COPY linux/ubuntu/cmake-manual-build.sh .
 #
 # Install dependencies
 #
-RUN apt-get install -y uuid-runtime
-RUN apt-get install -y uuid-dev
-RUN apt-get install -y pkg-config
-RUN apt-get install -y gcc-9 g++-9
-RUN apt-get install -y wget
-RUN apt-get install -y git
-RUN apt-get install -y tar
-RUN apt-get install -y make
-RUN apt-get install -y libssl-dev
+RUN apt install -y uuid-runtime
+RUN apt install -y uuid-dev
+RUN apt install -y pkg-config
+RUN apt install -y gcc-9 g++-9
+RUN apt install -y wget
+RUN apt install -y git
+RUN apt install -y tar
+RUN apt install -y make
+RUN apt install -y libssl-dev
 RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 60 --slave /usr/bin/g++ g++ /usr/bin/g++-9
 
 #

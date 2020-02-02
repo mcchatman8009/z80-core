@@ -11,10 +11,37 @@ using b=Z80Byte;
     addToProgramCounter(programCounterOffset);
 
 #define CPU_COMMAND(opCode, programCounterOffset, block) \
-    case opCode: \
+    case opCode:  \
         block; \
         addToProgramCounter(programCounterOffset); \
         return;
+
+#define OFFSET_CB_CPU_COMMAND(opCode, programCounterOffset, block, reg) \
+    case opCode: { \
+        reg.setByteValue(memory.readByte(address)); \
+        block; \
+        memory.writeByte(address, reg.getByteValue()); \
+        addToProgramCounter(programCounterOffset); \
+        return; \
+    }
+
+#define OFFSET_CB_CPU_COMMAND_HIGH(opCode, programCounterOffset, block, reg) \
+    case opCode: { \
+        reg.setHighByte(memory.readByte(address)); \
+        block; \
+        memory.writeByte(address, reg.getHighByte()); \
+        addToProgramCounter(programCounterOffset); \
+        return; \
+    }
+
+#define OFFSET_CB_CPU_COMMAND_LOW(opCode, programCounterOffset, block, reg) \
+    case opCode: { \
+        reg.setLowByte(memory.readByte(address)); \
+        block; \
+        memory.writeByte(address, reg.getLowByte()); \
+        addToProgramCounter(programCounterOffset); \
+        return; \
+    }
 
 #define HL_VALUE hl.getWordValue()
 
@@ -1049,38 +1076,313 @@ void Z80Cpu::executeNextIndexCBCommand(WordRegister& indexRegister) {
     outputOpCode(mnemonic, opCode);
 
     switch (opCode.getValue()) {
+
+        OFFSET_CB_CPU_COMMAND_HIGH(0x00, 1, bc.rotateLeftCircular(HIGH), bc)
+        OFFSET_CB_CPU_COMMAND_LOW(0x01, 1, bc.rotateLeftCircular(LOW), bc)
+        OFFSET_CB_CPU_COMMAND_HIGH(0x02, 1, de.rotateLeftCircular(HIGH), de)
+        OFFSET_CB_CPU_COMMAND_LOW(0x03, 1, de.rotateLeftCircular(LOW), de)
+        OFFSET_CB_CPU_COMMAND_HIGH(0x04, 1, hl.rotateLeftCircular(HIGH), hl)
+        OFFSET_CB_CPU_COMMAND_LOW(0x05, 1, hl.rotateLeftCircular(LOW), hl)
         CPU_COMMAND(0x06, 1, memoryCommandHandler.rotateLeftCircular(address))
+        OFFSET_CB_CPU_COMMAND(0x07, 1, a.rotateLeftCircular(), a)
+        OFFSET_CB_CPU_COMMAND_HIGH(0x08, 1, bc.rotateRightCircular(HIGH), bc)
+        OFFSET_CB_CPU_COMMAND_LOW(0x09, 1, bc.rotateRightCircular(LOW), bc)
+        OFFSET_CB_CPU_COMMAND_HIGH(0x0A, 1, de.rotateRightCircular(HIGH), de)
+        OFFSET_CB_CPU_COMMAND_LOW(0x0B, 1, de.rotateRightCircular(LOW), de)
+        OFFSET_CB_CPU_COMMAND_HIGH(0x0C, 1, hl.rotateRightCircular(HIGH), hl)
+        OFFSET_CB_CPU_COMMAND_LOW(0x0D, 1, hl.rotateRightCircular(LOW), hl)
         CPU_COMMAND(0x0E, 1, memoryCommandHandler.rotateRightCircular(address))
+        OFFSET_CB_CPU_COMMAND(0x0F, 1, a.rotateRightCircular(), a)
+
+        OFFSET_CB_CPU_COMMAND_HIGH(0x10, 1, bc.rotateLeftThroughCarry(HIGH), bc)
+        OFFSET_CB_CPU_COMMAND_LOW(0x11, 1, bc.rotateLeftThroughCarry(LOW), bc)
+        OFFSET_CB_CPU_COMMAND_HIGH(0x12, 1, de.rotateLeftThroughCarry(HIGH), de)
+        OFFSET_CB_CPU_COMMAND_LOW(0x13, 1, de.rotateLeftThroughCarry(LOW), de)
+        OFFSET_CB_CPU_COMMAND_HIGH(0x14, 1, hl.rotateLeftThroughCarry(HIGH), hl)
+        OFFSET_CB_CPU_COMMAND_LOW(0x15, 1, hl.rotateLeftThroughCarry(LOW), hl)
         CPU_COMMAND(0x16, 1, memoryCommandHandler.rotateLeftThroughCarry(address))
+        OFFSET_CB_CPU_COMMAND(0x17, 1, a.rotateLeftThroughCarry(), a)
+        OFFSET_CB_CPU_COMMAND_HIGH(0x18, 1, bc.rotateRightThroughCarry(HIGH), bc)
+        OFFSET_CB_CPU_COMMAND_LOW(0x19, 1, bc.rotateRightThroughCarry(LOW), bc)
+        OFFSET_CB_CPU_COMMAND_HIGH(0x1A, 1, de.rotateRightThroughCarry(HIGH), de)
+        OFFSET_CB_CPU_COMMAND_LOW(0x1B, 1, de.rotateRightThroughCarry(LOW), de)
+        OFFSET_CB_CPU_COMMAND_HIGH(0x1C, 1, hl.rotateRightThroughCarry(HIGH), hl)
+        OFFSET_CB_CPU_COMMAND_LOW(0x1D, 1, hl.rotateRightThroughCarry(LOW), hl)
         CPU_COMMAND(0x1E, 1, memoryCommandHandler.rotateRightThroughCarry(address))
+        OFFSET_CB_CPU_COMMAND(0x1F, 1, a.rotateRightThroughCarry(), a)
+
+
+        OFFSET_CB_CPU_COMMAND_HIGH(0x20, 1, bc.shiftLeftArithmetic(HIGH), bc)
+        OFFSET_CB_CPU_COMMAND_LOW(0x21, 1, bc.shiftLeftArithmetic(LOW),bc)
+        OFFSET_CB_CPU_COMMAND_HIGH(0x22, 1, de.shiftLeftArithmetic(HIGH), de)
+        OFFSET_CB_CPU_COMMAND_LOW(0x23, 1, de.shiftLeftArithmetic(LOW), de)
+        OFFSET_CB_CPU_COMMAND_HIGH(0x24, 1, hl.shiftLeftArithmetic(HIGH), hl)
+        OFFSET_CB_CPU_COMMAND_LOW(0x25, 1, hl.shiftLeftArithmetic(LOW), hl)
         CPU_COMMAND(0x26, 1, memoryCommandHandler.shiftLeftArithmetic(address))
+        OFFSET_CB_CPU_COMMAND(0x27, 1, a.shiftLeftArithmetic(), a)
+        OFFSET_CB_CPU_COMMAND_HIGH(0x28, 1, bc.shiftRightArithmetic(HIGH), bc)
+        OFFSET_CB_CPU_COMMAND_LOW(0x29, 1, bc.shiftRightArithmetic(LOW), bc)
+        OFFSET_CB_CPU_COMMAND_HIGH(0x2A, 1, de.shiftRightArithmetic(HIGH), de)
+        OFFSET_CB_CPU_COMMAND_LOW(0x2B, 1, de.shiftRightArithmetic(LOW), de)
+        OFFSET_CB_CPU_COMMAND_HIGH(0x2C, 1, hl.shiftRightArithmetic(HIGH), hl)
+        OFFSET_CB_CPU_COMMAND_LOW(0x2D, 1, hl.shiftRightArithmetic(LOW), hl)
         CPU_COMMAND(0x2E, 1, memoryCommandHandler.shiftRightArithmetic(address))
+        OFFSET_CB_CPU_COMMAND(0x2F, 1, a.shiftRightArithmetic(), a)
+
+
+        OFFSET_CB_CPU_COMMAND_HIGH(0x30, 1, bc.shiftLeftLogical(HIGH), bc)
+        OFFSET_CB_CPU_COMMAND_LOW(0x31, 1, bc.shiftLeftLogical(LOW), bc)
+        OFFSET_CB_CPU_COMMAND_HIGH(0x32, 1, de.shiftLeftLogical(HIGH), de)
+        OFFSET_CB_CPU_COMMAND_LOW(0x33, 1, de.shiftLeftLogical(LOW), de)
+        OFFSET_CB_CPU_COMMAND_HIGH(0x34, 1, hl.shiftLeftLogical(HIGH), hl)
+        OFFSET_CB_CPU_COMMAND_LOW(0x35, 1, hl.shiftLeftLogical(LOW), hl)
         CPU_COMMAND(0x36, 1, memoryCommandHandler.shiftLeftLogical(address))
+        OFFSET_CB_CPU_COMMAND(0x37, 1, a.shiftLeftLogical(), a)
+        OFFSET_CB_CPU_COMMAND_HIGH(0x38, 1, bc.shiftRightLogical(HIGH), bc)
+        OFFSET_CB_CPU_COMMAND_LOW(0x39, 1, bc.shiftRightLogical(LOW), bc)
+        OFFSET_CB_CPU_COMMAND_HIGH(0x3A, 1, de.shiftRightLogical(HIGH), de)
+        OFFSET_CB_CPU_COMMAND_LOW(0x3B, 1, de.shiftRightLogical(LOW), de)
+        OFFSET_CB_CPU_COMMAND_HIGH(0x3C, 1, hl.shiftRightLogical(HIGH), hl)
+        OFFSET_CB_CPU_COMMAND_LOW(0x3D, 1, hl.shiftRightLogical(LOW), hl)
         CPU_COMMAND(0x3E, 1, memoryCommandHandler.shiftRightLogical(address))
-        CPU_COMMAND(0x46, 1, memoryCommandHandler.testBit(0, address))
-        CPU_COMMAND(0x4E, 1, memoryCommandHandler.testBit(1, address))
-        CPU_COMMAND(0x56, 1, memoryCommandHandler.testBit(2, address))
-        CPU_COMMAND(0x5E, 1, memoryCommandHandler.testBit(3, address))
-        CPU_COMMAND(0x66, 1, memoryCommandHandler.testBit(4, address))
-        CPU_COMMAND(0x6E, 1, memoryCommandHandler.testBit(5, address))
-        CPU_COMMAND(0x76, 1, memoryCommandHandler.testBit(6, address))
-        CPU_COMMAND(0x7E, 1, memoryCommandHandler.testBit(7, address))
+        OFFSET_CB_CPU_COMMAND(0x3F, 1, a.shiftRightLogical(), a)
+
+        CPU_COMMAND(0x40, 1, memoryCommandHandler.testBit(0, address)) // NOLINT
+        CPU_COMMAND(0x41, 1, memoryCommandHandler.testBit(0, address)) // NOLINT
+        CPU_COMMAND(0x42, 1, memoryCommandHandler.testBit(0, address)) // NOLINT
+        CPU_COMMAND(0x43, 1, memoryCommandHandler.testBit(0, address)) // NOLINT
+        CPU_COMMAND(0x44, 1, memoryCommandHandler.testBit(0, address)) // NOLINT
+        CPU_COMMAND(0x45, 1, memoryCommandHandler.testBit(0, address)) // NOLINT
+        CPU_COMMAND(0x46, 1, memoryCommandHandler.testBit(0, address)) // NOLINT
+        CPU_COMMAND(0x47, 1, memoryCommandHandler.testBit(0, address)) // NOLINT
+        CPU_COMMAND(0x48, 1, memoryCommandHandler.testBit(1, address)) // NOLINT
+        CPU_COMMAND(0x49, 1, memoryCommandHandler.testBit(1, address)) // NOLINT
+        CPU_COMMAND(0x4A, 1, memoryCommandHandler.testBit(1, address)) // NOLINT
+        CPU_COMMAND(0x4B, 1, memoryCommandHandler.testBit(1, address)) // NOLINT
+        CPU_COMMAND(0x4C, 1, memoryCommandHandler.testBit(1, address)) // NOLINT
+        CPU_COMMAND(0x4D, 1, memoryCommandHandler.testBit(1, address)) // NOLINT
+        CPU_COMMAND(0x4E, 1, memoryCommandHandler.testBit(1, address)) // NOLINT
+        CPU_COMMAND(0x4F, 1, memoryCommandHandler.testBit(1, address)) // NOLINT
+
+        CPU_COMMAND(0x50, 1, memoryCommandHandler.testBit(2, address)) // NOLINT
+        CPU_COMMAND(0x51, 1, memoryCommandHandler.testBit(2, address)) // NOLINT
+        CPU_COMMAND(0x52, 1, memoryCommandHandler.testBit(2, address)) // NOLINT
+        CPU_COMMAND(0x53, 1, memoryCommandHandler.testBit(2, address)) // NOLINT
+        CPU_COMMAND(0x54, 1, memoryCommandHandler.testBit(2, address)) // NOLINT
+        CPU_COMMAND(0x55, 1, memoryCommandHandler.testBit(2, address)) // NOLINT
+        CPU_COMMAND(0x56, 1, memoryCommandHandler.testBit(2, address)) // NOLINT
+        CPU_COMMAND(0x57, 1, memoryCommandHandler.testBit(2, address)) // NOLINT
+        CPU_COMMAND(0x58, 1, memoryCommandHandler.testBit(3, address)) // NOLINT
+        CPU_COMMAND(0x59, 1, memoryCommandHandler.testBit(3, address)) // NOLINT
+        CPU_COMMAND(0x5A, 1, memoryCommandHandler.testBit(3, address)) // NOLINT
+        CPU_COMMAND(0x5B, 1, memoryCommandHandler.testBit(3, address)) // NOLINT
+        CPU_COMMAND(0x5C, 1, memoryCommandHandler.testBit(3, address)) // NOLINT
+        CPU_COMMAND(0x5D, 1, memoryCommandHandler.testBit(3, address)) // NOLINT
+        CPU_COMMAND(0x5E, 1, memoryCommandHandler.testBit(3, address)) // NOLINT
+        CPU_COMMAND(0x5F, 1, memoryCommandHandler.testBit(3, address)) // NOLINT
+
+        CPU_COMMAND(0x60, 1, memoryCommandHandler.testBit(4, address)) // NOLINT
+        CPU_COMMAND(0x61, 1, memoryCommandHandler.testBit(4, address)) // NOLINT
+        CPU_COMMAND(0x62, 1, memoryCommandHandler.testBit(4, address)) // NOLINT
+        CPU_COMMAND(0x63, 1, memoryCommandHandler.testBit(4, address)) // NOLINT
+        CPU_COMMAND(0x64, 1, memoryCommandHandler.testBit(4, address)) // NOLINT
+        CPU_COMMAND(0x65, 1, memoryCommandHandler.testBit(4, address)) // NOLINT
+        CPU_COMMAND(0x66, 1, memoryCommandHandler.testBit(4, address)) // NOLINT
+        CPU_COMMAND(0x67, 1, memoryCommandHandler.testBit(4, address)) // NOLINT
+        CPU_COMMAND(0x68, 1, memoryCommandHandler.testBit(5, address)) // NOLINT
+        CPU_COMMAND(0x69, 1, memoryCommandHandler.testBit(5, address)) // NOLINT
+        CPU_COMMAND(0x6A, 1, memoryCommandHandler.testBit(5, address)) // NOLINT
+        CPU_COMMAND(0x6B, 1, memoryCommandHandler.testBit(5, address)) // NOLINT
+        CPU_COMMAND(0x6C, 1, memoryCommandHandler.testBit(5, address)) // NOLINT
+        CPU_COMMAND(0x6D, 1, memoryCommandHandler.testBit(5, address)) // NOLINT
+        CPU_COMMAND(0x6E, 1, memoryCommandHandler.testBit(5, address)) // NOLINT
+        CPU_COMMAND(0x6F, 1, memoryCommandHandler.testBit(5, address)) // NOLINT
+
+        CPU_COMMAND(0x70, 1, memoryCommandHandler.testBit(6, address)) // NOLINT
+        CPU_COMMAND(0x71, 1, memoryCommandHandler.testBit(6, address)) // NOLINT
+        CPU_COMMAND(0x72, 1, memoryCommandHandler.testBit(6, address)) // NOLINT
+        CPU_COMMAND(0x73, 1, memoryCommandHandler.testBit(6, address)) // NOLINT
+        CPU_COMMAND(0x74, 1, memoryCommandHandler.testBit(6, address)) // NOLINT
+        CPU_COMMAND(0x75, 1, memoryCommandHandler.testBit(6, address)) // NOLINT
+        CPU_COMMAND(0x76, 1, memoryCommandHandler.testBit(6, address)) // NOLINT
+        CPU_COMMAND(0x77, 1, memoryCommandHandler.testBit(6, address)) // NOLINT
+        CPU_COMMAND(0x78, 1, memoryCommandHandler.testBit(7, address)) // NOLINT
+        CPU_COMMAND(0x79, 1, memoryCommandHandler.testBit(7, address)) // NOLINT
+        CPU_COMMAND(0x7A, 1, memoryCommandHandler.testBit(7, address)) // NOLINT
+        CPU_COMMAND(0x7B, 1, memoryCommandHandler.testBit(7, address)) // NOLINT
+        CPU_COMMAND(0x7C, 1, memoryCommandHandler.testBit(7, address)) // NOLINT
+        CPU_COMMAND(0x7D, 1, memoryCommandHandler.testBit(7, address)) // NOLINT
+        CPU_COMMAND(0x7E, 1, memoryCommandHandler.testBit(7, address)) // NOLINT
+        CPU_COMMAND(0x7F, 1, memoryCommandHandler.testBit(7, address)) // NOLINT
+
+        OFFSET_CB_CPU_COMMAND_HIGH(0x80, 1, bc.clearBit(0, HIGH), bc)
+        OFFSET_CB_CPU_COMMAND_LOW(0x81, 1, bc.clearBit(0, LOW), bc)
+        OFFSET_CB_CPU_COMMAND_HIGH(0x82, 1, de.clearBit(0, HIGH), de)
+        OFFSET_CB_CPU_COMMAND_LOW(0x83, 1, de.clearBit(0, LOW), de)
+        OFFSET_CB_CPU_COMMAND_HIGH(0x84, 1, hl.clearBit(0, HIGH), hl)
+        OFFSET_CB_CPU_COMMAND_LOW(0x85, 1, hl.clearBit(0, LOW), hl)
         CPU_COMMAND(0x86, 1, memoryCommandHandler.clearBit(0, address))
+        OFFSET_CB_CPU_COMMAND(0x87, 1, a.clearBit(0), a)
+        OFFSET_CB_CPU_COMMAND_HIGH(0x88, 1, bc.clearBit(1, HIGH), bc)
+        OFFSET_CB_CPU_COMMAND_LOW(0x89, 1, bc.clearBit(1, LOW), bc)
+        OFFSET_CB_CPU_COMMAND_HIGH(0x8A, 1, de.clearBit(1, HIGH), de)
+        OFFSET_CB_CPU_COMMAND_LOW(0x8B, 1, de.clearBit(1, LOW), de)
+        OFFSET_CB_CPU_COMMAND_HIGH(0x8C, 1, hl.clearBit(1, HIGH), hl)
+        OFFSET_CB_CPU_COMMAND_LOW(0x8D, 1, hl.clearBit(1, LOW), hl)
         CPU_COMMAND(0x8E, 1, memoryCommandHandler.clearBit(1, address))
+        OFFSET_CB_CPU_COMMAND(0x8F, 1, a.clearBit(1), a)
+
+        OFFSET_CB_CPU_COMMAND_HIGH(0x90, 1, bc.clearBit(2, HIGH), bc)
+        OFFSET_CB_CPU_COMMAND_LOW(0x91, 1, bc.clearBit(2, LOW), bc)
+        OFFSET_CB_CPU_COMMAND_HIGH(0x92, 1, de.clearBit(2, HIGH), de)
+        OFFSET_CB_CPU_COMMAND_LOW(0x93, 1, de.clearBit(2, LOW), de)
+        OFFSET_CB_CPU_COMMAND_HIGH(0x94, 1, hl.clearBit(2, HIGH), hl)
+        OFFSET_CB_CPU_COMMAND_LOW(0x95, 1, hl.clearBit(2, LOW), hl)
         CPU_COMMAND(0x96, 1, memoryCommandHandler.clearBit(2, address))
+        OFFSET_CB_CPU_COMMAND(0x97, 1, a.clearBit(2), a)
+        OFFSET_CB_CPU_COMMAND_HIGH(0x98, 1, bc.clearBit(3, HIGH), bc)
+        OFFSET_CB_CPU_COMMAND_LOW(0x99, 1, bc.clearBit(3, LOW), bc)
+        OFFSET_CB_CPU_COMMAND_HIGH(0x9A, 1, de.clearBit(3, HIGH), de)
+        OFFSET_CB_CPU_COMMAND_LOW(0x9B, 1, de.clearBit(3, LOW), de)
+        OFFSET_CB_CPU_COMMAND_HIGH(0x9C, 1, hl.clearBit(3, HIGH), hl)
+        OFFSET_CB_CPU_COMMAND_LOW(0x9D, 1, hl.clearBit(3, LOW), hl)
         CPU_COMMAND(0x9E, 1, memoryCommandHandler.clearBit(3, address))
+        OFFSET_CB_CPU_COMMAND(0x9F, 1, a.clearBit(3), a)
+
+        OFFSET_CB_CPU_COMMAND_HIGH(0xA0, 1, bc.clearBit(4, HIGH), bc)
+        OFFSET_CB_CPU_COMMAND_LOW(0xA1, 1, bc.clearBit(4, LOW), bc)
+        OFFSET_CB_CPU_COMMAND_HIGH(0xA2, 1, de.clearBit(4, HIGH), de)
+        OFFSET_CB_CPU_COMMAND_LOW(0xA3, 1, de.clearBit(4, LOW), de)
+        OFFSET_CB_CPU_COMMAND_HIGH(0xA4, 1, hl.clearBit(4, HIGH), hl)
+        OFFSET_CB_CPU_COMMAND_LOW(0xA5, 1, hl.clearBit(4, LOW), hl)
         CPU_COMMAND(0xA6, 1, memoryCommandHandler.clearBit(4, address))
+        CPU_COMMAND(0xA7, 1, a.clearBit(4))
+        OFFSET_CB_CPU_COMMAND_HIGH(0xA8, 1, bc.clearBit(5, HIGH), bc)
+        OFFSET_CB_CPU_COMMAND_LOW(0xA9, 1, bc.clearBit(5, LOW), bc)
+        OFFSET_CB_CPU_COMMAND_HIGH(0xAA, 1, de.clearBit(5, HIGH), de)
+        OFFSET_CB_CPU_COMMAND_LOW(0xAB, 1, de.clearBit(5, LOW), de)
+        OFFSET_CB_CPU_COMMAND_HIGH(0xAC, 1, hl.clearBit(5, HIGH), hl)
+        OFFSET_CB_CPU_COMMAND_LOW(0xAD, 1, hl.clearBit(5, LOW), hl)
         CPU_COMMAND(0xAE, 1, memoryCommandHandler.clearBit(5, address))
+        OFFSET_CB_CPU_COMMAND(0xAF, 1, a.clearBit(5), a)
+
+        OFFSET_CB_CPU_COMMAND_HIGH(0xB0, 1, bc.clearBit(6, HIGH), bc)
+        OFFSET_CB_CPU_COMMAND_LOW(0xB1, 1, bc.clearBit(6, LOW), bc)
+        OFFSET_CB_CPU_COMMAND_HIGH(0xB2, 1, de.clearBit(6, HIGH), de)
+        OFFSET_CB_CPU_COMMAND_LOW(0xB3, 1, de.clearBit(6, LOW), de)
+        OFFSET_CB_CPU_COMMAND_HIGH(0xB4, 1, hl.clearBit(6, HIGH), hl)
+        OFFSET_CB_CPU_COMMAND_LOW(0xB5, 1, hl.clearBit(6, LOW), hl)
         CPU_COMMAND(0xB6, 1, memoryCommandHandler.clearBit(6, address))
+        CPU_COMMAND(0xB7, 1, a.clearBit(6))
+        OFFSET_CB_CPU_COMMAND_HIGH(0xB8, 1, bc.clearBit(7, HIGH), bc)
+        OFFSET_CB_CPU_COMMAND_LOW(0xB9, 1, bc.clearBit(7, LOW), bc)
+        OFFSET_CB_CPU_COMMAND_HIGH(0xBA, 1, de.clearBit(7, HIGH), de)
+        OFFSET_CB_CPU_COMMAND_LOW(0xBB, 1, de.clearBit(7, LOW), de)
+        OFFSET_CB_CPU_COMMAND_HIGH(0xBC, 1, hl.clearBit(7, HIGH), hl)
+        OFFSET_CB_CPU_COMMAND_LOW(0xBD, 1, hl.clearBit(7, LOW), hl)
         CPU_COMMAND(0xBE, 1, memoryCommandHandler.clearBit(7, address))
+        OFFSET_CB_CPU_COMMAND(0xBF, 1, a.clearBit(7), a)
+
+        OFFSET_CB_CPU_COMMAND_HIGH(0xC0, 1, bc.enableBit(0, HIGH), bc)
+        OFFSET_CB_CPU_COMMAND_LOW(0xC1, 1, bc.enableBit(0, LOW), bc)
+        OFFSET_CB_CPU_COMMAND_HIGH(0xC2, 1, de.enableBit(0, HIGH), de)
+        OFFSET_CB_CPU_COMMAND_LOW(0xC3, 1, de.enableBit(0, LOW), de)
+        OFFSET_CB_CPU_COMMAND_HIGH(0xC4, 1, hl.enableBit(0, HIGH), hl)
+        OFFSET_CB_CPU_COMMAND_LOW(0xC5, 1, hl.enableBit(0, LOW), hl)
         CPU_COMMAND(0xC6, 1, memoryCommandHandler.enableBit(0, address))
+        OFFSET_CB_CPU_COMMAND(0xC7, 1, a.enableBit(0), a)
+        OFFSET_CB_CPU_COMMAND_HIGH(0xC8, 1, bc.enableBit(1, HIGH), bc)
+        OFFSET_CB_CPU_COMMAND_LOW(0xC9, 1, bc.enableBit(1, LOW), bc)
+        OFFSET_CB_CPU_COMMAND_HIGH(0xCA, 1, de.enableBit(1, HIGH), de)
+        OFFSET_CB_CPU_COMMAND_LOW(0xCB, 1, de.enableBit(1, LOW), de)
+        OFFSET_CB_CPU_COMMAND_HIGH(0xCC, 1, hl.enableBit(1, HIGH), hl)
+        OFFSET_CB_CPU_COMMAND_LOW(0xCD, 1, hl.enableBit(1, LOW), hl)
         CPU_COMMAND(0xCE, 1, memoryCommandHandler.enableBit(1, address))
+        OFFSET_CB_CPU_COMMAND(0xCF, 1, a.enableBit(1), a)
+
+        OFFSET_CB_CPU_COMMAND_HIGH(0xD0, 1, bc.enableBit(2, HIGH), bc)
+        OFFSET_CB_CPU_COMMAND_LOW(0xD1, 1, bc.enableBit(2, LOW), bc)
+        OFFSET_CB_CPU_COMMAND_HIGH(0xD2, 1, de.enableBit(2, HIGH), de)
+        OFFSET_CB_CPU_COMMAND_LOW(0xD3, 1, de.enableBit(2, LOW), de)
+        OFFSET_CB_CPU_COMMAND_HIGH(0xD4, 1, hl.enableBit(2, HIGH), hl)
+        OFFSET_CB_CPU_COMMAND_LOW(0xD5, 1, hl.enableBit(2, LOW), hl)
         CPU_COMMAND(0xD6, 1, memoryCommandHandler.enableBit(2, address))
+        OFFSET_CB_CPU_COMMAND(0xD7, 1, a.enableBit(2), a)
+        OFFSET_CB_CPU_COMMAND_HIGH(0xD8, 1, bc.enableBit(3, HIGH), bc)
+        OFFSET_CB_CPU_COMMAND_LOW(0xD9, 1, bc.enableBit(3, LOW), bc)
+        OFFSET_CB_CPU_COMMAND_HIGH(0xDA, 1, de.enableBit(3, HIGH), de)
+        OFFSET_CB_CPU_COMMAND_LOW(0xDB, 1, de.enableBit(3, LOW), de)
+        OFFSET_CB_CPU_COMMAND_HIGH(0xDC, 1, hl.enableBit(3, HIGH), hl)
+        OFFSET_CB_CPU_COMMAND_LOW(0xDD, 1, hl.enableBit(3, LOW), hl)
         CPU_COMMAND(0xDE, 1, memoryCommandHandler.enableBit(3, address))
+        OFFSET_CB_CPU_COMMAND(0xDF, 1, a.enableBit(3), a)
+
+        OFFSET_CB_CPU_COMMAND_HIGH(0xE0, 1, bc.enableBit(4, HIGH), bc)
+        OFFSET_CB_CPU_COMMAND_LOW(0xE1, 1, bc.enableBit(4, LOW), bc)
+        OFFSET_CB_CPU_COMMAND_HIGH(0xE2, 1, de.enableBit(4, HIGH), de)
+        OFFSET_CB_CPU_COMMAND_LOW(0xE3, 1, de.enableBit(4, LOW), de)
+        OFFSET_CB_CPU_COMMAND_HIGH(0xE4, 1, hl.enableBit(4, HIGH), hl)
+        OFFSET_CB_CPU_COMMAND_LOW(0xE5, 1, hl.enableBit(4, LOW), hl)
         CPU_COMMAND(0xE6, 1, memoryCommandHandler.enableBit(4, address))
+        OFFSET_CB_CPU_COMMAND(0xE7, 1, a.enableBit(4), a)
+        OFFSET_CB_CPU_COMMAND_HIGH(0xE8, 1, bc.enableBit(5, HIGH), bc)
+        OFFSET_CB_CPU_COMMAND_LOW(0xE9, 1, bc.enableBit(5, LOW), bc)
+        OFFSET_CB_CPU_COMMAND_HIGH(0xEA, 1, de.enableBit(5, HIGH), de)
+        OFFSET_CB_CPU_COMMAND_LOW(0xEB, 1, de.enableBit(5, LOW), de)
+        OFFSET_CB_CPU_COMMAND_HIGH(0xEC, 1, hl.enableBit(5, HIGH), hl)
+        OFFSET_CB_CPU_COMMAND_LOW(0xED, 1, hl.enableBit(5, LOW), hl)
         CPU_COMMAND(0xEE, 1, memoryCommandHandler.enableBit(5, address))
+        OFFSET_CB_CPU_COMMAND(0xEF, 1, a.enableBit(5), a)
+
+        OFFSET_CB_CPU_COMMAND_HIGH(0xF0, 1, bc.enableBit(6, HIGH), bc)
+        OFFSET_CB_CPU_COMMAND_LOW(0xF1, 1, bc.enableBit(6, LOW), bc)
+        OFFSET_CB_CPU_COMMAND_HIGH(0xF2, 1, de.enableBit(6, HIGH), de)
+        OFFSET_CB_CPU_COMMAND_LOW(0xF3, 1, de.enableBit(6, LOW), de)
+        OFFSET_CB_CPU_COMMAND_HIGH(0xF4, 1, hl.enableBit(6, HIGH), hl)
+        OFFSET_CB_CPU_COMMAND_LOW(0xF5, 1, hl.enableBit(6, LOW), hl)
         CPU_COMMAND(0xF6, 1, memoryCommandHandler.enableBit(6, address))
+        OFFSET_CB_CPU_COMMAND(0xF7, 1, a.enableBit(6), a)
+        OFFSET_CB_CPU_COMMAND_HIGH(0xF8, 1, bc.enableBit(7, HIGH), bc)
+        OFFSET_CB_CPU_COMMAND_LOW(0xF9, 1, bc.enableBit(7, LOW), bc)
+        OFFSET_CB_CPU_COMMAND_HIGH(0xFA, 1, de.enableBit(7, HIGH), de)
+        OFFSET_CB_CPU_COMMAND_LOW(0xFB, 1, de.enableBit(7, LOW), de)
+        OFFSET_CB_CPU_COMMAND_HIGH(0xFC, 1, hl.enableBit(7, HIGH), hl)
+        OFFSET_CB_CPU_COMMAND_LOW(0xFD, 1, hl.enableBit(7, LOW), hl)
         CPU_COMMAND(0xFE, 1, memoryCommandHandler.enableBit(7, address))
+        OFFSET_CB_CPU_COMMAND(0xFF, 1, a.enableBit(7), a)
+
+//        CPU_COMMAND(0x06, 1, memoryCommandHandler.rotateLeftCircular(address))
+//        CPU_COMMAND(0x0E, 1, memoryCommandHandler.rotateRightCircular(address))
+//        CPU_COMMAND(0x16, 1, memoryCommandHandler.rotateLeftThroughCarry(address))
+//        CPU_COMMAND(0x1E, 1, memoryCommandHandler.rotateRightThroughCarry(address))
+//        CPU_COMMAND(0x26, 1, memoryCommandHandler.shiftLeftArithmetic(address))
+//        CPU_COMMAND(0x2E, 1, memoryCommandHandler.shiftRightArithmetic(address))
+//        CPU_COMMAND(0x36, 1, memoryCommandHandler.shiftLeftLogical(address))
+//        CPU_COMMAND(0x3E, 1, memoryCommandHandler.shiftRightLogical(address))
+//        CPU_COMMAND(0x46, 1, memoryCommandHandler.testBit(0, address))
+//        CPU_COMMAND(0x4E, 1, memoryCommandHandler.testBit(1, address))
+//        CPU_COMMAND(0x56, 1, memoryCommandHandler.testBit(2, address))
+//        CPU_COMMAND(0x5E, 1, memoryCommandHandler.testBit(3, address))
+//        CPU_COMMAND(0x66, 1, memoryCommandHandler.testBit(4, address))
+//        CPU_COMMAND(0x6E, 1, memoryCommandHandler.testBit(5, address))
+//        CPU_COMMAND(0x76, 1, memoryCommandHandler.testBit(6, address))
+//        CPU_COMMAND(0x7E, 1, memoryCommandHandler.testBit(7, address))
+//        CPU_COMMAND(0x86, 1, memoryCommandHandler.clearBit(0, address))
+//        CPU_COMMAND(0x8E, 1, memoryCommandHandler.clearBit(1, address))
+//        CPU_COMMAND(0x96, 1, memoryCommandHandler.clearBit(2, address))
+//        CPU_COMMAND(0x9E, 1, memoryCommandHandler.clearBit(3, address))
+//        CPU_COMMAND(0xA6, 1, memoryCommandHandler.clearBit(4, address))
+//        CPU_COMMAND(0xAE, 1, memoryCommandHandler.clearBit(5, address))
+//        CPU_COMMAND(0xB6, 1, memoryCommandHandler.clearBit(6, address))
+//        CPU_COMMAND(0xBE, 1, memoryCommandHandler.clearBit(7, address))
+//        CPU_COMMAND(0xC6, 1, memoryCommandHandler.enableBit(0, address))
+//        CPU_COMMAND(0xCE, 1, memoryCommandHandler.enableBit(1, address))
+//        CPU_COMMAND(0xD6, 1, memoryCommandHandler.enableBit(2, address))
+//        CPU_COMMAND(0xDE, 1, memoryCommandHandler.enableBit(3, address))
+//        CPU_COMMAND(0xE6, 1, memoryCommandHandler.enableBit(4, address))
+//        CPU_COMMAND(0xEE, 1, memoryCommandHandler.enableBit(5, address))
+//        CPU_COMMAND(0xF6, 1, memoryCommandHandler.enableBit(6, address))
+//        CPU_COMMAND(0xFE, 1, memoryCommandHandler.enableBit(7, address))
     }
 }
 
