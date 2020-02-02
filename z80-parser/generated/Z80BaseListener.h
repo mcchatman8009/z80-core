@@ -676,8 +676,8 @@ public:
   virtual void enterNegateA(Z80Parser::NegateAContext * /*ctx*/) override { }
   virtual void exitNegateA(Z80Parser::NegateAContext * /*ctx*/) override { }
 
-  virtual void enterCompletementCarryFlag(Z80Parser::CompletementCarryFlagContext * /*ctx*/) override { }
-  virtual void exitCompletementCarryFlag(Z80Parser::CompletementCarryFlagContext * /*ctx*/) override { }
+  virtual void enterComplementCarryFlag(Z80Parser::ComplementCarryFlagContext * /*ctx*/) override { }
+  virtual void exitComplementCarryFlag(Z80Parser::ComplementCarryFlagContext * /*ctx*/) override { }
 
   virtual void enterSetCarryFlag(Z80Parser::SetCarryFlagContext * /*ctx*/) override { }
   virtual void exitSetCarryFlag(Z80Parser::SetCarryFlagContext * /*ctx*/) override { }
@@ -751,8 +751,8 @@ public:
   virtual void enterRotateRightCircularA(Z80Parser::RotateRightCircularAContext * /*ctx*/) override { }
   virtual void exitRotateRightCircularA(Z80Parser::RotateRightCircularAContext * /*ctx*/) override { }
 
-  virtual void enterRotateRightThroughtCarryA(Z80Parser::RotateRightThroughtCarryAContext * /*ctx*/) override { }
-  virtual void exitRotateRightThroughtCarryA(Z80Parser::RotateRightThroughtCarryAContext * /*ctx*/) override { }
+  virtual void enterRotateRightThroughCarryA(Z80Parser::RotateRightThroughCarryAContext * /*ctx*/) override { }
+  virtual void exitRotateRightThroughCarryA(Z80Parser::RotateRightThroughCarryAContext * /*ctx*/) override { }
 
   virtual void enterRotateLeftCircularCommandName(Z80Parser::RotateLeftCircularCommandNameContext * /*ctx*/) override { }
   virtual void exitRotateLeftCircularCommandName(Z80Parser::RotateLeftCircularCommandNameContext * /*ctx*/) override { }
@@ -769,8 +769,8 @@ public:
   virtual void enterShiftLeftArithmeticCommandName(Z80Parser::ShiftLeftArithmeticCommandNameContext * /*ctx*/) override { }
   virtual void exitShiftLeftArithmeticCommandName(Z80Parser::ShiftLeftArithmeticCommandNameContext * /*ctx*/) override { }
 
-  virtual void enterShiftLeftLogicialCommandName(Z80Parser::ShiftLeftLogicialCommandNameContext * /*ctx*/) override { }
-  virtual void exitShiftLeftLogicialCommandName(Z80Parser::ShiftLeftLogicialCommandNameContext * /*ctx*/) override { }
+  virtual void enterShiftLeftLogicalCommandName(Z80Parser::ShiftLeftLogicalCommandNameContext * /*ctx*/) override { }
+  virtual void exitShiftLeftLogicalCommandName(Z80Parser::ShiftLeftLogicalCommandNameContext * /*ctx*/) override { }
 
   virtual void enterShiftRightArithmeticCommandName(Z80Parser::ShiftRightArithmeticCommandNameContext * /*ctx*/) override { }
   virtual void exitShiftRightArithmeticCommandName(Z80Parser::ShiftRightArithmeticCommandNameContext * /*ctx*/) override { }
@@ -850,8 +850,8 @@ public:
   virtual void enterRotateDigitRight(Z80Parser::RotateDigitRightContext * /*ctx*/) override { }
   virtual void exitRotateDigitRight(Z80Parser::RotateDigitRightContext * /*ctx*/) override { }
 
-  virtual void enterRotateCommamd(Z80Parser::RotateCommamdContext * /*ctx*/) override { }
-  virtual void exitRotateCommamd(Z80Parser::RotateCommamdContext * /*ctx*/) override { }
+  virtual void enterRotateCommand(Z80Parser::RotateCommandContext * /*ctx*/) override { }
+  virtual void exitRotateCommand(Z80Parser::RotateCommandContext * /*ctx*/) override { }
 
   virtual void enterBitCommandName(Z80Parser::BitCommandNameContext * /*ctx*/) override { }
   virtual void exitBitCommandName(Z80Parser::BitCommandNameContext * /*ctx*/) override { }

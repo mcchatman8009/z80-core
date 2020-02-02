@@ -3,6 +3,7 @@ project(z80-core)
 
 set(CMAKE_CXX_STANDARD 17)
 
+#set (CMAKE_POSITION_INDEPENDENT_CODE TRUE)
 
 enable_testing()
 include(${CMAKE_CURRENT_SOURCE_DIR}/google-test.cmake)
@@ -60,7 +61,6 @@ add_executable(Z80Test
     test/Test.cpp
     test/Z80CpuCommandExpectedTestResults.cpp
     test/Z80CpuCommandExpectedTestResults.h
-    test/Z80CpuTest.h
     test/LD_TEST.cpp
     test/ADD_TEST.cpp
     test/SUB_TEST.cpp
@@ -123,7 +123,7 @@ add_library(Z80CoreObjectLibrary
 set_property(TARGET Z80CoreObjectLibrary PROPERTY POSITION_INDEPENDENT_CODE 1)
 
 add_library(Z80CoreShared SHARED $<TARGET_OBJECTS:Z80CoreObjectLibrary>)
-
+set_property(TARGET Z80CoreShared PROPERTY POSITION_INDEPENDENT_CODE 1)
 target_link_libraries(Z80CoreShared z80encoder z80parser)
 add_dependencies(Z80CoreShared z80encoder z80parser)
 set_target_properties(Z80CoreShared

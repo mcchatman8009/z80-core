@@ -1,5 +1,4 @@
 #include "Z80CpuTestFixture.h"
-#include "Z80CpuTest.h"
 
 using namespace std;
 
@@ -116,44 +115,30 @@ TEST_F(Z80CpuTestFixture, DEC_HL_PTR) { // NOLINT
 //
 // 16-Bit decrement  register
 //
-#define CPU_DEC_BC 0x0B
-#define CPU_DEC_DE 0x1B
-#define CPU_DEC_HL 0x2B
-#define CPU_DEC_SP 0x3B
+TEST_F(Z80CpuTestFixture, DEC_BC) { // NOLINT
 
-TEST_F(Z80CpuTest, DEC_BC) { // NOLINT
-    auto pc = START_PC;
-
-    cpuSet(PC, pc);
-    cpuSet(BC, 0x0100);
-    memSet(pc, CPU_DEC_BC);
+    cpuSet(WordCpuRegisterSymbol::BC, 0x0100);
 
     expectedResults.BC(0x00FF);
+    validateSingleInstructionAndTestPCOffset("DEC BC");
 }
-TEST_F(Z80CpuTest, DEC_DE) { // NOLINT
-    auto pc = START_PC;
+TEST_F(Z80CpuTestFixture, DEC_DE) { // NOLINT
 
-    cpuSet(PC, pc);
-    cpuSet(DE, 0x0100);
-    memSet(pc, CPU_DEC_DE);
+    cpuSet(WordCpuRegisterSymbol::DE, 0x0100);
 
-    expectedResults.DE(0x00FF);
+    validateSingleInstructionAndTestPCOffset("DEC BC");
 }
-TEST_F(Z80CpuTest, DEC_HL) { // NOLINT
-    auto pc = START_PC;
+TEST_F(Z80CpuTestFixture, DEC_HL) { // NOLINT
 
-    cpuSet(PC, pc);
-    cpuSet(HL, 0x0100);
-    memSet(pc, CPU_DEC_HL);
+    cpuSet(WordCpuRegisterSymbol::HL, 0x0100);
 
     expectedResults.HL(0x00FF);
+    validateSingleInstructionAndTestPCOffset("DEC HL");
 }
-TEST_F(Z80CpuTest, DEC_SP) { // NOLINT
-    auto pc = START_PC;
+TEST_F(Z80CpuTestFixture, DEC_SP) { // NOLINT
 
-    cpuSet(PC, pc);
-    cpuSet(SP, 0x0100);
-    memSet(pc, CPU_DEC_SP);
+    cpuSet(WordCpuRegisterSymbol::SP, 0x0100);
 
     expectedResults.SP(0x00FF);
+    validateSingleInstructionAndTestPCOffset("DEC SP");
 }

@@ -136,7 +136,7 @@ public:
     RuleDecrementIXH = 209, RuleDecrementIXL = 210, RuleDecrementIYH = 211, 
     RuleDecrementIYL = 212, RuleDecrementHLPointer = 213, RuleDecrementIXOffset = 214, 
     RuleDecrementIYOffset = 215, RuleArithmeticCommand = 216, RuleDecimalAdjustA = 217, 
-    RuleComplementA = 218, RuleNegateA = 219, RuleCompletementCarryFlag = 220, 
+    RuleComplementA = 218, RuleNegateA = 219, RuleComplementCarryFlag = 220, 
     RuleSetCarryFlag = 221, RuleNop = 222, RuleHalt = 223, RuleDisableInterrupts = 224, 
     RuleEnableInterrupts = 225, RuleSetInterruptMode = 226, RuleArithmeticControlCommand = 227, 
     RuleAddHLAndWordRegister = 228, RuleAddWithCarryHLAndWordRegister = 229, 
@@ -145,10 +145,10 @@ public:
     RuleIncrementWordRegister = 235, RuleIncrementIX = 236, RuleIncrementIY = 237, 
     RuleDecrementWordRegister = 238, RuleDecrementIX = 239, RuleDecrementIY = 240, 
     RuleWordArithemeticCommand = 241, RuleRotateLeftCircularA = 242, RuleRotateLeftThroughCarryA = 243, 
-    RuleRotateRightCircularA = 244, RuleRotateRightThroughtCarryA = 245, 
+    RuleRotateRightCircularA = 244, RuleRotateRightThroughCarryA = 245, 
     RuleRotateLeftCircularCommandName = 246, RuleRotateLeftThroughCarryCommandName = 247, 
     RuleRotateRightCircularCommandName = 248, RuleRotateRightThroughCarryCommandName = 249, 
-    RuleShiftLeftArithmeticCommandName = 250, RuleShiftLeftLogicialCommandName = 251, 
+    RuleShiftLeftArithmeticCommandName = 250, RuleShiftLeftLogicalCommandName = 251, 
     RuleShiftRightArithmeticCommandName = 252, RuleShiftRightLogicalCommandName = 253, 
     RuleRotateDigitLeftCommandName = 254, RuleRotateDigitRightCommandName = 255, 
     RuleRotateLeftCircularRegister = 256, RuleRotateLeftCircularHLPointer = 257, 
@@ -161,7 +161,7 @@ public:
     RuleRotateRightThroughCarryIXOffset = 270, RuleRotateRightThroughCarryIYOffset = 271, 
     RuleShiftLeftArithmetic = 272, RuleShiftLeftLogical = 273, RuleShiftRightArithmetic = 274, 
     RuleShiftRightLogical = 275, RuleRotateDigitLeft = 276, RuleRotateDigitRight = 277, 
-    RuleRotateCommamd = 278, RuleBitCommandName = 279, RuleSetCommandName = 280, 
+    RuleRotateCommand = 278, RuleBitCommandName = 279, RuleSetCommandName = 280, 
     RuleResetBitCommandName = 281, RuleTestBitInRegister = 282, RuleTestBitInHLPointer = 283, 
     RuleTestBitInIXOffset = 284, RuleTestBitInIYOffset = 285, RuleSetBitInRegister = 286, 
     RuleSetBitInHLPointer = 287, RuleSetBitInIXOffset = 288, RuleSetBitInIYOffset = 289, 
@@ -415,7 +415,7 @@ public:
   class DecimalAdjustAContext;
   class ComplementAContext;
   class NegateAContext;
-  class CompletementCarryFlagContext;
+  class ComplementCarryFlagContext;
   class SetCarryFlagContext;
   class NopContext;
   class HaltContext;
@@ -440,13 +440,13 @@ public:
   class RotateLeftCircularAContext;
   class RotateLeftThroughCarryAContext;
   class RotateRightCircularAContext;
-  class RotateRightThroughtCarryAContext;
+  class RotateRightThroughCarryAContext;
   class RotateLeftCircularCommandNameContext;
   class RotateLeftThroughCarryCommandNameContext;
   class RotateRightCircularCommandNameContext;
   class RotateRightThroughCarryCommandNameContext;
   class ShiftLeftArithmeticCommandNameContext;
-  class ShiftLeftLogicialCommandNameContext;
+  class ShiftLeftLogicalCommandNameContext;
   class ShiftRightArithmeticCommandNameContext;
   class ShiftRightLogicalCommandNameContext;
   class RotateDigitLeftCommandNameContext;
@@ -473,7 +473,7 @@ public:
   class ShiftRightLogicalContext;
   class RotateDigitLeftContext;
   class RotateDigitRightContext;
-  class RotateCommamdContext;
+  class RotateCommandContext;
   class BitCommandNameContext;
   class SetCommandNameContext;
   class ResetBitCommandNameContext;
@@ -580,7 +580,7 @@ public:
     ArithmeticCommandContext *arithmeticCommand();
     ArithmeticControlCommandContext *arithmeticControlCommand();
     WordArithemeticCommandContext *wordArithemeticCommand();
-    RotateCommamdContext *rotateCommamd();
+    RotateCommandContext *rotateCommand();
     BitManipulationCommandContext *bitManipulationCommand();
     BranchCommandContext *branchCommand();
     InputAndOutpuCommandContext *inputAndOutpuCommand();
@@ -3962,9 +3962,9 @@ public:
 
   NegateAContext* negateA();
 
-  class  CompletementCarryFlagContext : public antlr4::ParserRuleContext {
+  class  ComplementCarryFlagContext : public antlr4::ParserRuleContext {
   public:
-    CompletementCarryFlagContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    ComplementCarryFlagContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -3972,7 +3972,7 @@ public:
    
   };
 
-  CompletementCarryFlagContext* completementCarryFlag();
+  ComplementCarryFlagContext* complementCarryFlag();
 
   class  SetCarryFlagContext : public antlr4::ParserRuleContext {
   public:
@@ -4055,7 +4055,7 @@ public:
     DecimalAdjustAContext *decimalAdjustA();
     ComplementAContext *complementA();
     NegateAContext *negateA();
-    CompletementCarryFlagContext *completementCarryFlag();
+    ComplementCarryFlagContext *complementCarryFlag();
     SetCarryFlagContext *setCarryFlag();
     NopContext *nop();
     HaltContext *halt();
@@ -4336,9 +4336,9 @@ public:
 
   RotateRightCircularAContext* rotateRightCircularA();
 
-  class  RotateRightThroughtCarryAContext : public antlr4::ParserRuleContext {
+  class  RotateRightThroughCarryAContext : public antlr4::ParserRuleContext {
   public:
-    RotateRightThroughtCarryAContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    RotateRightThroughCarryAContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -4346,7 +4346,7 @@ public:
    
   };
 
-  RotateRightThroughtCarryAContext* rotateRightThroughtCarryA();
+  RotateRightThroughCarryAContext* rotateRightThroughCarryA();
 
   class  RotateLeftCircularCommandNameContext : public antlr4::ParserRuleContext {
   public:
@@ -4408,9 +4408,9 @@ public:
 
   ShiftLeftArithmeticCommandNameContext* shiftLeftArithmeticCommandName();
 
-  class  ShiftLeftLogicialCommandNameContext : public antlr4::ParserRuleContext {
+  class  ShiftLeftLogicalCommandNameContext : public antlr4::ParserRuleContext {
   public:
-    ShiftLeftLogicialCommandNameContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    ShiftLeftLogicalCommandNameContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -4418,7 +4418,7 @@ public:
    
   };
 
-  ShiftLeftLogicialCommandNameContext* shiftLeftLogicialCommandName();
+  ShiftLeftLogicalCommandNameContext* shiftLeftLogicalCommandName();
 
   class  ShiftRightArithmeticCommandNameContext : public antlr4::ParserRuleContext {
   public:
@@ -4728,7 +4728,7 @@ public:
     Z80Parser::SimpleByteRegisterContext *source = nullptr;;
     ShiftLeftLogicalContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    ShiftLeftLogicialCommandNameContext *shiftLeftLogicialCommandName();
+    ShiftLeftLogicalCommandNameContext *shiftLeftLogicalCommandName();
     SimpleByteRegisterContext *simpleByteRegister();
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -4794,14 +4794,14 @@ public:
 
   RotateDigitRightContext* rotateDigitRight();
 
-  class  RotateCommamdContext : public antlr4::ParserRuleContext {
+  class  RotateCommandContext : public antlr4::ParserRuleContext {
   public:
-    RotateCommamdContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    RotateCommandContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     RotateLeftCircularAContext *rotateLeftCircularA();
     RotateLeftThroughCarryAContext *rotateLeftThroughCarryA();
     RotateRightCircularAContext *rotateRightCircularA();
-    RotateRightThroughtCarryAContext *rotateRightThroughtCarryA();
+    RotateRightThroughCarryAContext *rotateRightThroughCarryA();
     RotateLeftCircularRegisterContext *rotateLeftCircularRegister();
     RotateLeftCircularHLPointerContext *rotateLeftCircularHLPointer();
     RotateLeftCircularIXOffsetContext *rotateLeftCircularIXOffset();
@@ -4830,7 +4830,7 @@ public:
    
   };
 
-  RotateCommamdContext* rotateCommamd();
+  RotateCommandContext* rotateCommand();
 
   class  BitCommandNameContext : public antlr4::ParserRuleContext {
   public:

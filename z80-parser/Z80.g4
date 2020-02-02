@@ -15,7 +15,7 @@ instruction:
     arithmeticCommand |
     arithmeticControlCommand |
     wordArithemeticCommand |
-    rotateCommamd |
+    rotateCommand |
     bitManipulationCommand |
     branchCommand |
     inputAndOutpuCommand
@@ -1194,7 +1194,7 @@ rotateRightCircularA:
     ('RRCA' | 'rrca')
 ;
 // RRA
-rotateRightThroughtCarryA:
+rotateRightThroughCarryA:
     ('RRA' | 'rra')
 ;
 rotateLeftCircularCommandName:
@@ -1212,7 +1212,7 @@ rotateRightThroughCarryCommandName:
 shiftLeftArithmeticCommandName:
     ('sla' | 'SLA')
 ;
-shiftLeftLogicialCommandName:
+shiftLeftLogicalCommandName:
     ('sll' | 'SLL')
 ;
 shiftRightArithmeticCommandName:
@@ -1301,7 +1301,7 @@ shiftLeftArithmetic:
 ;
 // SLL
 shiftLeftLogical:
-    shiftLeftLogicialCommandName source=simpleByteRegister
+    shiftLeftLogicalCommandName source=simpleByteRegister
 ;
 // SRA
 shiftRightArithmetic:
@@ -1321,11 +1321,11 @@ rotateDigitRight:
     rotateDigitRightCommandName
 ;
 
-rotateCommamd:
+rotateCommand:
     rotateLeftCircularA |
     rotateLeftThroughCarryA |
     rotateRightCircularA |
-    rotateRightThroughtCarryA |
+    rotateRightThroughCarryA |
     rotateLeftCircularRegister |
     rotateLeftCircularHLPointer |
     rotateLeftCircularIXOffset  |

@@ -674,8 +674,8 @@ public:
   virtual void enterNegateA(Z80Parser::NegateAContext *ctx) = 0;
   virtual void exitNegateA(Z80Parser::NegateAContext *ctx) = 0;
 
-  virtual void enterCompletementCarryFlag(Z80Parser::CompletementCarryFlagContext *ctx) = 0;
-  virtual void exitCompletementCarryFlag(Z80Parser::CompletementCarryFlagContext *ctx) = 0;
+  virtual void enterComplementCarryFlag(Z80Parser::ComplementCarryFlagContext *ctx) = 0;
+  virtual void exitComplementCarryFlag(Z80Parser::ComplementCarryFlagContext *ctx) = 0;
 
   virtual void enterSetCarryFlag(Z80Parser::SetCarryFlagContext *ctx) = 0;
   virtual void exitSetCarryFlag(Z80Parser::SetCarryFlagContext *ctx) = 0;
@@ -749,8 +749,8 @@ public:
   virtual void enterRotateRightCircularA(Z80Parser::RotateRightCircularAContext *ctx) = 0;
   virtual void exitRotateRightCircularA(Z80Parser::RotateRightCircularAContext *ctx) = 0;
 
-  virtual void enterRotateRightThroughtCarryA(Z80Parser::RotateRightThroughtCarryAContext *ctx) = 0;
-  virtual void exitRotateRightThroughtCarryA(Z80Parser::RotateRightThroughtCarryAContext *ctx) = 0;
+  virtual void enterRotateRightThroughCarryA(Z80Parser::RotateRightThroughCarryAContext *ctx) = 0;
+  virtual void exitRotateRightThroughCarryA(Z80Parser::RotateRightThroughCarryAContext *ctx) = 0;
 
   virtual void enterRotateLeftCircularCommandName(Z80Parser::RotateLeftCircularCommandNameContext *ctx) = 0;
   virtual void exitRotateLeftCircularCommandName(Z80Parser::RotateLeftCircularCommandNameContext *ctx) = 0;
@@ -767,8 +767,8 @@ public:
   virtual void enterShiftLeftArithmeticCommandName(Z80Parser::ShiftLeftArithmeticCommandNameContext *ctx) = 0;
   virtual void exitShiftLeftArithmeticCommandName(Z80Parser::ShiftLeftArithmeticCommandNameContext *ctx) = 0;
 
-  virtual void enterShiftLeftLogicialCommandName(Z80Parser::ShiftLeftLogicialCommandNameContext *ctx) = 0;
-  virtual void exitShiftLeftLogicialCommandName(Z80Parser::ShiftLeftLogicialCommandNameContext *ctx) = 0;
+  virtual void enterShiftLeftLogicalCommandName(Z80Parser::ShiftLeftLogicalCommandNameContext *ctx) = 0;
+  virtual void exitShiftLeftLogicalCommandName(Z80Parser::ShiftLeftLogicalCommandNameContext *ctx) = 0;
 
   virtual void enterShiftRightArithmeticCommandName(Z80Parser::ShiftRightArithmeticCommandNameContext *ctx) = 0;
   virtual void exitShiftRightArithmeticCommandName(Z80Parser::ShiftRightArithmeticCommandNameContext *ctx) = 0;
@@ -848,8 +848,8 @@ public:
   virtual void enterRotateDigitRight(Z80Parser::RotateDigitRightContext *ctx) = 0;
   virtual void exitRotateDigitRight(Z80Parser::RotateDigitRightContext *ctx) = 0;
 
-  virtual void enterRotateCommamd(Z80Parser::RotateCommamdContext *ctx) = 0;
-  virtual void exitRotateCommamd(Z80Parser::RotateCommamdContext *ctx) = 0;
+  virtual void enterRotateCommand(Z80Parser::RotateCommandContext *ctx) = 0;
+  virtual void exitRotateCommand(Z80Parser::RotateCommandContext *ctx) = 0;
 
   virtual void enterBitCommandName(Z80Parser::BitCommandNameContext *ctx) = 0;
   virtual void exitBitCommandName(Z80Parser::BitCommandNameContext *ctx) = 0;

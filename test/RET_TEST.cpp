@@ -1,4 +1,4 @@
-#include "Z80CpuTest.h"
+#include "Z80CpuTestFixture.h"
 
 //@formatter:off
 
@@ -11,14 +11,15 @@
 #define CPU_RET_S 0xF8
 #define CPU_RET_NP 0xE0
 #define CPU_RET_P 0xE8
+#define START_PC 0x100
 
-TEST_F(Z80CpuTest, CPU_RET) {  // NOLINT
+TEST_F(Z80CpuTestFixture, CPU_RET) {  // NOLINT
     auto pc = START_PC;
     auto pushedPC = START_PC+3;
     auto sp = 0xDFFF;
 
-    cpuSet(PC, pc);
-    cpuSet(SP, sp-2);
+    cpuSet(WordCpuRegisterSymbol::PC, pc);
+    cpuSet(WordCpuRegisterSymbol::SP, sp-2);
 
     memSet(sp-1,((pushedPC) & 0xFF00) >> 8); // NOLINT
     memSet(sp-2,(pushedPC) & 0xFF);          // NOLINT
@@ -33,13 +34,13 @@ TEST_F(Z80CpuTest, CPU_RET) {  // NOLINT
 
     validateExpectedResults();
 }
-TEST_F(Z80CpuTest, CPU_RET_NZ) {  // NOLINT
+TEST_F(Z80CpuTestFixture, CPU_RET_NZ) {  // NOLINT
     auto pc = START_PC;
     auto pushedPC = START_PC+3;
     auto sp = 0xDFFF;
 
-    cpuSet(PC, pc);
-    cpuSet(SP, sp-2);
+    cpuSet(WordCpuRegisterSymbol::PC, pc);
+    cpuSet(WordCpuRegisterSymbol::SP, sp-2);
 
     memSet(sp-1,((pushedPC) & 0xFF00) >> 8); // NOLINT
     memSet(sp-2,(pushedPC) & 0xFF);          // NOLINT
@@ -54,14 +55,14 @@ TEST_F(Z80CpuTest, CPU_RET_NZ) {  // NOLINT
 
     validateExpectedResults();
 }
-TEST_F(Z80CpuTest, CPU_RET_Z) {  // NOLINT
+TEST_F(Z80CpuTestFixture, CPU_RET_Z) {  // NOLINT
     auto pc = START_PC;
     auto pushedPC = START_PC+3;
     auto sp = 0xDFFF;
 
-    cpuSet(PC, pc);
-    cpuSet(F, 0x40);
-    cpuSet(SP, sp-2);
+    cpuSet(WordCpuRegisterSymbol::PC, pc);
+    cpuSet(ByteCpuRegisterSymbol::F, 0x40);
+    cpuSet(WordCpuRegisterSymbol::SP, sp-2);
 
     memSet(sp-1,((pushedPC) & 0xFF00) >> 8); // NOLINT
     memSet(sp-2,(pushedPC) & 0xFF);          // NOLINT
@@ -77,13 +78,13 @@ TEST_F(Z80CpuTest, CPU_RET_Z) {  // NOLINT
 
     validateExpectedResults();
 }
-TEST_F(Z80CpuTest, CPU_RET_NC) {  // NOLINT
+TEST_F(Z80CpuTestFixture, CPU_RET_NC) {  // NOLINT
     auto pc = START_PC;
     auto pushedPC = START_PC+3;
     auto sp = 0xDFFF;
 
-    cpuSet(PC, pc);
-    cpuSet(SP, sp-2);
+    cpuSet(WordCpuRegisterSymbol::PC, pc);
+    cpuSet(WordCpuRegisterSymbol::SP, sp-2);
 
     memSet(sp-1,((pushedPC) & 0xFF00) >> 8); // NOLINT
     memSet(sp-2,(pushedPC) & 0xFF);          // NOLINT
@@ -99,14 +100,14 @@ TEST_F(Z80CpuTest, CPU_RET_NC) {  // NOLINT
 
     validateExpectedResults();
 }
-TEST_F(Z80CpuTest, CPU_RET_C) {  // NOLINT
+TEST_F(Z80CpuTestFixture, CPU_RET_C) {  // NOLINT
     auto pc = START_PC;
     auto pushedPC = START_PC+3;
     auto sp = 0xDFFF;
 
-    cpuSet(PC, pc);
-    cpuSet(F, 0x01);
-    cpuSet(SP, sp-2);
+    cpuSet(WordCpuRegisterSymbol::PC, pc);
+    cpuSet(ByteCpuRegisterSymbol::F, 0x01);
+    cpuSet(WordCpuRegisterSymbol::SP, sp-2);
 
     memSet(sp-1,((pushedPC) & 0xFF00) >> 8); // NOLINT
     memSet(sp-2,(pushedPC) & 0xFF);          // NOLINT
@@ -122,13 +123,13 @@ TEST_F(Z80CpuTest, CPU_RET_C) {  // NOLINT
 
     validateExpectedResults();
 }
-TEST_F(Z80CpuTest, CPU_RET_NP) {  // NOLINT
+TEST_F(Z80CpuTestFixture, CPU_RET_NP) {  // NOLINT
     auto pc = START_PC;
     auto pushedPC = START_PC+3;
     auto sp = 0xDFFF;
 
-    cpuSet(PC, pc);
-    cpuSet(SP, sp-2);
+    cpuSet(WordCpuRegisterSymbol::PC, pc);
+    cpuSet(WordCpuRegisterSymbol::SP, sp-2);
 
     memSet(sp-1,((pushedPC) & 0xFF00) >> 8); // NOLINT
     memSet(sp-2,(pushedPC) & 0xFF);          // NOLINT
@@ -144,14 +145,14 @@ TEST_F(Z80CpuTest, CPU_RET_NP) {  // NOLINT
 
     validateExpectedResults();
 }
-TEST_F(Z80CpuTest, CPU_RET_P) {  // NOLINT
+TEST_F(Z80CpuTestFixture, CPU_RET_P) {  // NOLINT
     auto pc = START_PC;
     auto pushedPC = START_PC+3;
     auto sp = 0xDFFF;
 
-    cpuSet(PC, pc);
-    cpuSet(F, 0x04);
-    cpuSet(SP, sp-2);
+    cpuSet(WordCpuRegisterSymbol::PC, pc);
+    cpuSet(ByteCpuRegisterSymbol::F, 0x04);
+    cpuSet(WordCpuRegisterSymbol::SP, sp-2);
 
     memSet(sp-1,((pushedPC) & 0xFF00) >> 8); // NOLINT
     memSet(sp-2,(pushedPC) & 0xFF);          // NOLINT
@@ -167,13 +168,13 @@ TEST_F(Z80CpuTest, CPU_RET_P) {  // NOLINT
 
     validateExpectedResults();
 }
-TEST_F(Z80CpuTest, CPU_RET_NS) {  // NOLINT
+TEST_F(Z80CpuTestFixture, CPU_RET_NS) {  // NOLINT
     auto pc = START_PC;
     auto pushedPC = START_PC+3;
     auto sp = 0xDFFF;
 
-    cpuSet(PC, pc);
-    cpuSet(SP, sp-2);
+    cpuSet(WordCpuRegisterSymbol::PC, pc);
+    cpuSet(WordCpuRegisterSymbol::SP, sp-2);
 
     memSet(sp-1,((pushedPC) & 0xFF00) >> 8); // NOLINT
     memSet(sp-2,(pushedPC) & 0xFF);          // NOLINT
@@ -189,14 +190,14 @@ TEST_F(Z80CpuTest, CPU_RET_NS) {  // NOLINT
 
     validateExpectedResults();
 }
-TEST_F(Z80CpuTest, CPU_RET_S) {  // NOLINT
+TEST_F(Z80CpuTestFixture, CPU_RET_S) {  // NOLINT
     auto pc = START_PC;
     auto pushedPC = START_PC+3;
     auto sp = 0xDFFF;
 
-    cpuSet(PC, pc);
-    cpuSet(F, 0x80);
-    cpuSet(SP, sp-2);
+    cpuSet(WordCpuRegisterSymbol::PC, pc);
+    cpuSet(ByteCpuRegisterSymbol::F, 0x80);
+    cpuSet(WordCpuRegisterSymbol::SP, sp-2);
 
     memSet(sp-1,((pushedPC) & 0xFF00) >> 8); // NOLINT
     memSet(sp-2,(pushedPC) & 0xFF);          // NOLINT

@@ -1,5 +1,4 @@
 #include "Z80CpuTestFixture.h"
-#include "Z80CpuTest.h"
 
 using namespace std;
 
@@ -84,45 +83,29 @@ TEST_F(Z80CpuTestFixture, INC_HL_PTR) { // NOLINT
 //
 // 16-Bit increment register
 //
-#define CPU_INC_BC 0x03
-#define CPU_INC_DE 0x13
-#define CPU_INC_HL 0x23
-#define CPU_INC_SP 0x33
-
-TEST_F(Z80CpuTest, INC_BC) { // NOLINT
-    auto pc = START_PC;
-
-    cpuSet(PC, pc);
-    cpuSet(BC, 0x00FF);
-    memSet(pc, CPU_INC_BC);
+TEST_F(Z80CpuTestFixture, INC_BC) { // NOLINT
+    cpuSet(WordCpuRegisterSymbol::BC, 0x00FF);
 
     expectedResults.BC(0x0100);
+    validateSingleInstructionAndTestPCOffset("INC BC");
 }
-TEST_F(Z80CpuTest, INC_DE) { // NOLINT
-    auto pc = START_PC;
+TEST_F(Z80CpuTestFixture, INC_DE) { // NOLINT
 
-    cpuSet(PC, pc);
-    cpuSet(DE, 0x00FF);
-    memSet(pc, CPU_INC_DE);
+    cpuSet(WordCpuRegisterSymbol::DE, 0x00FF);
 
     expectedResults.DE(0x0100);
+    validateSingleInstructionAndTestPCOffset("INC DE");
 }
-TEST_F(Z80CpuTest, INC_HL) { // NOLINT
-    auto pc = START_PC;
-
-    cpuSet(PC, pc);
-    cpuSet(HL, 0x00FF);
-    memSet(pc, CPU_INC_HL);
+TEST_F(Z80CpuTestFixture, INC_HL) { // NOLINT
+    cpuSet(WordCpuRegisterSymbol::HL, 0x00FF);
 
     expectedResults.HL(0x0100);
+    validateSingleInstructionAndTestPCOffset("INC HL");
 }
-TEST_F(Z80CpuTest, INC_SP) { // NOLINT
-    auto pc = START_PC;
-
-    cpuSet(PC, pc);
-    cpuSet(SP, 0x00FF);
-    memSet(pc, CPU_INC_SP);
+TEST_F(Z80CpuTestFixture, INC_SP) { // NOLINT
+    cpuSet(WordCpuRegisterSymbol::SP, 0x00FF);
 
     expectedResults.SP(0x0100);
+    validateSingleInstructionAndTestPCOffset("INC SP");
 }
 

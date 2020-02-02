@@ -355,8 +355,8 @@ Z80Parser::WordArithemeticCommandContext* Z80Parser::InstructionContext::wordAri
   return getRuleContext<Z80Parser::WordArithemeticCommandContext>(0);
 }
 
-Z80Parser::RotateCommamdContext* Z80Parser::InstructionContext::rotateCommamd() {
-  return getRuleContext<Z80Parser::RotateCommamdContext>(0);
+Z80Parser::RotateCommandContext* Z80Parser::InstructionContext::rotateCommand() {
+  return getRuleContext<Z80Parser::RotateCommandContext>(0);
 }
 
 Z80Parser::BitManipulationCommandContext* Z80Parser::InstructionContext::bitManipulationCommand() {
@@ -444,7 +444,7 @@ Z80Parser::InstructionContext* Z80Parser::instruction() {
     case 7: {
       enterOuterAlt(_localctx, 7);
       setState(708);
-      rotateCommamd();
+      rotateCommand();
       break;
     }
 
@@ -16651,32 +16651,32 @@ Z80Parser::NegateAContext* Z80Parser::negateA() {
   return _localctx;
 }
 
-//----------------- CompletementCarryFlagContext ------------------------------------------------------------------
+//----------------- ComplementCarryFlagContext ------------------------------------------------------------------
 
-Z80Parser::CompletementCarryFlagContext::CompletementCarryFlagContext(ParserRuleContext *parent, size_t invokingState)
+Z80Parser::ComplementCarryFlagContext::ComplementCarryFlagContext(ParserRuleContext *parent, size_t invokingState)
   : ParserRuleContext(parent, invokingState) {
 }
 
 
-size_t Z80Parser::CompletementCarryFlagContext::getRuleIndex() const {
-  return Z80Parser::RuleCompletementCarryFlag;
+size_t Z80Parser::ComplementCarryFlagContext::getRuleIndex() const {
+  return Z80Parser::RuleComplementCarryFlag;
 }
 
-void Z80Parser::CompletementCarryFlagContext::enterRule(tree::ParseTreeListener *listener) {
+void Z80Parser::ComplementCarryFlagContext::enterRule(tree::ParseTreeListener *listener) {
   auto parserListener = dynamic_cast<Z80Listener *>(listener);
   if (parserListener != nullptr)
-    parserListener->enterCompletementCarryFlag(this);
+    parserListener->enterComplementCarryFlag(this);
 }
 
-void Z80Parser::CompletementCarryFlagContext::exitRule(tree::ParseTreeListener *listener) {
+void Z80Parser::ComplementCarryFlagContext::exitRule(tree::ParseTreeListener *listener) {
   auto parserListener = dynamic_cast<Z80Listener *>(listener);
   if (parserListener != nullptr)
-    parserListener->exitCompletementCarryFlag(this);
+    parserListener->exitComplementCarryFlag(this);
 }
 
-Z80Parser::CompletementCarryFlagContext* Z80Parser::completementCarryFlag() {
-  CompletementCarryFlagContext *_localctx = _tracker.createInstance<CompletementCarryFlagContext>(_ctx, getState());
-  enterRule(_localctx, 440, Z80Parser::RuleCompletementCarryFlag);
+Z80Parser::ComplementCarryFlagContext* Z80Parser::complementCarryFlag() {
+  ComplementCarryFlagContext *_localctx = _tracker.createInstance<ComplementCarryFlagContext>(_ctx, getState());
+  enterRule(_localctx, 440, Z80Parser::RuleComplementCarryFlag);
   size_t _la = 0;
 
   auto onExit = finally([=] {
@@ -17060,8 +17060,8 @@ Z80Parser::NegateAContext* Z80Parser::ArithmeticControlCommandContext::negateA()
   return getRuleContext<Z80Parser::NegateAContext>(0);
 }
 
-Z80Parser::CompletementCarryFlagContext* Z80Parser::ArithmeticControlCommandContext::completementCarryFlag() {
-  return getRuleContext<Z80Parser::CompletementCarryFlagContext>(0);
+Z80Parser::ComplementCarryFlagContext* Z80Parser::ArithmeticControlCommandContext::complementCarryFlag() {
+  return getRuleContext<Z80Parser::ComplementCarryFlagContext>(0);
 }
 
 Z80Parser::SetCarryFlagContext* Z80Parser::ArithmeticControlCommandContext::setCarryFlag() {
@@ -17144,7 +17144,7 @@ Z80Parser::ArithmeticControlCommandContext* Z80Parser::arithmeticControlCommand(
       case Z80Parser::T__125: {
         enterOuterAlt(_localctx, 4);
         setState(2126);
-        completementCarryFlag();
+        complementCarryFlag();
         break;
       }
 
@@ -18408,32 +18408,32 @@ Z80Parser::RotateRightCircularAContext* Z80Parser::rotateRightCircularA() {
   return _localctx;
 }
 
-//----------------- RotateRightThroughtCarryAContext ------------------------------------------------------------------
+//----------------- RotateRightThroughCarryAContext ------------------------------------------------------------------
 
-Z80Parser::RotateRightThroughtCarryAContext::RotateRightThroughtCarryAContext(ParserRuleContext *parent, size_t invokingState)
+Z80Parser::RotateRightThroughCarryAContext::RotateRightThroughCarryAContext(ParserRuleContext *parent, size_t invokingState)
   : ParserRuleContext(parent, invokingState) {
 }
 
 
-size_t Z80Parser::RotateRightThroughtCarryAContext::getRuleIndex() const {
-  return Z80Parser::RuleRotateRightThroughtCarryA;
+size_t Z80Parser::RotateRightThroughCarryAContext::getRuleIndex() const {
+  return Z80Parser::RuleRotateRightThroughCarryA;
 }
 
-void Z80Parser::RotateRightThroughtCarryAContext::enterRule(tree::ParseTreeListener *listener) {
+void Z80Parser::RotateRightThroughCarryAContext::enterRule(tree::ParseTreeListener *listener) {
   auto parserListener = dynamic_cast<Z80Listener *>(listener);
   if (parserListener != nullptr)
-    parserListener->enterRotateRightThroughtCarryA(this);
+    parserListener->enterRotateRightThroughCarryA(this);
 }
 
-void Z80Parser::RotateRightThroughtCarryAContext::exitRule(tree::ParseTreeListener *listener) {
+void Z80Parser::RotateRightThroughCarryAContext::exitRule(tree::ParseTreeListener *listener) {
   auto parserListener = dynamic_cast<Z80Listener *>(listener);
   if (parserListener != nullptr)
-    parserListener->exitRotateRightThroughtCarryA(this);
+    parserListener->exitRotateRightThroughCarryA(this);
 }
 
-Z80Parser::RotateRightThroughtCarryAContext* Z80Parser::rotateRightThroughtCarryA() {
-  RotateRightThroughtCarryAContext *_localctx = _tracker.createInstance<RotateRightThroughtCarryAContext>(_ctx, getState());
-  enterRule(_localctx, 490, Z80Parser::RuleRotateRightThroughtCarryA);
+Z80Parser::RotateRightThroughCarryAContext* Z80Parser::rotateRightThroughCarryA() {
+  RotateRightThroughCarryAContext *_localctx = _tracker.createInstance<RotateRightThroughCarryAContext>(_ctx, getState());
+  enterRule(_localctx, 490, Z80Parser::RuleRotateRightThroughCarryA);
   size_t _la = 0;
 
   auto onExit = finally([=] {
@@ -18738,32 +18738,32 @@ Z80Parser::ShiftLeftArithmeticCommandNameContext* Z80Parser::shiftLeftArithmetic
   return _localctx;
 }
 
-//----------------- ShiftLeftLogicialCommandNameContext ------------------------------------------------------------------
+//----------------- ShiftLeftLogicalCommandNameContext ------------------------------------------------------------------
 
-Z80Parser::ShiftLeftLogicialCommandNameContext::ShiftLeftLogicialCommandNameContext(ParserRuleContext *parent, size_t invokingState)
+Z80Parser::ShiftLeftLogicalCommandNameContext::ShiftLeftLogicalCommandNameContext(ParserRuleContext *parent, size_t invokingState)
   : ParserRuleContext(parent, invokingState) {
 }
 
 
-size_t Z80Parser::ShiftLeftLogicialCommandNameContext::getRuleIndex() const {
-  return Z80Parser::RuleShiftLeftLogicialCommandName;
+size_t Z80Parser::ShiftLeftLogicalCommandNameContext::getRuleIndex() const {
+  return Z80Parser::RuleShiftLeftLogicalCommandName;
 }
 
-void Z80Parser::ShiftLeftLogicialCommandNameContext::enterRule(tree::ParseTreeListener *listener) {
+void Z80Parser::ShiftLeftLogicalCommandNameContext::enterRule(tree::ParseTreeListener *listener) {
   auto parserListener = dynamic_cast<Z80Listener *>(listener);
   if (parserListener != nullptr)
-    parserListener->enterShiftLeftLogicialCommandName(this);
+    parserListener->enterShiftLeftLogicalCommandName(this);
 }
 
-void Z80Parser::ShiftLeftLogicialCommandNameContext::exitRule(tree::ParseTreeListener *listener) {
+void Z80Parser::ShiftLeftLogicalCommandNameContext::exitRule(tree::ParseTreeListener *listener) {
   auto parserListener = dynamic_cast<Z80Listener *>(listener);
   if (parserListener != nullptr)
-    parserListener->exitShiftLeftLogicialCommandName(this);
+    parserListener->exitShiftLeftLogicalCommandName(this);
 }
 
-Z80Parser::ShiftLeftLogicialCommandNameContext* Z80Parser::shiftLeftLogicialCommandName() {
-  ShiftLeftLogicialCommandNameContext *_localctx = _tracker.createInstance<ShiftLeftLogicialCommandNameContext>(_ctx, getState());
-  enterRule(_localctx, 502, Z80Parser::RuleShiftLeftLogicialCommandName);
+Z80Parser::ShiftLeftLogicalCommandNameContext* Z80Parser::shiftLeftLogicalCommandName() {
+  ShiftLeftLogicalCommandNameContext *_localctx = _tracker.createInstance<ShiftLeftLogicalCommandNameContext>(_ctx, getState());
+  enterRule(_localctx, 502, Z80Parser::RuleShiftLeftLogicalCommandName);
   size_t _la = 0;
 
   auto onExit = finally([=] {
@@ -19954,8 +19954,8 @@ Z80Parser::ShiftLeftLogicalContext::ShiftLeftLogicalContext(ParserRuleContext *p
   : ParserRuleContext(parent, invokingState) {
 }
 
-Z80Parser::ShiftLeftLogicialCommandNameContext* Z80Parser::ShiftLeftLogicalContext::shiftLeftLogicialCommandName() {
-  return getRuleContext<Z80Parser::ShiftLeftLogicialCommandNameContext>(0);
+Z80Parser::ShiftLeftLogicalCommandNameContext* Z80Parser::ShiftLeftLogicalContext::shiftLeftLogicalCommandName() {
+  return getRuleContext<Z80Parser::ShiftLeftLogicalCommandNameContext>(0);
 }
 
 Z80Parser::SimpleByteRegisterContext* Z80Parser::ShiftLeftLogicalContext::simpleByteRegister() {
@@ -19989,7 +19989,7 @@ Z80Parser::ShiftLeftLogicalContext* Z80Parser::shiftLeftLogical() {
   try {
     enterOuterAlt(_localctx, 1);
     setState(2285);
-    shiftLeftLogicialCommandName();
+    shiftLeftLogicalCommandName();
     setState(2286);
     dynamic_cast<ShiftLeftLogicalContext *>(_localctx)->source = simpleByteRegister();
    
@@ -20211,136 +20211,136 @@ Z80Parser::RotateDigitRightContext* Z80Parser::rotateDigitRight() {
   return _localctx;
 }
 
-//----------------- RotateCommamdContext ------------------------------------------------------------------
+//----------------- RotateCommandContext ------------------------------------------------------------------
 
-Z80Parser::RotateCommamdContext::RotateCommamdContext(ParserRuleContext *parent, size_t invokingState)
+Z80Parser::RotateCommandContext::RotateCommandContext(ParserRuleContext *parent, size_t invokingState)
   : ParserRuleContext(parent, invokingState) {
 }
 
-Z80Parser::RotateLeftCircularAContext* Z80Parser::RotateCommamdContext::rotateLeftCircularA() {
+Z80Parser::RotateLeftCircularAContext* Z80Parser::RotateCommandContext::rotateLeftCircularA() {
   return getRuleContext<Z80Parser::RotateLeftCircularAContext>(0);
 }
 
-Z80Parser::RotateLeftThroughCarryAContext* Z80Parser::RotateCommamdContext::rotateLeftThroughCarryA() {
+Z80Parser::RotateLeftThroughCarryAContext* Z80Parser::RotateCommandContext::rotateLeftThroughCarryA() {
   return getRuleContext<Z80Parser::RotateLeftThroughCarryAContext>(0);
 }
 
-Z80Parser::RotateRightCircularAContext* Z80Parser::RotateCommamdContext::rotateRightCircularA() {
+Z80Parser::RotateRightCircularAContext* Z80Parser::RotateCommandContext::rotateRightCircularA() {
   return getRuleContext<Z80Parser::RotateRightCircularAContext>(0);
 }
 
-Z80Parser::RotateRightThroughtCarryAContext* Z80Parser::RotateCommamdContext::rotateRightThroughtCarryA() {
-  return getRuleContext<Z80Parser::RotateRightThroughtCarryAContext>(0);
+Z80Parser::RotateRightThroughCarryAContext* Z80Parser::RotateCommandContext::rotateRightThroughCarryA() {
+  return getRuleContext<Z80Parser::RotateRightThroughCarryAContext>(0);
 }
 
-Z80Parser::RotateLeftCircularRegisterContext* Z80Parser::RotateCommamdContext::rotateLeftCircularRegister() {
+Z80Parser::RotateLeftCircularRegisterContext* Z80Parser::RotateCommandContext::rotateLeftCircularRegister() {
   return getRuleContext<Z80Parser::RotateLeftCircularRegisterContext>(0);
 }
 
-Z80Parser::RotateLeftCircularHLPointerContext* Z80Parser::RotateCommamdContext::rotateLeftCircularHLPointer() {
+Z80Parser::RotateLeftCircularHLPointerContext* Z80Parser::RotateCommandContext::rotateLeftCircularHLPointer() {
   return getRuleContext<Z80Parser::RotateLeftCircularHLPointerContext>(0);
 }
 
-Z80Parser::RotateLeftCircularIXOffsetContext* Z80Parser::RotateCommamdContext::rotateLeftCircularIXOffset() {
+Z80Parser::RotateLeftCircularIXOffsetContext* Z80Parser::RotateCommandContext::rotateLeftCircularIXOffset() {
   return getRuleContext<Z80Parser::RotateLeftCircularIXOffsetContext>(0);
 }
 
-Z80Parser::RotateLeftCircularIYOffsetContext* Z80Parser::RotateCommamdContext::rotateLeftCircularIYOffset() {
+Z80Parser::RotateLeftCircularIYOffsetContext* Z80Parser::RotateCommandContext::rotateLeftCircularIYOffset() {
   return getRuleContext<Z80Parser::RotateLeftCircularIYOffsetContext>(0);
 }
 
-Z80Parser::RotateLeftThroughCarryRegisterContext* Z80Parser::RotateCommamdContext::rotateLeftThroughCarryRegister() {
+Z80Parser::RotateLeftThroughCarryRegisterContext* Z80Parser::RotateCommandContext::rotateLeftThroughCarryRegister() {
   return getRuleContext<Z80Parser::RotateLeftThroughCarryRegisterContext>(0);
 }
 
-Z80Parser::RotateLeftThroughCarryHLPointerContext* Z80Parser::RotateCommamdContext::rotateLeftThroughCarryHLPointer() {
+Z80Parser::RotateLeftThroughCarryHLPointerContext* Z80Parser::RotateCommandContext::rotateLeftThroughCarryHLPointer() {
   return getRuleContext<Z80Parser::RotateLeftThroughCarryHLPointerContext>(0);
 }
 
-Z80Parser::RotateLeftThroughCarryIXOffsetContext* Z80Parser::RotateCommamdContext::rotateLeftThroughCarryIXOffset() {
+Z80Parser::RotateLeftThroughCarryIXOffsetContext* Z80Parser::RotateCommandContext::rotateLeftThroughCarryIXOffset() {
   return getRuleContext<Z80Parser::RotateLeftThroughCarryIXOffsetContext>(0);
 }
 
-Z80Parser::RotateLeftThroughCarryIYOffsetContext* Z80Parser::RotateCommamdContext::rotateLeftThroughCarryIYOffset() {
+Z80Parser::RotateLeftThroughCarryIYOffsetContext* Z80Parser::RotateCommandContext::rotateLeftThroughCarryIYOffset() {
   return getRuleContext<Z80Parser::RotateLeftThroughCarryIYOffsetContext>(0);
 }
 
-Z80Parser::RotateRightCircularRegisterContext* Z80Parser::RotateCommamdContext::rotateRightCircularRegister() {
+Z80Parser::RotateRightCircularRegisterContext* Z80Parser::RotateCommandContext::rotateRightCircularRegister() {
   return getRuleContext<Z80Parser::RotateRightCircularRegisterContext>(0);
 }
 
-Z80Parser::RotateRightCircularHLPointerContext* Z80Parser::RotateCommamdContext::rotateRightCircularHLPointer() {
+Z80Parser::RotateRightCircularHLPointerContext* Z80Parser::RotateCommandContext::rotateRightCircularHLPointer() {
   return getRuleContext<Z80Parser::RotateRightCircularHLPointerContext>(0);
 }
 
-Z80Parser::RotateRightCircularIXOffsetContext* Z80Parser::RotateCommamdContext::rotateRightCircularIXOffset() {
+Z80Parser::RotateRightCircularIXOffsetContext* Z80Parser::RotateCommandContext::rotateRightCircularIXOffset() {
   return getRuleContext<Z80Parser::RotateRightCircularIXOffsetContext>(0);
 }
 
-Z80Parser::RotateRightCircularIYOffsetContext* Z80Parser::RotateCommamdContext::rotateRightCircularIYOffset() {
+Z80Parser::RotateRightCircularIYOffsetContext* Z80Parser::RotateCommandContext::rotateRightCircularIYOffset() {
   return getRuleContext<Z80Parser::RotateRightCircularIYOffsetContext>(0);
 }
 
-Z80Parser::RotateRightThroughCarryRegisterContext* Z80Parser::RotateCommamdContext::rotateRightThroughCarryRegister() {
+Z80Parser::RotateRightThroughCarryRegisterContext* Z80Parser::RotateCommandContext::rotateRightThroughCarryRegister() {
   return getRuleContext<Z80Parser::RotateRightThroughCarryRegisterContext>(0);
 }
 
-Z80Parser::RotateRightThroughCarryHLPointerContext* Z80Parser::RotateCommamdContext::rotateRightThroughCarryHLPointer() {
+Z80Parser::RotateRightThroughCarryHLPointerContext* Z80Parser::RotateCommandContext::rotateRightThroughCarryHLPointer() {
   return getRuleContext<Z80Parser::RotateRightThroughCarryHLPointerContext>(0);
 }
 
-Z80Parser::RotateRightThroughCarryIXOffsetContext* Z80Parser::RotateCommamdContext::rotateRightThroughCarryIXOffset() {
+Z80Parser::RotateRightThroughCarryIXOffsetContext* Z80Parser::RotateCommandContext::rotateRightThroughCarryIXOffset() {
   return getRuleContext<Z80Parser::RotateRightThroughCarryIXOffsetContext>(0);
 }
 
-Z80Parser::RotateRightThroughCarryIYOffsetContext* Z80Parser::RotateCommamdContext::rotateRightThroughCarryIYOffset() {
+Z80Parser::RotateRightThroughCarryIYOffsetContext* Z80Parser::RotateCommandContext::rotateRightThroughCarryIYOffset() {
   return getRuleContext<Z80Parser::RotateRightThroughCarryIYOffsetContext>(0);
 }
 
-Z80Parser::ShiftLeftArithmeticContext* Z80Parser::RotateCommamdContext::shiftLeftArithmetic() {
+Z80Parser::ShiftLeftArithmeticContext* Z80Parser::RotateCommandContext::shiftLeftArithmetic() {
   return getRuleContext<Z80Parser::ShiftLeftArithmeticContext>(0);
 }
 
-Z80Parser::ShiftLeftLogicalContext* Z80Parser::RotateCommamdContext::shiftLeftLogical() {
+Z80Parser::ShiftLeftLogicalContext* Z80Parser::RotateCommandContext::shiftLeftLogical() {
   return getRuleContext<Z80Parser::ShiftLeftLogicalContext>(0);
 }
 
-Z80Parser::ShiftRightArithmeticContext* Z80Parser::RotateCommamdContext::shiftRightArithmetic() {
+Z80Parser::ShiftRightArithmeticContext* Z80Parser::RotateCommandContext::shiftRightArithmetic() {
   return getRuleContext<Z80Parser::ShiftRightArithmeticContext>(0);
 }
 
-Z80Parser::ShiftRightLogicalContext* Z80Parser::RotateCommamdContext::shiftRightLogical() {
+Z80Parser::ShiftRightLogicalContext* Z80Parser::RotateCommandContext::shiftRightLogical() {
   return getRuleContext<Z80Parser::ShiftRightLogicalContext>(0);
 }
 
-Z80Parser::RotateDigitLeftContext* Z80Parser::RotateCommamdContext::rotateDigitLeft() {
+Z80Parser::RotateDigitLeftContext* Z80Parser::RotateCommandContext::rotateDigitLeft() {
   return getRuleContext<Z80Parser::RotateDigitLeftContext>(0);
 }
 
-Z80Parser::RotateDigitRightContext* Z80Parser::RotateCommamdContext::rotateDigitRight() {
+Z80Parser::RotateDigitRightContext* Z80Parser::RotateCommandContext::rotateDigitRight() {
   return getRuleContext<Z80Parser::RotateDigitRightContext>(0);
 }
 
 
-size_t Z80Parser::RotateCommamdContext::getRuleIndex() const {
-  return Z80Parser::RuleRotateCommamd;
+size_t Z80Parser::RotateCommandContext::getRuleIndex() const {
+  return Z80Parser::RuleRotateCommand;
 }
 
-void Z80Parser::RotateCommamdContext::enterRule(tree::ParseTreeListener *listener) {
+void Z80Parser::RotateCommandContext::enterRule(tree::ParseTreeListener *listener) {
   auto parserListener = dynamic_cast<Z80Listener *>(listener);
   if (parserListener != nullptr)
-    parserListener->enterRotateCommamd(this);
+    parserListener->enterRotateCommand(this);
 }
 
-void Z80Parser::RotateCommamdContext::exitRule(tree::ParseTreeListener *listener) {
+void Z80Parser::RotateCommandContext::exitRule(tree::ParseTreeListener *listener) {
   auto parserListener = dynamic_cast<Z80Listener *>(listener);
   if (parserListener != nullptr)
-    parserListener->exitRotateCommamd(this);
+    parserListener->exitRotateCommand(this);
 }
 
-Z80Parser::RotateCommamdContext* Z80Parser::rotateCommamd() {
-  RotateCommamdContext *_localctx = _tracker.createInstance<RotateCommamdContext>(_ctx, getState());
-  enterRule(_localctx, 556, Z80Parser::RuleRotateCommamd);
+Z80Parser::RotateCommandContext* Z80Parser::rotateCommand() {
+  RotateCommandContext *_localctx = _tracker.createInstance<RotateCommandContext>(_ctx, getState());
+  enterRule(_localctx, 556, Z80Parser::RuleRotateCommand);
 
   auto onExit = finally([=] {
     exitRule();
@@ -20373,7 +20373,7 @@ Z80Parser::RotateCommamdContext* Z80Parser::rotateCommamd() {
     case 4: {
       enterOuterAlt(_localctx, 4);
       setState(2301);
-      rotateRightThroughtCarryA();
+      rotateRightThroughCarryA();
       break;
     }
 
@@ -24899,16 +24899,16 @@ std::vector<std::string> Z80Parser::_ruleNames = {
   "incrementIYOffset", "decrementRegister", "decrementIXH", "decrementIXL", 
   "decrementIYH", "decrementIYL", "decrementHLPointer", "decrementIXOffset", 
   "decrementIYOffset", "arithmeticCommand", "decimalAdjustA", "complementA", 
-  "negateA", "completementCarryFlag", "setCarryFlag", "nop", "halt", "disableInterrupts", 
+  "negateA", "complementCarryFlag", "setCarryFlag", "nop", "halt", "disableInterrupts", 
   "enableInterrupts", "setInterruptMode", "arithmeticControlCommand", "addHLAndWordRegister", 
   "addWithCarryHLAndWordRegister", "subtractWithCarryWordRegisterFromHL", 
   "simpleIXAdditionRegister", "simpleIYAdditionRegister", "addIXWithRegister", 
   "addIYWithRegister", "incrementWordRegister", "incrementIX", "incrementIY", 
   "decrementWordRegister", "decrementIX", "decrementIY", "wordArithemeticCommand", 
   "rotateLeftCircularA", "rotateLeftThroughCarryA", "rotateRightCircularA", 
-  "rotateRightThroughtCarryA", "rotateLeftCircularCommandName", "rotateLeftThroughCarryCommandName", 
+  "rotateRightThroughCarryA", "rotateLeftCircularCommandName", "rotateLeftThroughCarryCommandName", 
   "rotateRightCircularCommandName", "rotateRightThroughCarryCommandName", 
-  "shiftLeftArithmeticCommandName", "shiftLeftLogicialCommandName", "shiftRightArithmeticCommandName", 
+  "shiftLeftArithmeticCommandName", "shiftLeftLogicalCommandName", "shiftRightArithmeticCommandName", 
   "shiftRightLogicalCommandName", "rotateDigitLeftCommandName", "rotateDigitRightCommandName", 
   "rotateLeftCircularRegister", "rotateLeftCircularHLPointer", "rotateLeftCircularIXOffset", 
   "rotateLeftCircularIYOffset", "rotateLeftThroughCarryRegister", "rotateLeftThroughCarryHLPointer", 
@@ -24917,7 +24917,7 @@ std::vector<std::string> Z80Parser::_ruleNames = {
   "rotateRightThroughCarryRegister", "rotateRightThroughCarryHLPointer", 
   "rotateRightThroughCarryIXOffset", "rotateRightThroughCarryIYOffset", 
   "shiftLeftArithmetic", "shiftLeftLogical", "shiftRightArithmetic", "shiftRightLogical", 
-  "rotateDigitLeft", "rotateDigitRight", "rotateCommamd", "bitCommandName", 
+  "rotateDigitLeft", "rotateDigitRight", "rotateCommand", "bitCommandName", 
   "setCommandName", "resetBitCommandName", "testBitInRegister", "testBitInHLPointer", 
   "testBitInIXOffset", "testBitInIYOffset", "setBitInRegister", "setBitInHLPointer", 
   "setBitInIXOffset", "setBitInIYOffset", "resetBitInRegister", "resetBitHLPointer", 

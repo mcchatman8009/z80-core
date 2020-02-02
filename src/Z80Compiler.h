@@ -15,7 +15,7 @@ class Z80Compiler : private Z80BaseListener {
 
     private:
 
-        template <class ParserProviderCallbackFunction>
+        template<class ParserProviderCallbackFunction>
         void provideParserFromText(std::string_view assemblyCode, ParserProviderCallbackFunction callbackFunction);
 
         template<class Rule>
@@ -348,7 +348,7 @@ class Z80Compiler : private Z80BaseListener {
         void exitNegateA(Z80Parser::NegateAContext* context) override;
 
 
-        void exitCompletementCarryFlag(Z80Parser::CompletementCarryFlagContext* context) override;
+        void exitComplementCarryFlag(Z80Parser::ComplementCarryFlagContext* context) override;
 
 
         void exitSetCarryFlag(Z80Parser::SetCarryFlagContext* context) override;
@@ -419,46 +419,11 @@ class Z80Compiler : private Z80BaseListener {
 
         void exitRotateRightCircularA(Z80Parser::RotateRightCircularAContext* context) override;
 
-
-        void exitRotateRightThroughtCarryA(Z80Parser::RotateRightThroughtCarryAContext* context) override;
-
-
-        void exitRotateLeftCircularCommandName(Z80Parser::RotateLeftCircularCommandNameContext* context) override;
-
-        void
-        exitRotateLeftThroughCarryCommandName(Z80Parser::RotateLeftThroughCarryCommandNameContext* context) override;
-
-
-        void exitRotateRightCircularCommandName(Z80Parser::RotateRightCircularCommandNameContext* context) override;
-
-
-        void
-        exitRotateRightThroughCarryCommandName(Z80Parser::RotateRightThroughCarryCommandNameContext* context) override;
-
-
-        void exitShiftLeftArithmeticCommandName(Z80Parser::ShiftLeftArithmeticCommandNameContext* context) override;
-
-
-        void exitShiftLeftLogicialCommandName(Z80Parser::ShiftLeftLogicialCommandNameContext* context) override;
-
-
-        void exitShiftRightArithmeticCommandName(Z80Parser::ShiftRightArithmeticCommandNameContext* context) override;
-
-
-        void exitShiftRightLogicalCommandName(Z80Parser::ShiftRightLogicalCommandNameContext* context) override;
-
-
-        void exitRotateDigitLeftCommandName(Z80Parser::RotateDigitLeftCommandNameContext* context) override;
-
-
-        void exitRotateDigitRightCommandName(Z80Parser::RotateDigitRightCommandNameContext* context) override;
-
+        void exitRotateRightThroughCarryA(Z80Parser::RotateRightThroughCarryAContext* context) override;
 
         void exitRotateLeftCircularRegister(Z80Parser::RotateLeftCircularRegisterContext* context) override;
 
-
         void exitRotateLeftCircularHLPointer(Z80Parser::RotateLeftCircularHLPointerContext* context) override;
-
 
         void exitRotateLeftCircularIXOffset(Z80Parser::RotateLeftCircularIXOffsetContext* context) override;
 
@@ -518,19 +483,6 @@ class Z80Compiler : private Z80BaseListener {
 
         void exitRotateDigitRight(Z80Parser::RotateDigitRightContext* context) override;
 
-
-        void exitRotateCommamd(Z80Parser::RotateCommamdContext* context) override;
-
-
-        void exitBitCommandName(Z80Parser::BitCommandNameContext* context) override;
-
-
-        void exitSetCommandName(Z80Parser::SetCommandNameContext* context) override;
-
-
-        void exitResetBitCommandName(Z80Parser::ResetBitCommandNameContext* context) override;
-
-
         void exitTestBitInRegister(Z80Parser::TestBitInRegisterContext* context) override;
 
 
@@ -566,38 +518,7 @@ class Z80Compiler : private Z80BaseListener {
 
         void exitResetBitIYOffset(Z80Parser::ResetBitIYOffsetContext* context) override;
 
-
-        void exitBitManipulationCommand(Z80Parser::BitManipulationCommandContext* context) override;
-
-
         void exitJumpCondition(Z80Parser::JumpConditionContext* context) override;
-
-
-        void exitJumpCommandName(Z80Parser::JumpCommandNameContext* context) override;
-
-
-        void exitJumpRelativeCommandName(Z80Parser::JumpRelativeCommandNameContext* context) override;
-
-        void exitJumpRelativeAndDecrementCommandName(
-            Z80Parser::JumpRelativeAndDecrementCommandNameContext* context) override;
-
-
-        void exitCallCommandName(Z80Parser::CallCommandNameContext* context) override;
-
-
-        void exitReturnCommandName(Z80Parser::ReturnCommandNameContext* context) override;
-
-
-        void exitReturnAndEnableInterruptCommandName(
-            Z80Parser::ReturnAndEnableInterruptCommandNameContext* context) override;
-
-
-        void exitReturnFromNonMaskableInterruptCommandName(
-            Z80Parser::ReturnFromNonMaskableInterruptCommandNameContext* context) override;
-
-
-        void exitRestartCommandName(Z80Parser::RestartCommandNameContext* context) override;
-
 
         void exitJumpToAbsoluteAddress(Z80Parser::JumpToAbsoluteAddressContext* context) override;
 
@@ -643,16 +564,6 @@ class Z80Compiler : private Z80BaseListener {
 
 
         void exitRestartCommand(Z80Parser::RestartCommandContext* context) override;
-
-
-        void exitBranchCommand(Z80Parser::BranchCommandContext* context) override;
-
-
-        void exitInputCommandName(Z80Parser::InputCommandNameContext* context) override;
-
-
-        void exitOutCommandName(Z80Parser::OutCommandNameContext* context) override;
-
 
         void exitInputDataIntoA(Z80Parser::InputDataIntoAContext* context) override;
 

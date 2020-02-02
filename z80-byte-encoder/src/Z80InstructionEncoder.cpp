@@ -2165,15 +2165,14 @@ RRC L'            |0xdcb
 RRC L             |0xdcb
 RRCA              |0xf
 RRD               |0x67ed
-RST n             |0xc7
-RST n             |0xcf
-RST n             |0xd7
-RST n             |0xdf
-RST n             |0xe7
-RST n             |0xef
-RST n             |0xf7
-RST n             |0xff
-RST n             |0x00
+RST 00            |0xc7
+RST 08            |0xcf
+RST 10            |0xd7
+RST 18            |0xdf
+RST 20            |0xe7
+RST 28            |0xef
+RST 30            |0xf7
+RST 38            |0xff
 RST               |0xc7
 SBC A',A'         |0x9f
 SBC A,A           |0x9f

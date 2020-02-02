@@ -26,7 +26,7 @@ TEST_F(Z80ParserTestFixture, negateA) { // NOLINT
 
 TEST_F(Z80ParserTestFixture, completementCarryFlag) { // NOLINT
     performParse("CCF", [](Z80Parser& parser) {
-        parser.completementCarryFlag();
+        parser.complementCarryFlag();
         ASSERT_TRUE(true);
     });
 }

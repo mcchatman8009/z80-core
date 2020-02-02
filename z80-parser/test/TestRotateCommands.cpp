@@ -26,7 +26,7 @@ TEST_F(Z80ParserTestFixture, rotateRightCircularA) { // NOLINT
 
 TEST_F(Z80ParserTestFixture, rotateRightThroughtCarryA) { // NOLINT
     performParse("rra ", [](Z80Parser& parser) {
-        parser.rotateRightThroughtCarryA();
+        parser.rotateCommand();
         ASSERT_TRUE(true);
     });
 }

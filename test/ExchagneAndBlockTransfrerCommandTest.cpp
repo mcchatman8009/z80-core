@@ -229,6 +229,7 @@ TEST_F(Z80CpuTestFixture, CPD) { // NOLINT
 
     validateSingleInstructionAndTestPCOffset("CPD");
 }
+
 TEST_F(Z80CpuTestFixture, CPDR) { // NOLINT
     cpuSet(WordCpuRegisterSymbol::HL, 0xD000);
     cpuSet(WordCpuRegisterSymbol::BC, 1);

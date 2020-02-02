@@ -1,7 +1,9 @@
-#include "Z80CpuTest.h"
+#include "Z80CpuTestFixture.h"
 
 //@formatter:off
 
+
+#define START_PC 0x100
 
 #define CPU_CALL_NN 0xCD
 #define CPU_CALL_NZ_NN 0xC4
@@ -14,12 +16,12 @@
 #define CPU_CALL_S_NN 0xFC
 
 
-TEST_F(Z80CpuTest, CALL_NN) {  // NOLINT
+TEST_F(Z80CpuTestFixture, CALL_NN) {  // NOLINT
     auto pc = START_PC;
     auto sp = 0xDFFF;
 
-    cpuSet(PC, pc);
-    cpuSet(SP, sp);
+    cpuSet(WordCpuRegisterSymbol::PC, pc);
+    cpuSet(WordCpuRegisterSymbol::SP, sp);
 
     memSet(pc++, CPU_CALL_NN);
     memSet(pc++, 0xFF); // The low byte.
@@ -34,12 +36,12 @@ TEST_F(Z80CpuTest, CALL_NN) {  // NOLINT
 
     validateExpectedResults();
 }
-TEST_F(Z80CpuTest, CALL_NC_NN) {  // NOLINT
+TEST_F(Z80CpuTestFixture, CALL_NC_NN) {  // NOLINT
     auto pc = START_PC;
     auto sp = 0xDFFF;
 
-    cpuSet(PC, pc);
-    cpuSet(SP, sp);
+    cpuSet(WordCpuRegisterSymbol::PC, pc);
+    cpuSet(WordCpuRegisterSymbol::SP, sp);
 
     memSet(pc++, CPU_CALL_NC_NN);
     memSet(pc++, 0xFF); // The low byte.
@@ -55,12 +57,12 @@ TEST_F(Z80CpuTest, CALL_NC_NN) {  // NOLINT
 
     validateExpectedResults();
 }
-TEST_F(Z80CpuTest, CALL_C_NN) {  // NOLINT
+TEST_F(Z80CpuTestFixture, CALL_C_NN) {  // NOLINT
     auto pc = START_PC;
     auto sp = 0xDFFF;
 
-    cpuSet(PC, pc);
-    cpuSet(SP, sp);
+    cpuSet(WordCpuRegisterSymbol::PC, pc);
+    cpuSet(WordCpuRegisterSymbol::SP, sp);
 
     memSet(pc++, CPU_CALL_C_NN);
     memSet(pc++, 0xFF); // The low byte.
@@ -76,12 +78,12 @@ TEST_F(Z80CpuTest, CALL_C_NN) {  // NOLINT
 
     validateExpectedResults();
 }
-TEST_F(Z80CpuTest, CALL_NZ_NN) {  // NOLINT
+TEST_F(Z80CpuTestFixture, CALL_NZ_NN) {  // NOLINT
     auto pc = START_PC;
     auto sp = 0xDFFF;
 
-    cpuSet(PC, pc);
-    cpuSet(SP, sp);
+    cpuSet(WordCpuRegisterSymbol::PC, pc);
+    cpuSet(WordCpuRegisterSymbol::SP, sp);
 
     memSet(pc++, CPU_CALL_NZ_NN);
     memSet(pc++, 0xFF); // The low byte.
@@ -97,12 +99,12 @@ TEST_F(Z80CpuTest, CALL_NZ_NN) {  // NOLINT
 
     validateExpectedResults();
 }
-TEST_F(Z80CpuTest, CALL_Z_NN) {  // NOLINT
+TEST_F(Z80CpuTestFixture, CALL_Z_NN) {  // NOLINT
     auto pc = START_PC;
     auto sp = 0xDFFF;
 
-    cpuSet(PC, pc);
-    cpuSet(SP, sp);
+    cpuSet(WordCpuRegisterSymbol::PC, pc);
+    cpuSet(WordCpuRegisterSymbol::SP, sp);
 
     memSet(pc++, CPU_CALL_Z_NN);
     memSet(pc++, 0xFF); // The low byte.
@@ -118,12 +120,12 @@ TEST_F(Z80CpuTest, CALL_Z_NN) {  // NOLINT
 
     validateExpectedResults();
 }
-TEST_F(Z80CpuTest, CALL_NP_NN) {  // NOLINT
+TEST_F(Z80CpuTestFixture, CALL_NP_NN) {  // NOLINT
     auto pc = START_PC;
     auto sp = 0xDFFF;
 
-    cpuSet(PC, pc);
-    cpuSet(SP, sp);
+    cpuSet(WordCpuRegisterSymbol::PC, pc);
+    cpuSet(WordCpuRegisterSymbol::SP, sp);
 
     memSet(pc++, CPU_CALL_NP_NN);
     memSet(pc++, 0xFF); // The low byte.
@@ -139,12 +141,12 @@ TEST_F(Z80CpuTest, CALL_NP_NN) {  // NOLINT
 
     validateExpectedResults();
 }
-TEST_F(Z80CpuTest, CALL_P_NN) {  // NOLINT
+TEST_F(Z80CpuTestFixture, CALL_P_NN) {  // NOLINT
     auto pc = START_PC;
     auto sp = 0xDFFF;
 
-    cpuSet(PC, pc);
-    cpuSet(SP, sp);
+    cpuSet(WordCpuRegisterSymbol::PC, pc);
+    cpuSet(WordCpuRegisterSymbol::SP, sp);
 
     memSet(pc++, CPU_CALL_P_NN);
     memSet(pc++, 0xFF); // The low byte.
@@ -160,12 +162,12 @@ TEST_F(Z80CpuTest, CALL_P_NN) {  // NOLINT
 
     validateExpectedResults();
 }
-TEST_F(Z80CpuTest, CALL_NS_NN) {  // NOLINT
+TEST_F(Z80CpuTestFixture, CALL_NS_NN) {  // NOLINT
     auto pc = START_PC;
     auto sp = 0xDFFF;
 
-    cpuSet(PC, pc);
-    cpuSet(SP, sp);
+    cpuSet(WordCpuRegisterSymbol::PC, pc);
+    cpuSet(WordCpuRegisterSymbol::SP, sp);
 
     memSet(pc++, CPU_CALL_NS_NN);
     memSet(pc++, 0xFF); // The low byte.
@@ -181,12 +183,12 @@ TEST_F(Z80CpuTest, CALL_NS_NN) {  // NOLINT
 
     validateExpectedResults();
 }
-TEST_F(Z80CpuTest, CALL_S_NN) {  // NOLINT
+TEST_F(Z80CpuTestFixture, CALL_S_NN) {  // NOLINT
     auto pc = START_PC;
     auto sp = 0xDFFF;
 
-    cpuSet(PC, pc);
-    cpuSet(SP, sp);
+    cpuSet(WordCpuRegisterSymbol::PC, pc);
+    cpuSet(WordCpuRegisterSymbol::SP, sp);
 
     memSet(pc++, CPU_CALL_S_NN);
     memSet(pc++, 0xFF); // The low byte.

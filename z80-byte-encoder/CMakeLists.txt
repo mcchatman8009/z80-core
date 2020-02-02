@@ -8,3 +8,4 @@ add_executable(InstructionEncoderTest src/csv.h src/Z80InstructionEncoder.cpp sr
 add_library(z80encoder src/csv.h src/Z80InstructionEncoder.cpp src/Z80InstructionEncoder.h src/csv.h)
 target_link_libraries(InstructionEncoderTest gtest gmock gtest_main)
 add_test(InstructionEncoderTest InstructionEncoderTest)
+set_property(TARGET z80encoder PROPERTY POSITION_INDEPENDENT_CODE ON)

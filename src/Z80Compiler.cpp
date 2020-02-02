@@ -1507,7 +1507,7 @@ void Z80Compiler::exitNegateA(Z80Parser::NegateAContext* context) {
 }
 
 
-void Z80Compiler::exitCompletementCarryFlag(Z80Parser::CompletementCarryFlagContext* context) {
+void Z80Compiler::exitComplementCarryFlag(Z80Parser::ComplementCarryFlagContext* context) {
     //
     // CCF
     //
@@ -1591,7 +1591,9 @@ void Z80Compiler::exitAddWithCarryHLAndWordRegister(Z80Parser::AddWithCarryHLAnd
 
 void
 Z80Compiler::exitSubtractWithCarryWordRegisterFromHL(Z80Parser::SubtractWithCarryWordRegisterFromHLContext* context) {
-    Z80BaseListener::exitSubtractWithCarryWordRegisterFromHL(context);
+    auto instruction = context->getText();
+    auto results = instructionEncoder.encodeInstructionWithoutImmediateBytes(instruction);
+    addBytesToRom(results);
 }
 
 
@@ -1606,120 +1608,104 @@ void Z80Compiler::exitSimpleIYAdditionRegister(Z80Parser::SimpleIYAdditionRegist
 
 
 void Z80Compiler::exitAddIXWithRegister(Z80Parser::AddIXWithRegisterContext* context) {
-    Z80BaseListener::exitAddIXWithRegister(context);
+    auto instruction = context->getText();
+    auto results = instructionEncoder.encodeInstructionWithoutImmediateBytes(instruction);
+    addBytesToRom(results);
 }
 
 
 void Z80Compiler::exitAddIYWithRegister(Z80Parser::AddIYWithRegisterContext* context) {
-    Z80BaseListener::exitAddIYWithRegister(context);
+    auto instruction = context->getText();
+    auto results = instructionEncoder.encodeInstructionWithoutImmediateBytes(instruction);
+    addBytesToRom(results);
 }
 
 
 void Z80Compiler::exitIncrementWordRegister(Z80Parser::IncrementWordRegisterContext* context) {
-    Z80BaseListener::exitIncrementWordRegister(context);
+    auto instruction = context->getText();
+    auto results = instructionEncoder.encodeInstructionWithoutImmediateBytes(instruction);
+    addBytesToRom(results);
 }
 
 
 void Z80Compiler::exitIncrementIX(Z80Parser::IncrementIXContext* context) {
-    Z80BaseListener::exitIncrementIX(context);
+    auto instruction = context->getText();
+    auto results = instructionEncoder.encodeInstructionWithoutImmediateBytes(instruction);
+    addBytesToRom(results);
 }
 
 
 void Z80Compiler::exitIncrementIY(Z80Parser::IncrementIYContext* context) {
-    Z80BaseListener::exitIncrementIY(context);
+    auto instruction = context->getText();
+    auto results = instructionEncoder.encodeInstructionWithoutImmediateBytes(instruction);
+    addBytesToRom(results);
 }
 
 
 void Z80Compiler::exitDecrementWordRegister(Z80Parser::DecrementWordRegisterContext* context) {
-    Z80BaseListener::exitDecrementWordRegister(context);
+    auto instruction = context->getText();
+    auto results = instructionEncoder.encodeInstructionWithoutImmediateBytes(instruction);
+    addBytesToRom(results);
 }
 
 
 void Z80Compiler::exitDecrementIX(Z80Parser::DecrementIXContext* context) {
-    Z80BaseListener::exitDecrementIX(context);
+    auto instruction = context->getText();
+    auto results = instructionEncoder.encodeInstructionWithoutImmediateBytes(instruction);
+    addBytesToRom(results);
 }
 
 
 void Z80Compiler::exitDecrementIY(Z80Parser::DecrementIYContext* context) {
-    Z80BaseListener::exitDecrementIY(context);
+    auto instruction = context->getText();
+    auto results = instructionEncoder.encodeInstructionWithoutImmediateBytes(instruction);
+    addBytesToRom(results);
 }
 
 
 void Z80Compiler::exitWordArithemeticCommand(Z80Parser::WordArithemeticCommandContext* context) {
     Z80BaseListener::exitWordArithemeticCommand(context);
+
 }
 
 
 void Z80Compiler::exitRotateLeftCircularA(Z80Parser::RotateLeftCircularAContext* context) {
-    Z80BaseListener::exitRotateLeftCircularA(context);
+    auto instruction = context->getText();
+    auto results = instructionEncoder.encodeInstructionWithoutImmediateBytes(instruction);
+    addBytesToRom(results);
 }
 
 
 void Z80Compiler::exitRotateLeftThroughCarryA(Z80Parser::RotateLeftThroughCarryAContext* context) {
-    Z80BaseListener::exitRotateLeftThroughCarryA(context);
+    auto instruction = context->getText();
+    auto results = instructionEncoder.encodeInstructionWithoutImmediateBytes(instruction);
+    addBytesToRom(results);
 }
 
 
 void Z80Compiler::exitRotateRightCircularA(Z80Parser::RotateRightCircularAContext* context) {
-    Z80BaseListener::exitRotateRightCircularA(context);
+    auto instruction = context->getText();
+    auto results = instructionEncoder.encodeInstructionWithoutImmediateBytes(instruction);
+    addBytesToRom(results);
 }
 
 
-void Z80Compiler::exitRotateRightThroughtCarryA(Z80Parser::RotateRightThroughtCarryAContext* context) {
-    Z80BaseListener::exitRotateRightThroughtCarryA(context);
-}
-
-
-void Z80Compiler::exitRotateLeftCircularCommandName(Z80Parser::RotateLeftCircularCommandNameContext* context) {
-    Z80BaseListener::exitRotateLeftCircularCommandName(context);
-}
-
-
-void Z80Compiler::exitRotateLeftThroughCarryCommandName(Z80Parser::RotateLeftThroughCarryCommandNameContext* context) {
-    Z80BaseListener::exitRotateLeftThroughCarryCommandName(context);
-}
-
-
-void Z80Compiler::exitRotateRightCircularCommandName(Z80Parser::RotateRightCircularCommandNameContext* context) {
-    Z80BaseListener::exitRotateRightCircularCommandName(context);
-}
-
-
-void
-Z80Compiler::exitRotateRightThroughCarryCommandName(Z80Parser::RotateRightThroughCarryCommandNameContext* context) {
-    Z80BaseListener::exitRotateRightThroughCarryCommandName(context);
-}
-
-void Z80Compiler::exitShiftLeftArithmeticCommandName(Z80Parser::ShiftLeftArithmeticCommandNameContext* context) {
-    Z80BaseListener::exitShiftLeftArithmeticCommandName(context);
-}
-
-void Z80Compiler::exitShiftLeftLogicialCommandName(Z80Parser::ShiftLeftLogicialCommandNameContext* context) {
-    Z80BaseListener::exitShiftLeftLogicialCommandName(context);
-}
-
-void Z80Compiler::exitShiftRightArithmeticCommandName(Z80Parser::ShiftRightArithmeticCommandNameContext* context) {
-    Z80BaseListener::exitShiftRightArithmeticCommandName(context);
-}
-
-void Z80Compiler::exitShiftRightLogicalCommandName(Z80Parser::ShiftRightLogicalCommandNameContext* context) {
-    Z80BaseListener::exitShiftRightLogicalCommandName(context);
-}
-
-void Z80Compiler::exitRotateDigitLeftCommandName(Z80Parser::RotateDigitLeftCommandNameContext* context) {
-    Z80BaseListener::exitRotateDigitLeftCommandName(context);
-}
-
-void Z80Compiler::exitRotateDigitRightCommandName(Z80Parser::RotateDigitRightCommandNameContext* context) {
-    Z80BaseListener::exitRotateDigitRightCommandName(context);
+void Z80Compiler::exitRotateRightThroughCarryA(Z80Parser::RotateRightThroughCarryAContext* context) {
+    auto instruction = context->getText();
+    auto results = instructionEncoder.encodeInstructionWithoutImmediateBytes(instruction);
+    addBytesToRom(results);
 }
 
 void Z80Compiler::exitRotateLeftCircularRegister(Z80Parser::RotateLeftCircularRegisterContext* context) {
-    Z80BaseListener::exitRotateLeftCircularRegister(context);
+    auto instruction = context->getText();
+    auto results = instructionEncoder.encodeInstructionWithoutImmediateBytes(instruction);
+    addBytesToRom(results);
 }
 
 void Z80Compiler::exitRotateLeftCircularHLPointer(Z80Parser::RotateLeftCircularHLPointerContext* context) {
-    Z80BaseListener::exitRotateLeftCircularHLPointer(context);
+    auto instruction = context->getText();
+    auto results = instructionEncoder.encodeInstructionWithoutImmediateBytes(instruction);
+    addBytesToRom(results);
 }
 
 void Z80Compiler::exitRotateLeftCircularIXOffset(Z80Parser::RotateLeftCircularIXOffsetContext* context) {
@@ -1731,11 +1717,15 @@ void Z80Compiler::exitRotateLeftCircularIYOffset(Z80Parser::RotateLeftCircularIY
 }
 
 void Z80Compiler::exitRotateLeftThroughCarryRegister(Z80Parser::RotateLeftThroughCarryRegisterContext* context) {
-    Z80BaseListener::exitRotateLeftThroughCarryRegister(context);
+    auto instruction = context->getText();
+    auto results = instructionEncoder.encodeInstructionWithoutImmediateBytes(instruction);
+    addBytesToRom(results);
 }
 
 void Z80Compiler::exitRotateLeftThroughCarryHLPointer(Z80Parser::RotateLeftThroughCarryHLPointerContext* context) {
-    Z80BaseListener::exitRotateLeftThroughCarryHLPointer(context);
+    auto instruction = context->getText();
+    auto results = instructionEncoder.encodeInstructionWithoutImmediateBytes(instruction);
+    addBytesToRom(results);
 }
 
 void Z80Compiler::exitRotateLeftThroughCarryIXOffset(Z80Parser::RotateLeftThroughCarryIXOffsetContext* context) {
@@ -1747,11 +1737,15 @@ void Z80Compiler::exitRotateLeftThroughCarryIYOffset(Z80Parser::RotateLeftThroug
 }
 
 void Z80Compiler::exitRotateRightCircularHLPointer(Z80Parser::RotateRightCircularHLPointerContext* context) {
-    Z80BaseListener::exitRotateRightCircularHLPointer(context);
+    auto instruction = context->getText();
+    auto results = instructionEncoder.encodeInstructionWithoutImmediateBytes(instruction);
+    addBytesToRom(results);
 }
 
 void Z80Compiler::exitRotateRightCircularRegister(Z80Parser::RotateRightCircularRegisterContext* context) {
-    Z80BaseListener::exitRotateRightCircularRegister(context);
+    auto instruction = context->getText();
+    auto results = instructionEncoder.encodeInstructionWithoutImmediateBytes(instruction);
+    addBytesToRom(results);
 }
 
 void Z80Compiler::exitRotateRightCircularIXOffset(Z80Parser::RotateRightCircularIXOffsetContext* context) {
@@ -1763,11 +1757,15 @@ void Z80Compiler::exitRotateRightCircularIYOffset(Z80Parser::RotateRightCircular
 }
 
 void Z80Compiler::exitRotateRightThroughCarryRegister(Z80Parser::RotateRightThroughCarryRegisterContext* context) {
-    Z80BaseListener::exitRotateRightThroughCarryRegister(context);
+    auto instruction = context->getText();
+    auto results = instructionEncoder.encodeInstructionWithoutImmediateBytes(instruction);
+    addBytesToRom(results);
 }
 
 void Z80Compiler::exitRotateRightThroughCarryHLPointer(Z80Parser::RotateRightThroughCarryHLPointerContext* context) {
-    Z80BaseListener::exitRotateRightThroughCarryHLPointer(context);
+    auto instruction = context->getText();
+    auto results = instructionEncoder.encodeInstructionWithoutImmediateBytes(instruction);
+    addBytesToRom(results);
 }
 
 void Z80Compiler::exitRotateRightThroughCarryIXOffset(Z80Parser::RotateRightThroughCarryIXOffsetContext* context) {
@@ -1779,51 +1777,51 @@ void Z80Compiler::exitRotateRightThroughCarryIYOffset(Z80Parser::RotateRightThro
 }
 
 void Z80Compiler::exitShiftLeftArithmetic(Z80Parser::ShiftLeftArithmeticContext* context) {
-    Z80BaseListener::exitShiftLeftArithmetic(context);
+    auto instruction = context->getText();
+    auto results = instructionEncoder.encodeInstructionWithoutImmediateBytes(instruction);
+    addBytesToRom(results);
 }
 
 void Z80Compiler::exitShiftLeftLogical(Z80Parser::ShiftLeftLogicalContext* context) {
-    Z80BaseListener::exitShiftLeftLogical(context);
+    auto instruction = context->getText();
+    auto results = instructionEncoder.encodeInstructionWithoutImmediateBytes(instruction);
+    addBytesToRom(results);
 }
 
 void Z80Compiler::exitShiftRightArithmetic(Z80Parser::ShiftRightArithmeticContext* context) {
-    Z80BaseListener::exitShiftRightArithmetic(context);
+    auto instruction = context->getText();
+    auto results = instructionEncoder.encodeInstructionWithoutImmediateBytes(instruction);
+    addBytesToRom(results);
 }
 
 void Z80Compiler::exitShiftRightLogical(Z80Parser::ShiftRightLogicalContext* context) {
-    Z80BaseListener::exitShiftRightLogical(context);
+    auto instruction = context->getText();
+    auto results = instructionEncoder.encodeInstructionWithoutImmediateBytes(instruction);
+    addBytesToRom(results);
 }
 
 void Z80Compiler::exitRotateDigitLeft(Z80Parser::RotateDigitLeftContext* context) {
-    Z80BaseListener::exitRotateDigitLeft(context);
+    auto instruction = context->getText();
+    auto results = instructionEncoder.encodeInstructionWithoutImmediateBytes(instruction);
+    addBytesToRom(results);
 }
 
 void Z80Compiler::exitRotateDigitRight(Z80Parser::RotateDigitRightContext* context) {
-    Z80BaseListener::exitRotateDigitRight(context);
-}
-
-void Z80Compiler::exitRotateCommamd(Z80Parser::RotateCommamdContext* context) {
-    Z80BaseListener::exitRotateCommamd(context);
-}
-
-void Z80Compiler::exitBitCommandName(Z80Parser::BitCommandNameContext* context) {
-    Z80BaseListener::exitBitCommandName(context);
-}
-
-void Z80Compiler::exitSetCommandName(Z80Parser::SetCommandNameContext* context) {
-    Z80BaseListener::exitSetCommandName(context);
-}
-
-void Z80Compiler::exitResetBitCommandName(Z80Parser::ResetBitCommandNameContext* context) {
-    Z80BaseListener::exitResetBitCommandName(context);
+    auto instruction = context->getText();
+    auto results = instructionEncoder.encodeInstructionWithoutImmediateBytes(instruction);
+    addBytesToRom(results);
 }
 
 void Z80Compiler::exitTestBitInRegister(Z80Parser::TestBitInRegisterContext* context) {
-    Z80BaseListener::exitTestBitInRegister(context);
+    auto instruction = context->getText();
+    auto results = instructionEncoder.encodeInstructionWithoutImmediateBytes(instruction);
+    addBytesToRom(results);
 }
 
 void Z80Compiler::exitTestBitInHLPointer(Z80Parser::TestBitInHLPointerContext* context) {
-    Z80BaseListener::exitTestBitInHLPointer(context);
+    auto instruction = context->getText();
+    auto results = instructionEncoder.encodeInstructionWithoutImmediateBytes(instruction);
+    addBytesToRom(results);
 }
 
 void Z80Compiler::exitTestBitInIXOffset(Z80Parser::TestBitInIXOffsetContext* context) {
@@ -1835,11 +1833,15 @@ void Z80Compiler::exitTestBitInIYOffset(Z80Parser::TestBitInIYOffsetContext* con
 }
 
 void Z80Compiler::exitSetBitInRegister(Z80Parser::SetBitInRegisterContext* context) {
-    Z80BaseListener::exitSetBitInRegister(context);
+    auto instruction = context->getText();
+    auto results = instructionEncoder.encodeInstructionWithoutImmediateBytes(instruction);
+    addBytesToRom(results);
 }
 
 void Z80Compiler::exitSetBitInHLPointer(Z80Parser::SetBitInHLPointerContext* context) {
-    Z80BaseListener::exitSetBitInHLPointer(context);
+    auto instruction = context->getText();
+    auto results = instructionEncoder.encodeInstructionWithoutImmediateBytes(instruction);
+    addBytesToRom(results);
 }
 
 void Z80Compiler::exitSetBitInIXOffset(Z80Parser::SetBitInIXOffsetContext* context) {
@@ -1851,11 +1853,15 @@ void Z80Compiler::exitSetBitInIYOffset(Z80Parser::SetBitInIYOffsetContext* conte
 }
 
 void Z80Compiler::exitResetBitInRegister(Z80Parser::ResetBitInRegisterContext* context) {
-    Z80BaseListener::exitResetBitInRegister(context);
+    auto instruction = context->getText();
+    auto results = instructionEncoder.encodeInstructionWithoutImmediateBytes(instruction);
+    addBytesToRom(results);
 }
 
 void Z80Compiler::exitResetBitHLPointer(Z80Parser::ResetBitHLPointerContext* context) {
-    Z80BaseListener::exitResetBitHLPointer(context);
+    auto instruction = context->getText();
+    auto results = instructionEncoder.encodeInstructionWithoutImmediateBytes(instruction);
+    addBytesToRom(results);
 }
 
 void Z80Compiler::exitResetBitIXOffset(Z80Parser::ResetBitIXOffsetContext* context) {
@@ -1866,59 +1872,13 @@ void Z80Compiler::exitResetBitIYOffset(Z80Parser::ResetBitIYOffsetContext* conte
     Z80BaseListener::exitResetBitIYOffset(context);
 }
 
-void Z80Compiler::exitBitManipulationCommand(Z80Parser::BitManipulationCommandContext* context) {
-    Z80BaseListener::exitBitManipulationCommand(context);
-}
-
 void Z80Compiler::exitJumpCondition(Z80Parser::JumpConditionContext* context) {
     Z80BaseListener::exitJumpCondition(context);
 }
 
-void Z80Compiler::exitJumpCommandName(Z80Parser::JumpCommandNameContext* context) {
-    Z80BaseListener::exitJumpCommandName(context);
-}
-
-void Z80Compiler::exitJumpRelativeCommandName(Z80Parser::JumpRelativeCommandNameContext* context) {
-    Z80BaseListener::exitJumpRelativeCommandName(context);
-}
-
-
-void
-Z80Compiler::exitJumpRelativeAndDecrementCommandName(Z80Parser::JumpRelativeAndDecrementCommandNameContext* context) {
-    Z80BaseListener::exitJumpRelativeAndDecrementCommandName(context);
-}
-
-void Z80Compiler::exitCallCommandName(Z80Parser::CallCommandNameContext* context) {
-    Z80BaseListener::exitCallCommandName(context);
-}
-
-
-void Z80Compiler::exitReturnCommandName(Z80Parser::ReturnCommandNameContext* context) {
-    Z80BaseListener::exitReturnCommandName(context);
-}
-
-
-void
-Z80Compiler::exitReturnAndEnableInterruptCommandName(Z80Parser::ReturnAndEnableInterruptCommandNameContext* context) {
-    Z80BaseListener::exitReturnAndEnableInterruptCommandName(context);
-}
-
-
-void Z80Compiler::exitReturnFromNonMaskableInterruptCommandName(
-    Z80Parser::ReturnFromNonMaskableInterruptCommandNameContext* context) {
-    Z80BaseListener::exitReturnFromNonMaskableInterruptCommandName(context);
-}
-
-
-void Z80Compiler::exitRestartCommandName(Z80Parser::RestartCommandNameContext* context) {
-    Z80BaseListener::exitRestartCommandName(context);
-}
-
-
 void Z80Compiler::exitJumpToAbsoluteAddress(Z80Parser::JumpToAbsoluteAddressContext* context) {
     Z80BaseListener::exitJumpToAbsoluteAddress(context);
 }
-
 
 void
 Z80Compiler::exitJumpToAbsoluteAddressGivenCondition(Z80Parser::JumpToAbsoluteAddressGivenConditionContext* context) {
@@ -1978,28 +1938,23 @@ Z80Compiler::exitReturnFromSubroutineGivenCondition(Z80Parser::ReturnFromSubrout
 
 
 void Z80Compiler::exitReturnAndEnableInterrupt(Z80Parser::ReturnAndEnableInterruptContext* context) {
-    Z80BaseListener::exitReturnAndEnableInterrupt(context);
+    auto instruction = context->getText();
+    auto results = instructionEncoder.encodeInstructionWithoutImmediateBytes(instruction);
+    addBytesToRom(results);
 }
 
 
 void Z80Compiler::exitReturnFromNonMaskableInterrupt(Z80Parser::ReturnFromNonMaskableInterruptContext* context) {
-    Z80BaseListener::exitReturnFromNonMaskableInterrupt(context);
+    auto instruction = context->getText();
+    auto results = instructionEncoder.encodeInstructionWithoutImmediateBytes(instruction);
+    addBytesToRom(results);
 }
 
 void Z80Compiler::exitRestartCommand(Z80Parser::RestartCommandContext* context) {
-    Z80BaseListener::exitRestartCommand(context);
-}
-
-void Z80Compiler::exitBranchCommand(Z80Parser::BranchCommandContext* context) {
-    Z80BaseListener::exitBranchCommand(context);
-}
-
-void Z80Compiler::exitInputCommandName(Z80Parser::InputCommandNameContext* context) {
-    Z80BaseListener::exitInputCommandName(context);
-}
-
-void Z80Compiler::exitOutCommandName(Z80Parser::OutCommandNameContext* context) {
-    Z80BaseListener::exitOutCommandName(context);
+    auto data = readByte(context->number());
+    auto instruction = "RST " + to_string((int)data);
+    auto results = instructionEncoder.encodeInstructionWithoutImmediateBytes(instruction);
+    addBytesToRom(results);
 }
 
 void Z80Compiler::exitInputDataIntoA(Z80Parser::InputDataIntoAContext* context) {
@@ -2012,49 +1967,68 @@ void Z80Compiler::exitInputDataIntoRegister(Z80Parser::InputDataIntoRegisterCont
 
 
 void Z80Compiler::exitIni(Z80Parser::IniContext* context) {
-    Z80BaseListener::exitIni(context);
+    auto instruction = context->getText();
+    auto results = instructionEncoder.encodeInstructionWithoutImmediateBytes(instruction);
+    addBytesToRom(results);
 }
 
 void Z80Compiler::exitInir(Z80Parser::InirContext* context) {
-    Z80BaseListener::exitInir(context);
+    auto instruction = context->getText();
+    auto results = instructionEncoder.encodeInstructionWithoutImmediateBytes(instruction);
+    addBytesToRom(results);
 }
 
 
 void Z80Compiler::exitInd(Z80Parser::IndContext* context) {
-    Z80BaseListener::exitInd(context);
+    auto instruction = context->getText();
+    auto results = instructionEncoder.encodeInstructionWithoutImmediateBytes(instruction);
+    addBytesToRom(results);
 }
 
 
 void Z80Compiler::exitIndr(Z80Parser::IndrContext* context) {
-    Z80BaseListener::exitIndr(context);
+    auto instruction = context->getText();
+    auto results = instructionEncoder.encodeInstructionWithoutImmediateBytes(instruction);
+    addBytesToRom(results);
 }
 
 void Z80Compiler::exitOutputAIntoDataPointer(Z80Parser::OutputAIntoDataPointerContext* context) {
     Z80BaseListener::exitOutputAIntoDataPointer(context);
+
 }
 
 
 void Z80Compiler::exitOutputRegisterIntoCPointer(Z80Parser::OutputRegisterIntoCPointerContext* context) {
-    Z80BaseListener::exitOutputRegisterIntoCPointer(context);
+    auto instruction = context->getText();
+    auto results = instructionEncoder.encodeInstructionWithoutImmediateBytes(instruction);
+    addBytesToRom(results);
 }
 
 
 void Z80Compiler::exitOuti(Z80Parser::OutiContext* context) {
-    Z80BaseListener::exitOuti(context);
+    auto instruction = context->getText();
+    auto results = instructionEncoder.encodeInstructionWithoutImmediateBytes(instruction);
+    addBytesToRom(results);
 }
 
 
 void Z80Compiler::exitOtir(Z80Parser::OtirContext* context) {
-    Z80BaseListener::exitOtir(context);
+    auto instruction = context->getText();
+    auto results = instructionEncoder.encodeInstructionWithoutImmediateBytes(instruction);
+    addBytesToRom(results);
 }
 
 void Z80Compiler::exitOutd(Z80Parser::OutdContext* context) {
-    Z80BaseListener::exitOutd(context);
+    auto instruction = context->getText();
+    auto results = instructionEncoder.encodeInstructionWithoutImmediateBytes(instruction);
+    addBytesToRom(results);
 }
 
 
 void Z80Compiler::exitOtdr(Z80Parser::OtdrContext* context) {
-    Z80BaseListener::exitOtdr(context);
+    auto instruction = context->getText();
+    auto results = instructionEncoder.encodeInstructionWithoutImmediateBytes(instruction);
+    addBytesToRom(results);
 }
 
 

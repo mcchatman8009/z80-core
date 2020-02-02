@@ -695,7 +695,7 @@ arithmeticCommand
 decimalAdjustA
 complementA
 negateA
-completementCarryFlag
+complementCarryFlag
 setCarryFlag
 nop
 halt
@@ -720,13 +720,13 @@ wordArithemeticCommand
 rotateLeftCircularA
 rotateLeftThroughCarryA
 rotateRightCircularA
-rotateRightThroughtCarryA
+rotateRightThroughCarryA
 rotateLeftCircularCommandName
 rotateLeftThroughCarryCommandName
 rotateRightCircularCommandName
 rotateRightThroughCarryCommandName
 shiftLeftArithmeticCommandName
-shiftLeftLogicialCommandName
+shiftLeftLogicalCommandName
 shiftRightArithmeticCommandName
 shiftRightLogicalCommandName
 rotateDigitLeftCommandName
@@ -753,7 +753,7 @@ shiftRightArithmetic
 shiftRightLogical
 rotateDigitLeft
 rotateDigitRight
-rotateCommamd
+rotateCommand
 bitCommandName
 setCommandName
 resetBitCommandName

@@ -129,18 +129,4 @@ class Z80CpuCommandExpectedTestResults {
         MemoryHandler& memory;
 
 };
-
-class UndefinedZ80CpuTestStateException : public std::exception {
-    public:
-        explicit UndefinedZ80CpuTestStateException(std::string info) : info{std::move(info)} {}
-
-        const char* what() const throw() { // NOLINT
-            return info.c_str();
-        }
-
-    private:
-        std::string info;
-};
-
-
 #endif //SMS_Z80CPUCOMMANDEXPECTEDTESTRESULTS_H

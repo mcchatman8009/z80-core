@@ -8,6 +8,8 @@ set(CMAKE_CXX_STANDARD 17)
 include(antlr4.cmake)
 set_target_properties(antlr4_shared PROPERTIES EXCLUDE_FROM_ALL 1 EXCLUDE_FROM_DEFAULT_BUILD 1)
 
+set_property(TARGET antlr4_static PROPERTY POSITION_INDEPENDENT_CODE ON)
+
 enable_testing()
 include(${CMAKE_CURRENT_SOURCE_DIR}/google-test.cmake)
 
@@ -46,5 +48,6 @@ add_library(z80parser STATIC
     generated/Z80Parser.h
     )
 
+set_property(TARGET z80parser PROPERTY POSITION_INDEPENDENT_CODE ON)
 target_link_libraries(z80parser antlr4_static)
 add_dependencies(z80parser antlr4_static)

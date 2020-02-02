@@ -48,7 +48,6 @@ TEST(FlagRegisterTest, SetNegativeFlag) { // NOLINT
     ASSERT_EQ(flagRegister.getByteValue().getValue(), 0b00000000);
 }
 
-
 TEST(FlagRegisterTest, SetParityFlag) { // NOLINT
     FlagRegister flagRegister;
     flagRegister.initialize();
