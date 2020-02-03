@@ -1,4 +1,5 @@
 #include "Z80Cpu.h"
+#include "Z80Compiler.h"
 
 using namespace std;
 
@@ -89,6 +90,10 @@ void Z80Cpu::set(ByteCpuRegisterSymbol byteCpuRegisterSymbol, Z80Byte data) {
 
 void Z80Cpu::set(WordCpuRegisterSymbol wordCpuRegisterSymbol, Z80Word data) {
     switch (wordCpuRegisterSymbol) {
+        case WordCpuRegisterSymbol::AF:
+            a.setByteValue(data.getHighByte());
+            f.setByteValue(data.getLowByte());
+            return;
         case WordCpuRegisterSymbol::BC:
             bc.setWordValue(data);
             return;
@@ -158,6 +163,8 @@ Z80Byte Z80Cpu::get(ByteCpuRegisterSymbol byteCpuRegisterSymbol) {
 
 Z80Word Z80Cpu::get(WordCpuRegisterSymbol wordCpuRegisterSymbol) {
     switch (wordCpuRegisterSymbol) {
+        case WordCpuRegisterSymbol::AF:
+            return w{a.getByteValue(), f.getByteValue()};
         case WordCpuRegisterSymbol::BC:
             return bc.getWordValue();
         case WordCpuRegisterSymbol::DE:
@@ -721,4 +728,13 @@ void Z80Cpu::RLD() {
 
 void Z80Cpu::enableDebugLogging(bool enable) {
     debug = enable;
+}
+
+int Z80Cpu::getInterruptMode() {
+    return interruptMode;
+}
+
+void Z80Cpu::compileAssembly(std::string_view assembly, std::vector<unsigned char>& compliedBytes) {
+    Z80Compiler compiler{};
+    compiler.compileAndPutIntoByteVector(assembly, compliedBytes);
 }

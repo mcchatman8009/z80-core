@@ -14,6 +14,7 @@ class Z80Compiler : private Z80BaseListener {
         std::vector<unsigned char> compile(std::string_view assemblyCode);
 
     private:
+        void enterStatement(Z80Parser::StatementContext* context) override;
 
         template<class ParserProviderCallbackFunction>
         void provideParserFromText(std::string_view assemblyCode, ParserProviderCallbackFunction callbackFunction);
@@ -652,6 +653,8 @@ class Z80Compiler : private Z80BaseListener {
         void exitSubtractIYHighOrLowFromA(Z80Parser::SubtractIYHighOrLowFromAContext* context) override;
 
         void exitCompareAWithHLPointer(Z80Parser::CompareAWithHLPointerContext* context) override;
+
+        void enterInstruction(Z80Parser::InstructionContext* context) override;
 };
 
 

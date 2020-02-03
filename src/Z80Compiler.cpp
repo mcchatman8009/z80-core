@@ -2111,5 +2111,12 @@ std::vector<unsigned char> Z80Compiler::readWordBytes(Z80Parser::NumberPointerCo
     return readWordBytes(numberContext->number());
 }
 
+void Z80Compiler::enterStatement(Z80Parser::StatementContext* context) {
+    Z80BaseListener::enterStatement(context);
+}
+
+void Z80Compiler::enterInstruction(Z80Parser::InstructionContext* context) {
+    Z80BaseListener::enterInstruction(context);
+}
 
 

@@ -1,4 +1,4 @@
-#include <Z80Core.h>
+#include <Z80Core.hpp>
 #include <Z80Cpu.h>
 
 #include <memory>
@@ -69,7 +69,7 @@ namespace Z80Core {
             }
 
             void executeUntilNumberOfCycles(int cycles) {
-                cpu->executeUntilNumberOfCycles(cycles);
+                cpu->executeForNumberOfCycles(cycles);
             }
 
             void enableDebugLogging(bool enable) {
@@ -92,34 +92,118 @@ namespace Z80Core {
         std::unique_ptr<IOMemoryHandler> ioMemoryResource = std::unique_ptr<IOMemoryHandler>(
             new IOMemoryHandlerDelegate(ioMemory));
 
-        cpu = std::make_unique<Z80CpuImplementation>(memoryResource, ioMemoryResource);
+        cpuImpl = std::make_unique<Z80CpuImplementation>(memoryResource, ioMemoryResource);
 
     }
 
     void Z80CpuChip::initialize() {
-        cpu->initialize();
+        cpuImpl->cpu->initialize();
 
     }
 
     void Z80CpuChip::triggerInterrupt() {
-        cpu->triggerInterrupt();
+        cpuImpl->cpu->triggerInterrupt();
 
     }
 
     void Z80CpuChip::triggerNonMaskableInterrupt() {
-        cpu->triggerNonMaskableInterrupt();
+        cpuImpl->cpu->triggerNonMaskableInterrupt();
     }
 
-    void Z80CpuChip::executeUntilNumberOfCycles(int cycles) {
-        cpu->executeUntilNumberOfCycles(cycles);
+    void Z80CpuChip::executeForNumberOfCycles(int cycles) {
+        cpuImpl->cpu->executeForNumberOfCycles(cycles);
     }
 
     int Z80CpuChip::getNumberOfCyclesPassed() const {
-        return cpu->getNumberOfCyclesPassed();
+        return cpuImpl->cpu->getNumberOfCyclesPassed();
     }
 
     void Z80CpuChip::enableDebuggingLogging(bool enable) {
-        cpu->enableDebugLogging(enable);
+        cpuImpl->cpu->enableDebugLogging(enable);
+    }
+
+    void Z80CpuChip::executeNextInstruction() {
+        cpuImpl->cpu->executeNextCommand();
+    }
+
+    void Z80CpuChip::compileAssembly(const char* assembly, std::vector<byte>& compiledBytes) {
+        cpuImpl->cpu->compileAssembly(assembly, compiledBytes);
+    }
+
+    word Z80CpuChip::getAF() {
+        return cpuImpl->cpu->get(WordCpuRegisterSymbol::AF).getValue();
+    }
+
+    void Z80CpuChip::setAF(word value) {
+        cpuImpl->cpu->set(WordCpuRegisterSymbol::AF, Z80Word{value});
+    }
+
+    word Z80CpuChip::getBC() {
+        return cpuImpl->cpu->get(WordCpuRegisterSymbol::BC).getValue();
+    }
+
+    void Z80CpuChip::setBC(word value) {
+        cpuImpl->cpu->set(WordCpuRegisterSymbol::BC, Z80Word{value});
+    }
+
+    word Z80CpuChip::getDE() {
+        return cpuImpl->cpu->get(WordCpuRegisterSymbol::DE).getValue();
+    }
+
+    void Z80CpuChip::setDE(word value) {
+        cpuImpl->cpu->set(WordCpuRegisterSymbol::DE, Z80Word{value});
+    }
+
+    word Z80CpuChip::getHL() {
+        return cpuImpl->cpu->get(WordCpuRegisterSymbol::HL).getValue();
+    }
+
+    void Z80CpuChip::setHL(word value) {
+        cpuImpl->cpu->set(WordCpuRegisterSymbol::HL, Z80Word{value});
+    }
+
+    word Z80CpuChip::getSP() {
+        return cpuImpl->cpu->get(WordCpuRegisterSymbol::SP).getValue();
+    }
+
+    void Z80CpuChip::setSP(word value) {
+        cpuImpl->cpu->set(WordCpuRegisterSymbol::SP, Z80Word{value});
+    }
+
+    word Z80CpuChip::getPC() {
+        return cpuImpl->cpu->get(WordCpuRegisterSymbol::PC).getValue();
+    }
+
+    void Z80CpuChip::setPC(word value) {
+        cpuImpl->cpu->set(WordCpuRegisterSymbol::PC, Z80Word{value});
+    }
+
+    byte Z80CpuChip::getRefreshRegister() {
+        return cpuImpl->cpu->get(ByteCpuRegisterSymbol::R).getValue();
+    }
+
+    byte Z80CpuChip::getInterruptRegister() {
+        return cpuImpl->cpu->get(ByteCpuRegisterSymbol::I).getValue();
+    }
+
+    int Z80CpuChip::getInterruptMode() {
+        return cpuImpl->cpu->getInterruptMode();
+    }
+
+    byte Z80CpuChip::readMemoryByte(word address) {
+        return cpuImpl->memory->readByte(Z80Word{address}).getValue();
+    }
+
+    void Z80CpuChip::writeMemoryByte(word address, byte data) {
+        cpuImpl->memory->writeByte(Z80Word{address}, Z80Byte{data});
+    }
+
+    byte Z80CpuChip::readIOMemoryByte(word port) {
+        return cpuImpl->ioMemory->readByte(Z80Byte{port}).getValue();
+    }
+
+    void Z80CpuChip::writeIOMemoryByte(word port, byte data) {
+        cpuImpl->ioMemory->writeByte(Z80Byte{port}, Z80Byte{data});
     }
 
     Z80CpuChip* createZ80Cpu(Memory& memory, IOMemory& ioMemory) {

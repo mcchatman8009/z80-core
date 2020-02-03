@@ -45,7 +45,7 @@ using b=Z80Byte;
 
 #define HL_VALUE hl.getWordValue()
 
-void Z80Cpu::executeUntilNumberOfCycles(int cycles) {
+void Z80Cpu::executeForNumberOfCycles(int cycles) {
     cyclesPassed = 0;
 
     while (cyclesPassed < cycles) {
@@ -1113,7 +1113,7 @@ void Z80Cpu::executeNextIndexCBCommand(WordRegister& indexRegister) {
 
 
         OFFSET_CB_CPU_COMMAND_HIGH(0x20, 1, bc.shiftLeftArithmetic(HIGH), bc)
-        OFFSET_CB_CPU_COMMAND_LOW(0x21, 1, bc.shiftLeftArithmetic(LOW),bc)
+        OFFSET_CB_CPU_COMMAND_LOW(0x21, 1, bc.shiftLeftArithmetic(LOW), bc)
         OFFSET_CB_CPU_COMMAND_HIGH(0x22, 1, de.shiftLeftArithmetic(HIGH), de)
         OFFSET_CB_CPU_COMMAND_LOW(0x23, 1, de.shiftLeftArithmetic(LOW), de)
         OFFSET_CB_CPU_COMMAND_HIGH(0x24, 1, hl.shiftLeftArithmetic(HIGH), hl)

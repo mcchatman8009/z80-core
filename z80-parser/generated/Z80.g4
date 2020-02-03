@@ -1,11 +1,12 @@
 grammar Z80;
 
 program:
-    (statement EOL)+
+    statement*
 ;
 
 statement:
-   label? (instruction )? comment?
+   label? (instruction )? comment? EOL |
+   EOL
 ;
 
 instruction:
@@ -533,17 +534,17 @@ loadHLPointerIntoDEThenDecrementBCAndIncrementHL:
 // LDIR
 loadDEPointerWithHLPointerThenDecrementBCAndIncrementHLRepeat:
     'LDIR' |
-    'ldir' |
+    'ldir'
 ;
 // LDD
 loadDEPointerWithHLPointerThenDecrementBCAndHL:
     'LDD' |
-    'ldd' |
+    'ldd'
 ;
 // LDDR
 loadDEPointerWithHLPointerThenDecrementBCAndHLRepeat:
     'LDDR' |
-    'lddr' |
+    'lddr'
 ;
 // CPI
 compareAToHLPointerThenIncrementHLAndDecrementBC:

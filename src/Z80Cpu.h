@@ -10,10 +10,13 @@
 #include "MemoryCommandHandler.h"
 #include "ByteCpuRegisterSymbol.h"
 #include "WordCpuRegisterSymbol.h"
+#include <vector>
 
 class Z80Cpu {
     public:
         explicit Z80Cpu(MemoryHandler& memoryHandler, IOMemoryHandler& ioMemoryHandler);
+
+        void compileAssembly(std::string_view assembly, std::vector<unsigned char>& compliedBytes);
 
         void set(ByteCpuRegisterSymbol byteCpuRegisterSymbol, Z80Byte data);
 
@@ -33,12 +36,13 @@ class Z80Cpu {
 
         void executeNextCommand(Z80Byte opCode);
 
-        void executeUntilNumberOfCycles(int cycles);
+        void executeForNumberOfCycles(int cycles);
 
         int getNumberOfCyclesPassed() const; // NOLINT
 
         void enableDebugLogging(bool enable);
 
+        int getInterruptMode();
 
     private:
         MemoryHandler& memory;

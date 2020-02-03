@@ -2,6 +2,7 @@
 #define Z80_CORE_WORDCPUREGISTERSYMBOL_H
 enum class WordCpuRegisterSymbol {
 // @formatter:off
+    AF,
     BC,
     DE,
     HL,
