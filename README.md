@@ -32,10 +32,10 @@ make test
 ```
 
 ### Project Goals 
-[X] Provide Z80 Emulation support for the [Zilog_Z180](https://en.wikipedia.org/wiki/Zilog_Z180) based architectures.
-[X] Support all the undocumented opcodes. See [Undocumented Instructions](documents/z80-documented-v0.91.pdf).
-[X] Create a simple Parser for the Z80 Assembly/Assembler mnemonics, to enable easy to read unit testing.
-[X] Create Unit tests that execute all Z80 instructions and core functionality.
-[X] Create build automaton support using Docker and Github Actions
-[ ] Add Emscripten & WebAssembly build support
-[ ] Provide Github API Development Wiki.
+- [X] Provide Z80 Emulation support for the [Zilog_Z180](https://en.wikipedia.org/wiki/Zilog_Z180) based architectures.
+- [X] Support all the undocumented opcodes. See [Undocumented Instructions](documents/z80-documented-v0.91.pdf).
+- [X] Create a simple Parser for the Z80 Assembly/Assembler mnemonics, to enable easy to read unit testing.
+- [X] Create Unit tests that execute all Z80 instructions and core functionality.
+- [X] Create build automaton support using Docker and Github Actions
+- [ ] Add Emscripten & WebAssembly build support
+- [ ] Provide Github API Development Wiki.
